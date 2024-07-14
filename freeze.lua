@@ -1,8 +1,11 @@
+local modpath = minetest.get_modpath(minetest.get_current_modname())
+local modname = minetest.get_current_modname()
+
 local trap = nil
 local mode = nil
 local scope = "public" -- Set scope of the chat message (public or private)
 
-minetest.register_entity("freeze:fe", {
+minetest.register_entity(modname .. ":fe", {
     physical = true,
     collisionbox = {-0.01,-0.01,-0.01, 0.01,0.01,0.01},
     visual = "sprite",
@@ -70,7 +73,7 @@ minetest.register_entity("freeze:fe", {
 
 
 minetest.register_on_joinplayer(function(player)
-    local istrapped = player:get_attribute("freeze:istrapped")
+    local istrapped = player:get_attribute(modname .. ":istrapped")
 
     if istrapped then
         trap = player:get_player_name()
@@ -78,7 +81,7 @@ minetest.register_on_joinplayer(function(player)
         local pos = player:get_pos()
 
         minetest.after(0.3,function()
-            minetest.add_entity(pos, "freeze:fe")
+            minetest.add_entity(pos, modname .. ":fe")
         end)
     end
 end)
@@ -103,7 +106,7 @@ minetest.register_chatcommand("freeze", {
             return true,"Player not online."
         end
 
-	local frozen = player:get_attribute("freeze:istrapped")
+	local frozen = player:get_attribute(modname .. ":istrapped")
 
 	if frozen then
 	    return true,"Player is already frozen."
@@ -111,9 +114,9 @@ minetest.register_chatcommand("freeze", {
 
         trap = param
         mode = "a"
-        player:set_attribute("freeze:istrapped","true")
+        player:set_attribute(modname .. ":istrapped","true")
         local pos = player:get_pos()
-        minetest.add_entity(pos, "freeze:fe")
+        minetest.add_entity(pos, modname .. ":fe")
     end,
 })
 
@@ -129,7 +132,7 @@ minetest.register_chatcommand("unfreeze", {
         return true,"Player not online."
         end
 
-        player:set_attribute("freeze:istrapped",nil)
+        player:set_attribute(modname .. ":istrapped",nil)
 
         trap = param
         mode = "d"

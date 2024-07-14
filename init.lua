@@ -33,7 +33,7 @@ dofile(modpath .. "/freeze.lua")
 minetest.chat_send_all(modpath)
 
 
-
+--privs
 --nametag
 
 -- amongus
