@@ -1,6 +1,11 @@
 local modpath = minetest.get_modpath(minetest.get_current_modname())
 local modname = minetest.get_current_modname()
 
+dofile(modpath .. "/yaml/init.lua")
+dofile(modpath .. "/nickname/init.lua")
+dofile(modpath .. "/hidename/init.lua")
+
+
 dofile(modpath .. "/sounds.lua")
 dofile(modpath .. "/items.lua")
 dofile(modpath .. "/metal.lua")

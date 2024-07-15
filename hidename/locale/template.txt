@@ -1,0 +1,23 @@
+# textdomain:hidename
+
+# Translators:
+
+
+Nametag: @1=
+hidden=
+visible=
+Status: @1=
+Nametag is already hidden=
+Nametag is already visible=
+Nametag is now hidden=
+Nametag is now visible=
+Make nametag hidden=
+Make nametag visible=
+Get nametag info or set visibility=
+Parameter options:=
+Display nametag text & visible state (default)=
+Cannot make nametag visible while you are invisible=
+
+ERROR: Unknown parameter: @1=
+ERROR: Could not hide nametag=
+ERROR: Could not show nametag=

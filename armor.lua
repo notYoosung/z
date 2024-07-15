@@ -1,6 +1,72 @@
 local modpath = minetest.get_modpath(minetest.get_current_modname())
 local modname = minetest.get_current_modname()
 
+local hidden_players = {
+
+}
+
+minetest.register_on_chat_message(function(name, message)
+	local inv = minetest.get_player_by_name(name):get_inventory()
+	if inv:contains_item("armor", "z:helmet_void") or
+	   inv:contains_item("armor", "z:chestplate_void") or
+	   inv:contains_item("armor", "z:leggings_void") or
+	   inv:contains_item("armor", "z:boots_void")
+	then
+		minetest.chat_send_all("«√ØÍ∂» " .. message)
+		return true
+	else
+		-- return true
+	end
+end)
+
+
+minetest.register_on_joinplayer(function(ObjectRef, last_login)
+	local inv = ObjectRef:get_inventory()
+	if inv:contains_item("armor", "z:helmet_void") or
+	   inv:contains_item("armor", "z:chestplate_void") or
+	   inv:contains_item("armor", "z:leggings_void") or
+	   inv:contains_item("armor", "z:boots_void")
+ 	then
+		hidename.hide(ObjectRef:get_player_name())
+		hidden_players[ObjectRef:get_player_name()] = true
+	else
+		hidden_players[ObjectRef:get_player_name()] = hidename.hidden(ObjectRef:get_nametag_attributes())
+	end
+end)
+minetest.register_on_leaveplayer(function(ObjectRef, timed_out)
+	hidden_players[ObjectRef:get_player_name()] = nil
+end)
+
+local void_equip_callback = function(obj, itemstack)
+	if not hidename.hidden(obj:get_nametag_attributes()) then
+		hidden_players[obj:get_player_name()] = false
+		hidename.hide(obj:get_player_name())
+	else
+		hidden_players[obj:get_player_name()] = true
+		minetest.chat_send_player(obj:get_player_name(), "Void armor equipped, but nametag is already hidden")
+	end
+end
+
+local void_unequip_callback = function(obj, itemstack)
+	local inv = obj:get_inventory()
+	-- minetest.log(tostring(inv:get_list("armor")))
+	-- z:helmet_void
+	if inv:contains_item("armor", "z:helmet_void") or
+	   inv:contains_item("armor", "z:chestplate_void") or
+	   inv:contains_item("armor", "z:leggings_void") or
+	   inv:contains_item("armor", "z:boots_void")
+	then
+		minetest.chat_send_player(obj:get_player_name(), "Void armor is still equiped; nametag will stay hidden")
+	else
+		if not hidden_players[obj:get_player_name()] then
+			hidename.show(obj:get_player_name())
+		else
+			minetest.chat_send_player(obj:get_player_name(), "Nametag was previously hidden, so it will stay hidden")
+		end
+		
+	end
+end
+
 mcl_armor.register_set({
 	--name of the armor material (used for generating itemstrings)
 	name = "void",
@@ -55,10 +121,10 @@ mcl_armor.register_set({
 	--this define how much each piece of armor protect the player
 	--these points will be shown in the HUD (chestplate bar above the health bar)
 	points = {
-		head = 10,
-		torso = 10,
-		legs = 10,
-		feet = 10,
+		head = 1000,
+		torso = 1000,
+		legs = 1000,
+		feet = 1000,
 	},
 
 	--this attribute reduce strong damage even more
@@ -123,17 +189,19 @@ mcl_armor.register_set({
 	--this callback table allow you to define functions that will be called each time an entity equip an armor piece or the mcl_armor.on_equip() function is called
 	--the functions accept two arguments: obj and itemstack
 	on_equip_callbacks = {
-		head = function(obj, itemstack)
-			--do stuff
-		end,
+		head = void_equip_callback,
+		torso = void_equip_callback,
+		legs = void_equip_callback,
+		feet = void_equip_callback,
 	},
 
 	--this callback table allow you to define functions that will be called each time an entity unequip an armor piece or the mcl_armor.on_unequip() function is called
 	--the functions accept two arguments: obj and itemstack
 	on_unequip_callbacks = {
-		head = function(obj, itemstack)
-			--do stuff
-		end,
+		head = void_unequip_callback,
+		torso = void_unequip_callback,
+		legs = void_unequip_callback,
+		feet = void_unequip_callback,
 	},
 
 	--this callback table allow you to define functions that will be called then an armor piece break
@@ -158,3 +226,4 @@ mcl_armor.register_set({
 	--if set to nil no repair material will be added
 	repair_material = modname .. ":metal_ingot",
 })
+
