@@ -2,7 +2,7 @@ local modpath = minetest.get_modpath(minetest.get_current_modname())
 local modname = minetest.get_current_modname()
 
 local rawitemstring = [[
-textures/z_plants_bamboo_endcap.png textures/z_plants_birch_sapling.png textures/z_plants_blue_mushroom_1.png textures/z_plants_chrysanthemum_green.png textures/z_plants_dandelion_white.png textures/z_plants_dandelion_yellow.png textures/z_plants_ethereal_crystal_spike.png textures/z_plants_ethereal_fern.png textures/z_plants_geranium.png textures/z_plants_moss_1.png textures/z_plants_moss_2.png textures/z_plants_mushroom_brown.png textures/z_plants_mushroom_red.png textures/z_plants_orange_mushroom_1.png textures/z_plants_orange_mushroom_2.png textures/z_plants_plant_1.png textures/z_plants_plant_2.png textures/z_plants_rose.png textures/z_plants_shrub_1.png textures/z_plants_shrub_2.png textures/z_plants_shrub_3_4_bottom.png textures/z_plants_shrub_3.png textures/z_plants_shrub_4.png textures/z_plants_strawberry_1.png textures/z_plants_strawberry_2.png textures/z_plants_strawberry_3.png textures/z_plants_strawberry_4.png textures/z_plants_tulip_black.png textures/z_plants_tulip.png textures/z_plants_viola.png textures/z_plants_wheat_6.png textures/z_plants_wild_onion_5.png textures/z_plants_willow_twig.png
+textures/z_plants_bamboo_endcap.png textures/z_plants_birch_sapling.png textures/z_plants_blue_mushroom_1.png textures/z_plants_chrysanthemum_green.png textures/z_plants_dandelion_white.png textures/z_plants_dandelion_yellow.png textures/z_plants_ethereal_crystal_spike.png textures/z_plants_ethereal_fern.png textures/z_plants_geranium.png textures/z_plants_moss_1.png textures/z_plants_moss_2.png textures/z_plants_mushroom_brown.png textures/z_plants_mushroom_red.png textures/z_plants_orange_mushroom_1.png textures/z_plants_orange_mushroom_2.png textures/z_plants_plant_1.png textures/z_plants_plant_2.png textures/z_plants_rose.png textures/z_plants_strawberry_1.png textures/z_plants_strawberry_2.png textures/z_plants_strawberry_3.png textures/z_plants_strawberry_4.png textures/z_plants_tulip_black.png textures/z_plants_tulip.png textures/z_plants_viola.png textures/z_plants_wheat_6.png textures/z_plants_wild_onion_5.png textures/z_plants_willow_twig.png
 ]]
 local itemlist = string.split(string.gsub(string.gsub(rawitemstring, "textures/z_plants_", ""), ".png", ""), " ")
 
@@ -32,7 +32,7 @@ local plantsdef = {
 	node_placement_prediction = "",
 	--inventory_image = "z_items_" .. v .. ".png"
 	walkable = false,
-	buildable_to = true,
+	-- buildable_to = true,
 	sounds = mcl_sounds.node_sound_leaves_defaults(),
 
 
@@ -94,6 +94,11 @@ itemlist = {
 	"bamboo_1",
 	"standing_tree_bottom",
 	"vine",
+	"shrub_1",
+	"shrub_2",
+	"shrub_3",
+	"shrub_3_4_bottom",
+	"shrub_4",
 }
 fbox = {
     type = "fixed",

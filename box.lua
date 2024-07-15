@@ -309,8 +309,8 @@ do
         end,
         after_dig_node = drop_content,
         on_blast = on_blast,
-        on_rightclick = function()
-            barrel_open()
+        on_rightclick = function(pos, node, clicker, itemstack)
+            barrel_open(pos, node, clicker, itemstack)
             mesecon.receptor_on(pos, trapped_chest_mesecons_rules)
         end,
         on_destruct = close_forms,

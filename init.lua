@@ -35,11 +35,10 @@ dofile(modpath .. "/freeze.lua")
 
 
 
-minetest.chat_send_all(modpath)
+-- minetest.chat_send_all(modpath)
 
 
 --privs
---nametag
 
 -- amongus
 -- amongus red square button
@@ -48,16 +47,8 @@ minetest.chat_send_all(modpath)
 --rockets
 
 
---hidename
-
 --acorn
 
-
-
---
-
-
---armor abilities
 
 --vl variants
 
@@ -73,13 +64,10 @@ minetest.chat_send_all(modpath)
 --entities/animals
 
 
---invis armor
 --observer entity
---clover
 
---realistic falshlight
+--realistic flashlight
 --trapped box
---all black armor
 
 --vuill
 
