@@ -30,6 +30,7 @@ dofile(modpath .. "/food.lua")
 dofile(modpath .. "/powers.lua")
 dofile(modpath .. "/tools.lua")
 dofile(modpath .. "/freeze.lua")
+dofile(modpath .. "/rw.lua")
 
 --dofile(modpath .. "/goodtorch/init.lua")
 
@@ -84,3 +85,7 @@ dofile(modpath .. "/freeze.lua")
 
 
 --vehicles
+
+
+
+--rapid pressure plate/button
