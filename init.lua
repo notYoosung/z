@@ -35,6 +35,10 @@ dofile(modpath .. "/rw.lua")
 --dofile(modpath .. "/goodtorch/init.lua")
 
 
+dofile(modpath .. "/creatura/init.lua")
+dofile(modpath .. "/animalia/init.lua")
+
+
 
 -- minetest.chat_send_all(modpath)
 
@@ -89,3 +93,10 @@ dofile(modpath .. "/rw.lua")
 
 
 --rapid pressure plate/button
+
+
+
+--farming
+
+
+--planes
