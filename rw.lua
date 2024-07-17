@@ -2,6 +2,11 @@ local modpath = minetest.get_modpath(minetest.get_current_modname())
 local modname = minetest.get_current_modname()
 
 
+
+-- local RW_ammo_capabilities = {}
+
+local tools = {}
+
 local rw = {}
 
 local l = {
@@ -19,9 +24,23 @@ for i, v in ipairs(l) do
 			not_in_creative_inventory = 1,
 		}
 
-		if v == tool then
+		if v == "tool" then
 			defaultdef.on_use = function() return end
 			defaultdef.wield_scale = mcl_vars.tool_wield_scale
+			
+			defaultgroups.weapon = 1
+			defaultgroups.weapon_ranged = 1
+
+			if not name:match("_r+$")
+				and not name:match("_rld$")
+				and not name:match("_uld$")
+			then
+				table.insert(tools, name)
+			end
+		elseif v == "craftitem" then
+			-- local ammoname = string.gsub(name, modname .. ":rw_", "")
+			-- minetest.log(tostring(ammoname))
+			-- RW_ammo_capabilities[ammoname] = def.RW_ammo_capabilities
 		end
 		
 		for i, v in pairs(def) do
@@ -53,6 +72,19 @@ end
 
 
 
+minetest.register_chatcommand("rw", {
+    privs = {
+        server = true,
+    },
+    func = function(name, param)
+		local pos = minetest.get_player_by_name(name):getpos()
+		for k, v in ipairs(tools) do
+			-- minetest.chat_send_player(name, "Spawning Item at " .. minetest.pos_to_string(pos) .. ", please wait")
+			minetest.spawn_item(pos, v)
+		end
+		return true, "successfully spawned"
+    end,
+})
 
 
 
@@ -237,6 +269,8 @@ rangedweapons_reload_gun = function(itemstack, player)
 			
 			reload_ammo = ItemStack(ammo[1] .. " 65535")
 			clipSize = ammo[2]
+
+			player_has_ammo = 1
 		end
 	end
 
@@ -1263,52 +1297,240 @@ bullet_knockback = (function()
 	end
 end)()
 
-ammo = (function()
-	forbidden_ents = {
+
+forbidden_ents = {
 	"",
+}
+
+
+minetest.register_alias(modname .. ":rw_726mm", modname .. ":rw_762mm")
+
+rw.register_craftitem(modname .. ":rw_shot_bullet_visual", {
+	wield_scale = {x=1.0,y=1.0,z=1.0},
+	inventory_image = "bulletshot.png",
+})
+
+
+local rangedweapons_shot_bullet = {
+	timer = 0,
+	initial_properties = {
+		physical = true,
+		hp_max = 420,
+		glow = 100,
+		visual = "wielditem",
+		visual_size = {x=0.75, y=0.75},
+		textures = {modname .. ":rw_shot_bullet_visual"},
+		_lastpos = {},
+			collide_with_objects = true,
+		collisionbox = {-0.0025, -0.0025, -0.0025, 0.0025, 0.0025, 0.0025},
+	},
+	_fire_damage_resistant = true,
+	_lastpos={},
+	_startpos=nil,
+	_damage=1,	-- Damage on impact
+	_is_critical=false, -- Whether this arrow would deal critical damage
+	_stuck=false,   -- Whether arrow is stuck
+	_lifetime=0,-- Amount of time (in seconds) the arrow has existed
+	_stuckrechecktimer=nil,-- An additional timer for periodically re-checking the stuck status of an arrow
+	_stuckin=nil,	--Position of node in which arow is stuck.
+	_shooter=nil,	-- ObjectRef of player or mob who shot it
+	_is_arrow = true,
+	_in_player = false,
+	_blocked = false,
+	_viscosity=0,   -- Viscosity of node the arrow is currently in
+	_deflection_cooloff=0, -- Cooloff timer after an arrow deflection, to prevent many deflections in quick succession
+}
+
+local use_particles = minetest.settings:get_bool(modname .. "_impact_particles", true)
+local max_lifetime = tonumber(minetest.settings:get(modname .. "_bullet_lifetime")) or 10.0
+
+local function generic_proj_on_step(self, dtime, moveresult, customops)
+	local specialops = {}
+	local defaultops = {
+		on_hit = function()
+			
+		end,
+		on_hit_player = function()
+			
+		end,
+		on_hit_object = function()
+			
+		end,
 	}
+	end
 	
+	for k, v in pairs(defaultops) do
+		specialops[k] = function()
+			defaultops[k]()
+			customops[k]()
+		end
+	end
+
+
+	mcl_burning.tick(self.object, dtime, self)
+	-- mcl_burning.tick may remove object immediately
+	if not self.object:get_pos() then return end
+
+
+	local pos = self.object:get_pos()
+	local dpos = vector.round(vector.new(pos)) -- digital pos
+	local node = minetest.get_node(dpos)
+
+	self.timer = self.timer + dtime
+	if self.timer > max_lifetime then
+		mcl_burning.extinguish(self.object)
+		self.object:remove()
+		return
+	end
+
+	if self.owner == nil then
+		self.object:remove()
+		return
+	end
+			
+	local closest_object
+	local closest_distance
+
+
+	local arrow_dir = self.object:get_velocity()
+	--create a raycast from the arrow based on the velocity of the arrow to deal with lag
+	local raycast = minetest.raycast(pos, vector.add(pos, vector.multiply(arrow_dir, 0.1)), true, false)
+	for hitpoint in raycast do
+		if hitpoint.type == "object" then
+			-- find the closest object that is in the way of the arrow
+			local ok = false
+			if hitpoint.ref:is_player() and enable_pvp then
+				ok = true
+			elseif not hitpoint.ref:is_player() and hitpoint.ref:get_luaentity() then
+				if (hitpoint.ref:get_luaentity().is_mob or hitpoint.ref:get_luaentity()._hittable_by_projectile) then
+					ok = true
+				end
+			end
+			if ok then
+				local dist = vector.distance(hitpoint.ref:get_pos(), pos)
+				if not closest_object or not closest_distance then
+					closest_object = hitpoint.ref
+					closest_distance = dist
+				elseif dist < closest_distance then
+					closest_object = hitpoint.ref
+					closest_distance = dist
+				end
+			end
+		end
+	end
+
+	if closest_object then
+		local obj = closest_object
+		local is_player = obj:is_player()
+		local lua = obj:get_luaentity()
+		if obj == self._shooter and self.timer > 0.5 or obj ~= self._shooter and (is_player or (lua and (lua.is_mob or lua._hittable_by_projectile))) then
+			if obj:get_hp() > 0 then
+				-- Check if there is no solid node between arrow and object
+				local ray = minetest.raycast(self.object:get_pos(), obj:get_pos(), true)
+				for pointed_thing in ray do
+					if pointed_thing.type == "object" and pointed_thing.ref == closest_object then
+						-- Target reached! We can proceed now.
+						break
+					elseif pointed_thing.type == "node" then
+						local nn = minetest.get_node(minetest.get_pointed_thing_position(pointed_thing)).name
+						local def = minetest.registered_nodes[nn]
+						if (not def) or def.walkable then
+							-- There's a node in the way. Delete arrow without damage
+							mcl_burning.extinguish(self.object)
+							self.object:remove()
+							return
+						end
+					end
+				end
+
+				-- Punch target object but avoid hurting enderman.
+				if not lua then
+					if not self._in_player then
+						damage_particles(vector.add(pos, vector.multiply(self.object:get_velocity(), 0.1)), self._is_critical)
+					end
+					if mcl_burning.is_burning(self.object) then
+						mcl_burning.set_on_fire(obj, 5)
+					end
+					if not self._in_player and not self._blocked then
+						mcl_util.deal_damage(obj, self._damage or 10, {type = "arrow", source = self._shooter, direct = self.object})
+						if self._extra_hit_func then
+							self._extra_hit_func(obj)
+						end
+						self.object:remove()
+					end
+					for i=1,math.random(math.ceil(10*0.66),math.ceil(10*1.5)) do
+						minetest.add_particle({
+							pos = self.object:get_pos(),
+							velocity = {x=math.random(-15.0,15.0)/10, y=math.random(2.0,5.0), z=math.random(-15.0,15.0)/10},
+							acceleration = {x=math.random(-3.0,3.0), y=math.random(-10.0,-15.0), z=math.random(-3.0,3.0)},
+							expirationtime = 0.75,
+							size = math.random(10,20)/10,
+							collisiondetection = true,
+							vertical = false,
+							texture = "blood.png",
+							animation = {type="vertical_frames", aspect_w=8, aspect_h=8, length = 0.8,},
+							glow = 0,
+						})
+					end
+
+				end
+
+
+				if is_player then
+					if self._shooter and self._shooter:is_player() and not self._in_player and not self._blocked then
+						-- “Ding” sound for hitting another player
+						minetest.sound_play({name="mcl_bows_hit_player", gain=0.1}, {to_player=self._shooter:get_player_name()}, true)
+					end
+				end
+
+				if not self._in_player and not self._blocked then
+					minetest.sound_play({name="default_dig_cracky", gain=0.3}, {pos=self.object:get_pos(), max_hear_distance=16}, true)
+				end
+			end
+			if not obj:is_player() then
+				mcl_burning.extinguish(self.object)
+				if self._piercing == 0 then
+					self.object:remove()
+				end
+			end
+			return
+		end
+	end
 	
-	minetest.register_alias(modname .. ":rw_726mm", modname .. ":rw_762mm")
-	
-	rw.register_craftitem(modname .. ":rw_shot_bullet_visual", {
-		wield_scale = {x=1.0,y=1.0,z=1.0},
-		inventory_image = "bulletshot.png",
-	})
-	
-	
-	local rangedweapons_shot_bullet = {
-		timer = 0,
-		initial_properties = {
-			physical = true,
-			hp_max = 420,
-			glow = 100,
-			visual = "wielditem",
-			visual_size = {x=0.75, y=0.75},
-			textures = {modname .. ":rw_shot_bullet_visual"},
-			_lastpos = {},
-				collide_with_objects = true,
-			collisionbox = {-0.0025, -0.0025, -0.0025, 0.0025, 0.0025, 0.0025},
-		},
-		_fire_damage_resistant = true,
-		_lastpos={},
-		_startpos=nil,
-		_damage=1,	-- Damage on impact
-		_is_critical=false, -- Whether this arrow would deal critical damage
-		_stuck=false,   -- Whether arrow is stuck
-		_lifetime=0,-- Amount of time (in seconds) the arrow has existed
-		_stuckrechecktimer=nil,-- An additional timer for periodically re-checking the stuck status of an arrow
-		_stuckin=nil,	--Position of node in which arow is stuck.
-		_shooter=nil,	-- ObjectRef of player or mob who shot it
-		_is_arrow = true,
-		_in_player = false,
-		_blocked = false,
-		_viscosity=0,   -- Viscosity of node the arrow is currently in
-		_deflection_cooloff=0, -- Cooloff timer after an arrow deflection, to prevent many deflections in quick succession
-	}
-	
-	local use_particles = minetest.settings:get_bool(modname .. "_impact_particles", true)
-	local max_lifetime = tonumber(minetest.settings:get(modname .. "_bullet_lifetime")) or 10.0
+	if self._lastpos == nil then
+		self._lastpos = pos
+	end
+
+	-- Check for node collision
+	if self._lastpos.x~=nil and not self._stuck then
+		-- local def = minetest.registered_nodes[node.name]
+		local vel = self.object:get_velocity()
+		-- Arrow has stopped in one axis, so it probably hit something.
+		-- This detection is a bit clunky, but sadly, MT does not offer a direct collision detection for us. :-(
+		if (math.abs(vel.x) < 0.0001) or (math.abs(vel.z) < 0.0001) or (math.abs(vel.y) < 0.00001) then
+
+			mcl_burning.extinguish(self.object)
+			self.object:remove()
+		end
+	end
+
+	-- Update yaw
+	if not self._stuck then
+		local vel = self.object:get_velocity() or {x=0, y=0, z=0}
+		local yaw = minetest.dir_to_yaw(vel)+YAW_OFFSET
+		local pitch = dir_to_pitch(vel)
+		self.object:set_rotation({ x = 0, y = yaw, z = pitch })
+	end
+
+	-- Update internal variable
+	self._lastpos = pos
+
+
+end
+
+
+
+ammo = (function()
 	--[[
 	rangedweapons_shot_bullet.on_step = function(self, dtime, moveresult)
 		----------------------------------------
@@ -1677,262 +1899,10 @@ ammo = (function()
 	end
 	--]]
 	
-	
 	----------------------------------------------
 	
 	rangedweapons_shot_bullet.on_step = function(self, dtime, moveresult)
-		mcl_burning.tick(self.object, dtime, self)
-		-- mcl_burning.tick may remove object immediately
-		if not self.object:get_pos() then return end
-	
-	
-		local pos = self.object:get_pos()
-		local dpos = vector.round(vector.new(pos)) -- digital pos
-		local node = minetest.get_node(dpos)
-	
-		self.timer = self.timer + dtime
-		if self.timer > max_lifetime then
-			mcl_burning.extinguish(self.object)
-			self.object:remove()
-			return
-		end
-	
-		if self._stuck then
-			-- self._stuckrechecktimer = self._stuckrechecktimer + dtime
-			-- -- Drop arrow as item when it is no longer stuck
-			-- -- FIXME: Arrows are a bit slow to react and continue to float in mid air for a few seconds.
-			-- if self._stuckrechecktimer > STUCK_RECHECK_TIME then
-			-- 	local stuckin_def
-			-- 	if self._stuckin then
-			-- 		stuckin_def = minetest.registered_nodes[minetest.get_node(self._stuckin).name]
-			-- 	end
-			-- 	-- TODO: In MC, arrow just falls down without turning into an item
-			-- 	if stuckin_def and stuckin_def.walkable == false then
-			-- 		spawn_item(self, pos)
-			-- 		return
-			-- 	end
-			-- 	self._stuckrechecktimer = 0
-			-- end
-			-- -- Pickup arrow if player is nearby (not in Creative Mode)
-			-- local objects = minetest.get_objects_inside_radius(pos, 1)
-			-- for _,obj in ipairs(objects) do
-			-- 	if obj:is_player() then
-			-- 		if self._collectable and not minetest.is_creative_enabled(obj:get_player_name()) then
-			-- 			if obj:get_inventory():room_for_item("main", "mcl_bows:arrow") then
-			-- 				obj:get_inventory():add_item("main", "mcl_bows:arrow")
-			-- 				minetest.sound_play("item_drop_pickup", {
-			-- 					pos = pos,
-			-- 					max_hear_distance = 16,
-			-- 					gain = 1.0,
-			-- 				}, true)
-			-- 			end
-			-- 		end
-					mcl_burning.extinguish(self.object)
-					self.object:remove()
-			-- 		return
-			-- 	end
-			-- end
-	
-		-- Check for object "collision". Done every tick (hopefully this is not too stressing)
-		else
-	
-			if self.owner == nil then
-				self.object:remove()
-				return
-			end
-			
-			local pos = self.object:get_pos()
-			local dpos = vector.round(vector.new(pos)) -- digital pos
-			local node = minetest.get_node(dpos)
-			
-			local closest_object
-			local closest_distance
-	
-	
-			local arrow_dir = self.object:get_velocity()
-			--create a raycast from the arrow based on the velocity of the arrow to deal with lag
-			local raycast = minetest.raycast(pos, vector.add(pos, vector.multiply(arrow_dir, 0.1)), true, false)
-			for hitpoint in raycast do
-				if hitpoint.type == "object" then
-					-- find the closest object that is in the way of the arrow
-					local ok = false
-					if hitpoint.ref:is_player() and enable_pvp then
-						ok = true
-					elseif not hitpoint.ref:is_player() and hitpoint.ref:get_luaentity() then
-						if (hitpoint.ref:get_luaentity().is_mob or hitpoint.ref:get_luaentity()._hittable_by_projectile) then
-							ok = true
-						end
-					end
-					if ok then
-						local dist = vector.distance(hitpoint.ref:get_pos(), pos)
-						if not closest_object or not closest_distance then
-							closest_object = hitpoint.ref
-							closest_distance = dist
-						elseif dist < closest_distance then
-							closest_object = hitpoint.ref
-							closest_distance = dist
-						end
-					end
-				end
-			end
-	
-			if closest_object then
-				local obj = closest_object
-				local is_player = obj:is_player()
-				local lua = obj:get_luaentity()
-				if obj == self._shooter and self.timer > 0.5 or obj ~= self._shooter and (is_player or (lua and (lua.is_mob or lua._hittable_by_projectile))) then
-					if obj:get_hp() > 0 then
-						-- Check if there is no solid node between arrow and object
-						local ray = minetest.raycast(self.object:get_pos(), obj:get_pos(), true)
-						for pointed_thing in ray do
-							if pointed_thing.type == "object" and pointed_thing.ref == closest_object then
-								-- Target reached! We can proceed now.
-								break
-							elseif pointed_thing.type == "node" then
-								local nn = minetest.get_node(minetest.get_pointed_thing_position(pointed_thing)).name
-								local def = minetest.registered_nodes[nn]
-								if (not def) or def.walkable then
-									-- There's a node in the way. Delete arrow without damage
-									mcl_burning.extinguish(self.object)
-									self.object:remove()
-									return
-								end
-							end
-						end
-	
-						-- Punch target object but avoid hurting enderman.
-						if not lua or lua.name ~= "mobs_mc:enderman" then
-							if not self._in_player then
-								damage_particles(vector.add(pos, vector.multiply(self.object:get_velocity(), 0.1)), self._is_critical)
-							end
-							if mcl_burning.is_burning(self.object) then
-								mcl_burning.set_on_fire(obj, 5)
-							end
-							if not self._in_player and not self._blocked then
-								mcl_util.deal_damage(obj, self._damage or 10, {type = "arrow", source = self._shooter, direct = self.object})
-								if self._extra_hit_func then
-									self._extra_hit_func(obj)
-								end
-								self.object:remove()
-							end
-						end
-	
-	
-						if is_player then
-							if self._shooter and self._shooter:is_player() and not self._in_player and not self._blocked then
-								-- “Ding” sound for hitting another player
-								minetest.sound_play({name="mcl_bows_hit_player", gain=0.1}, {to_player=self._shooter:get_player_name()}, true)
-							end
-						end
-	
-						if not self._in_player and not self._blocked then
-							minetest.sound_play({name="default_dig_cracky", gain=0.3}, {pos=self.object:get_pos(), max_hear_distance=16}, true)
-						end
-					end
-					if not obj:is_player() then
-						mcl_burning.extinguish(self.object)
-						if self._piercing == 0 then
-							self.object:remove()
-						end
-					end
-					return
-				end
-			end
-		end
-		
-		if self._lastpos == nil then
-			self._lastpos = pos
-		end
-
-		-- Check for node collision
-		if self._lastpos.x~=nil and not self._stuck then
-			local def = minetest.registered_nodes[node.name]
-			local vel = self.object:get_velocity()
-			-- Arrow has stopped in one axis, so it probably hit something.
-			-- This detection is a bit clunky, but sadly, MT does not offer a direct collision detection for us. :-(
-			if (math.abs(vel.x) < 0.0001) or (math.abs(vel.z) < 0.0001) or (math.abs(vel.y) < 0.00001) then
-				-- Check for the node to which the arrow is pointing
-				local dir
-				if math.abs(vel.y) < 0.00001 then
-					if self._lastpos.y < pos.y then
-						dir = vector.new(0, 1, 0)
-					else
-						dir = vector.new(0, -1, 0)
-					end
-				else
-					dir = minetest.facedir_to_dir(minetest.dir_to_facedir(minetest.yaw_to_dir(self.object:get_yaw()-YAW_OFFSET)))
-				end
-				self._stuckin = vector.add(dpos, dir)
-				local snode = minetest.get_node(self._stuckin)
-				local sdef = minetest.registered_nodes[snode.name]
-	
-				-- If node is non-walkable, unknown or ignore, don't make arrow stuck.
-				-- This causes a deflection in the engine.
-				if not sdef or sdef.walkable == false or snode.name == "ignore" then
-					mcl_burning.extinguish(self.object)
-					self.object:remove()
-					--[[self._stuckin = nil
-					if self._deflection_cooloff == nil then
-						self._deflection_cooloff = 0
-					end
-					if self._deflection_cooloff <= 0 then
-						-- Lose 1/3 of velocity on deflection
-						local newvel = vector.multiply(vel, 0.6667)
-	
-						self.object:set_velocity(newvel)
-						-- Reset deflection cooloff timer to prevent many deflections happening in quick succession
-						self._deflection_cooloff = 1.0
-					end--]]
-				else
-					mcl_burning.extinguish(self.object)
-					self.object:remove()
-
-					-- Node was walkable, make arrow stuck
-					-- self._stuck = true
-					-- self.timer = 0
-					-- self._stuckrechecktimer = 0
-	
-					-- self.object:set_velocity(vector.new(0, 0, 0))
-					-- self.object:set_acceleration(vector.new(0, 0, 0))
-	
-					minetest.sound_play({name="default_dig_cracky", gain=0.3}, {pos=self.object:get_pos(), max_hear_distance=16}, true)
-	
-					local bdef = minetest.registered_nodes[node.name]
-					if (bdef and bdef._on_arrow_hit) then
-						bdef._on_arrow_hit(dpos, self)
-					elseif (sdef and sdef._on_arrow_hit) then
-						sdef._on_arrow_hit(self._stuckin, self)
-					end
-				end
-			elseif (def and def.liquidtype ~= "none") then
-				--[[-- Slow down arrow in liquids
-				local v = def.liquid_viscosity
-				if not v then
-					v = 0
-				end
-				--local old_v = self._viscosity
-				self._viscosity = v
-				local vpenalty = math.max(0.1, 0.98 - 0.1 * v)
-				if math.abs(vel.x) > 0.001 then
-					vel.x = vel.x * vpenalty
-				end
-				if math.abs(vel.z) > 0.001 then
-					vel.z = vel.z * vpenalty
-				end
-				self.object:set_velocity(vel)--]]
-			end
-		end
-	
-		-- Update yaw
-		if not self._stuck then
-			local vel = self.object:get_velocity() or {x=0, y=0, z=0}
-			local yaw = minetest.dir_to_yaw(vel)+YAW_OFFSET
-			local pitch = dir_to_pitch(vel)
-			self.object:set_rotation({ x = 0, y = yaw, z = pitch })
-		end
-	
-		-- Update internal variable
-		self._lastpos = pos
+		generic_proj_on_step(self, dtime, moveresult)
 	end
 		
 	----------------------------------------------------------------
@@ -5794,13 +5764,16 @@ hand_grenade = (function()
 	minetest.register_globalstep(function(dtime, player, pos)
 		gtimer = gtimer + dtime;
 		if gtimer >= 3.0 then
-		for _, player in pairs(minetest.get_connected_players()) do
-		local pos = player:get_pos()
-			if player:get_wielded_item():get_name() == modname .. ":rw_hand_grenade_nopin" then
-			player:set_wielded_item(modname .. ":rw_hand_grenade")
-			gtimer = 0
-			grenade_boom(player)
-			end end end end)
+			for _, player in pairs(minetest.get_connected_players()) do
+				local pos = player:get_pos()
+				if player:get_wielded_item():get_name() == modname .. ":rw_hand_grenade_nopin" then
+					player:set_wielded_item(modname .. ":rw_hand_grenade")
+					gtimer = 0
+					grenade_boom(player)
+				end
+			end
+		end
+	end)
 	
 	local rangedweapons_grenade = {
 		physical = true,
@@ -5819,8 +5792,8 @@ hand_grenade = (function()
 		local btimer = btimer or 0
 		self.timer = self.timer + dtime
 		if self.timer > (3.0 - btimer) then
-		grenade_boom(self)
-		self.object:remove()
+			grenade_boom(self)
+			self.object:remove()
 		end
 		self._lastpos= {x = pos.x, y = pos.y, z = pos.z}
 	
