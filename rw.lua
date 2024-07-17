@@ -252,11 +252,15 @@ rangedweapons_reload_gun = function(itemstack, player)
 			inv:add_item("main", ammoName .. " " .. ammoCount)
 
 			if inv:contains_item("main", reload_ammo:get_name() .. " " .. clipSize) then
-				inv:remove_item("main", reload_ammo:get_name() .. " " .. clipSize)
+				if not playeriscreative then
+					inv:remove_item("main", reload_ammo:get_name() .. " " .. clipSize)
+				end
 				gunMeta:set_int("RW_bullets", clipSize)
 			else
 				gunMeta:set_int("RW_bullets", reload_ammo:get_count())
-				inv:remove_item("main", reload_ammo:get_name() .. " " .. reload_ammo:get_count())
+				if not playeriscreative then
+					inv:remove_item("main", reload_ammo:get_name() .. " " .. reload_ammo:get_count())
+				end
 			end
 		end
 
@@ -3134,13 +3138,17 @@ forcegun = (function()
 		wield_scale = {x=2.0,y=2.0,z=1.75},
 		inventory_image = "forcegun.png",
 		on_use = function(itemstack, user, pointed_thing)
+			local playeriscreative = minetest.is_creative_enabled(player:get_player_name())
+
 			local pos = user:get_pos()
 			local dir = user:get_look_dir()
 			local yaw = user:get_look_horizontal()
 			local inv = user:get_inventory()
-			if  inv:contains_item("main", modname .. ":rw_power_particle 40") then
+			if playeriscreative or inv:contains_item("main", modname .. ":rw_power_particle 40") then
 				if pos and dir then
-					inv:remove_item("main", modname .. ":rw_power_particle 25")
+					if not playeriscreative then
+						inv:remove_item("main", modname .. ":rw_power_particle 25")
+					end
 					pos.y = pos.y + 1.5
 					local obj = minetest.add_entity(pos, modname .. ":rw_forceblast")
 					if obj then
