@@ -364,7 +364,15 @@ rangedweapons_single_load_gun = function(itemstack, player)
 					break
 				end
 			end
-
+			if player_has_ammo == 0 and playeriscreative then
+				local ammo = GunCaps.suitable_ammo[1]
+				
+				reload_ammo = ItemStack(ammo[1] .. " 65535")
+				clipSize = ammo[2]
+	
+				player_has_ammo = 1
+			end
+	
 			if player_has_ammo == 1 then
 				break
 			end
@@ -388,7 +396,7 @@ rangedweapons_single_load_gun = function(itemstack, player)
 			gunMeta:set_int("RW_bullets", 0)
 		end
 
-		if inv:contains_item("main", reload_ammo:get_name()) and gunMeta:get_int("RW_bullets") < clipSize then
+		if (inv:contains_item("main", reload_ammo:get_name()) or playeriscreative) and gunMeta:get_int("RW_bullets") < clipSize then
 			if not minetest.settings:get_bool(modname .. "_infinite_ammo", false) or not playeriscreative then
 				inv:remove_item("main", reload_ammo:get_name())
 			end
@@ -1347,22 +1355,32 @@ local max_lifetime = tonumber(minetest.settings:get(modname .. "_bullet_lifetime
 local function generic_proj_on_step(self, dtime, moveresult, customops)
 	local specialops = {}
 	local defaultops = {
-		on_hit = function()
-			
+		on_hit_node = function(self, node)
+			minetest.sound_play("default_dig_cracky", {
+				object = self.object,
+				max_hear_distance = 32
+			}, true)
+			mcl_burning.extinguish(self.object)
+			self.object:remove()
 		end,
-		on_hit_player = function()
-			
-		end,
-		on_hit_object = function()
-			
+		on_hit_object = function(this, obj, is_player)
+			minetest.sound_play("default_punch", {
+				object = obj,
+				max_hear_distance = 32
+			}, true)
+			mcl_burning.extinguish(this.object)
+			this.object:remove()
+			-- minetest.log("obj hit")
 		end,
 	}
-	end
+	
 	
 	for k, v in pairs(defaultops) do
-		specialops[k] = function()
-			defaultops[k]()
-			customops[k]()
+		specialops[k] = function(a, b, c)
+			if customops and customops[k] then
+				customops[k](a, b, c)
+			end
+			defaultops[k](a, b, c)
 		end
 	end
 
@@ -1423,7 +1441,7 @@ local function generic_proj_on_step(self, dtime, moveresult, customops)
 		local obj = closest_object
 		local is_player = obj:is_player()
 		local lua = obj:get_luaentity()
-		if obj == self._shooter and self.timer > 0.5 or obj ~= self._shooter and (is_player or (lua and (lua.is_mob or lua._hittable_by_projectile))) then
+		if obj == self._shooter and self.timer > 1000.5 or obj ~= self._shooter and (is_player or (lua and (lua.is_mob or lua._hittable_by_projectile))) then
 			if obj:get_hp() > 0 then
 				-- Check if there is no solid node between arrow and object
 				local ray = minetest.raycast(self.object:get_pos(), obj:get_pos(), true)
@@ -1436,31 +1454,39 @@ local function generic_proj_on_step(self, dtime, moveresult, customops)
 						local def = minetest.registered_nodes[nn]
 						if (not def) or def.walkable then
 							-- There's a node in the way. Delete arrow without damage
-							mcl_burning.extinguish(self.object)
-							self.object:remove()
+							specialops.on_hit_node(self, minetest.get_node(minetest.get_pointed_thing_position(pointed_thing)))
 							return
 						end
 					end
 				end
 
-				-- Punch target object but avoid hurting enderman.
-				if not lua then
-					if not self._in_player then
+				-- Punch target object
+				-- if  lua then
+					-- if not self._in_player then
 						damage_particles(vector.add(pos, vector.multiply(self.object:get_velocity(), 0.1)), self._is_critical)
-					end
+					-- end
 					if mcl_burning.is_burning(self.object) then
 						mcl_burning.set_on_fire(obj, 5)
 					end
-					if not self._in_player and not self._blocked then
-						mcl_util.deal_damage(obj, self._damage or 10, {type = "arrow", source = self._shooter, direct = self.object})
+					-- if not self._in_player then
+						mcl_util.deal_damage(obj, self.damage.fleshy or self._damage or 10, {type = "arrow", source = self._shooter, direct = self.object})
 						if self._extra_hit_func then
 							self._extra_hit_func(obj)
 						end
-						self.object:remove()
-					end
+						if obj.indicate_damage ~= nil then
+							obj:hurt(damage)
+							obj:indicate_damage()
+						end	
+						-- minetest.log("damage")
+						-- if self.damage then
+						-- 	minetest.log(self.damage.fleshy)
+						-- end
+						
+						specialops.on_hit_object(self, obj, is_player)
+					-- end
 					for i=1,math.random(math.ceil(10*0.66),math.ceil(10*1.5)) do
 						minetest.add_particle({
-							pos = self.object:get_pos(),
+							pos = obj:get_pos(),
 							velocity = {x=math.random(-15.0,15.0)/10, y=math.random(2.0,5.0), z=math.random(-15.0,15.0)/10},
 							acceleration = {x=math.random(-3.0,3.0), y=math.random(-10.0,-15.0), z=math.random(-3.0,3.0)},
 							expirationtime = 0.75,
@@ -1473,7 +1499,7 @@ local function generic_proj_on_step(self, dtime, moveresult, customops)
 						})
 					end
 
-				end
+				-- end
 
 
 				if is_player then
@@ -1488,10 +1514,7 @@ local function generic_proj_on_step(self, dtime, moveresult, customops)
 				end
 			end
 			if not obj:is_player() then
-				mcl_burning.extinguish(self.object)
-				if self._piercing == 0 then
-					self.object:remove()
-				end
+				specialops.on_hit_object(self, obj, false)
 			end
 			return
 		end
@@ -1904,7 +1927,7 @@ ammo = (function()
 	rangedweapons_shot_bullet.on_step = function(self, dtime, moveresult)
 		generic_proj_on_step(self, dtime, moveresult)
 	end
-		
+	
 	----------------------------------------------------------------
 	
 	
@@ -3153,6 +3176,36 @@ forcegun = (function()
 	}
 	
 	rangedweapons_forceblast.on_step = function(self, dtime, moveresult)
+		--[[generic_proj_on_step(self, dtime, moveresult, {
+			on_hit_object = function(self, collide_with)
+				local pos = self.object:get_pos()
+				proj_dir = proj_dir or ({x=0,y=0,z=0})
+
+				if collide_with:is_player() then
+
+					collide_with:add_player_velocity({x=proj_dir.x * 20, y=5+ (proj_dir.y * 20), z=proj_dir.z * 20})
+				else
+					collide_with:add_velocity({x=proj_dir.x * 20, y=5+ (proj_dir.y * 20), z=proj_dir.z * 20})
+
+				end
+				minetest.add_particle({
+					pos = ({x = pos.x, y = pos.y, z = pos.z}),
+					velocity ={x=0,y=0,z=0},
+					acceleration ={x=0,y=0,z=0},
+					expirationtime = 0.20,
+					size = 16,
+					collisiondetection = true,
+					collision_removal = false,
+					vertical = false,
+					texture = "force_blast.png",
+					glow = 20,
+					animation = {type="vertical_frames", aspect_w=64, aspect_h=64, length = 0.20,},
+				})
+				self.object:remove()
+			end
+		})
+		--]]
+
 		self.timer = self.timer + dtime
 		local pos = self.object:get_pos()
 		proj_dir = proj_dir or ({x=0,y=0,z=0})
@@ -3169,27 +3222,6 @@ forcegun = (function()
 			if moveresult.collisions[1] ~= nil then
 	
 				if moveresult.collisions[1].type == "object" then
-					if moveresult.collisions[1].object:is_player() then
-	
-						moveresult.collisions[1].object:add_player_velocity({x=proj_dir.x * 20, y=5+ (proj_dir.y * 20), z=proj_dir.z * 20})
-					else
-						moveresult.collisions[1].object:add_velocity({x=proj_dir.x * 20, y=5+ (proj_dir.y * 20), z=proj_dir.z * 20})
-	
-					end
-					minetest.add_particle({
-						pos = ({x = pos.x, y = pos.y, z = pos.z}),
-						velocity ={x=0,y=0,z=0},
-						acceleration ={x=0,y=0,z=0},
-						expirationtime = 0.20,
-						size = 16,
-						collisiondetection = true,
-						collision_removal = false,
-						vertical = false,
-						texture = "force_blast.png",
-						glow = 20,
-						animation = {type="vertical_frames", aspect_w=64, aspect_h=64, length = 0.20,},
-					})
-					self.object:remove()
 				end
 	
 				if moveresult.collisions[1].type == "node" then
