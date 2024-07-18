@@ -3131,7 +3131,7 @@ forcegun = (function()
 		wield_scale = {x=2.0,y=2.0,z=1.75},
 		inventory_image = "forcegun.png",
 		on_use = function(itemstack, user, pointed_thing)
-			local playeriscreative = minetest.is_creative_enabled(player:get_player_name())
+			local playeriscreative = minetest.is_creative_enabled(user:get_player_name())
 
 			local pos = user:get_pos()
 			local dir = user:get_look_dir()
@@ -3250,7 +3250,11 @@ forcegun = (function()
 						if posd_y > -1.0 and posd_y < 0 then posd_y = -1.0 end
 	
 						if obj:get_luaentity() ~= nil then
-							if obj:get_luaentity().name ~= modname .. ":rw_forceblast" then
+							if obj:get_luaentity().name ~= modname .. ":rw_forceblast" and 
+							obj:get_luaentity().name ~= "mcl_chests:chest" and
+							obj:get_luaentity().name ~= "mcl_itemframes:item" and
+							obj:get_luaentity().name ~= "mcl_enchanting:book"
+							then
 								obj:add_velocity({x=10*(-posd_x), y=30*(-1/posd_y), z=10*(-posd_z)})
 								self.object:remove()
 							end
