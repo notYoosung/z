@@ -31,6 +31,7 @@ for i, v in ipairs(l) do
 			defaultgroups.weapon = 1
 			defaultgroups.weapon_ranged = 1
 
+			defaultgroups.not_in_creative_inventory = 0
 			if not name:match("_r+$")
 				and not name:match("_rld$")
 				and not name:match("_uld$")
@@ -55,8 +56,6 @@ for i, v in ipairs(l) do
 		defaultdef.groups = defaultgroups
 
 		local showlist = {
-			"forcegun",
-			"power_particle",
 		}
 		for i, v in ipairs(showlist) do
 			if modname .. ":rw_" .. v == name then
@@ -1441,8 +1440,8 @@ local function generic_proj_on_step(self, dtime, moveresult, customops)
 		local obj = closest_object
 		local is_player = obj:is_player()
 		local lua = obj:get_luaentity()
-		if obj == self._shooter and self.timer > 1000.5 or obj ~= self._shooter and (is_player or (lua and (lua.is_mob or lua._hittable_by_projectile))) then
-			if obj:get_hp() > 0 then
+		if obj ~= self.owner and obj ~= self._shooter and (is_player or (lua and (lua.is_mob or lua._hittable_by_projectile or lua.indicate_damage or lua._vitals))) then
+			if obj:get_hp() > 0 or creatura.is_alive(obj) then
 				-- Check if there is no solid node between arrow and object
 				local ray = minetest.raycast(self.object:get_pos(), obj:get_pos(), true)
 				for pointed_thing in ray do
@@ -1463,7 +1462,7 @@ local function generic_proj_on_step(self, dtime, moveresult, customops)
 				-- Punch target object
 				-- if  lua then
 					-- if not self._in_player then
-						damage_particles(vector.add(pos, vector.multiply(self.object:get_velocity(), 0.1)), self._is_critical)
+						damage_particles(vector.add(pos, vector.multiply(self.object:get_velocity(), 0.0)), true)
 					-- end
 					if mcl_burning.is_burning(self.object) then
 						mcl_burning.set_on_fire(obj, 5)
@@ -1497,7 +1496,7 @@ local function generic_proj_on_step(self, dtime, moveresult, customops)
 							animation = {type="vertical_frames", aspect_w=8, aspect_h=8, length = 0.8,},
 							glow = 0,
 						})
-					end--]
+					end--]]
 
 				-- end
 

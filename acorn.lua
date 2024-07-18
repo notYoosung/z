@@ -1,5 +1,5 @@
-local modpath = minetest.get_modpath(minetest.get_current_modname())
 local modname = minetest.get_current_modname()
+local modpath = minetest.get_modpath(modname)
 
 mcl_trees.register_wood("acorn_oak",{
 	readable_name = "Acorn Oak",

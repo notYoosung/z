@@ -5,6 +5,8 @@ dofile(modpath .. "/yaml/init.lua")
 dofile(modpath .. "/nickname/init.lua")
 dofile(modpath .. "/hidename/init.lua")
 
+dofile(modpath .. "/creatura/init.lua")
+dofile(modpath .. "/animalia/init.lua")
 
 dofile(modpath .. "/sounds.lua")
 dofile(modpath .. "/items.lua")
@@ -32,11 +34,11 @@ dofile(modpath .. "/tools.lua")
 dofile(modpath .. "/freeze.lua")
 dofile(modpath .. "/rw.lua")
 
+dofile(modpath .. "/ctf/init.lua")
+
 --dofile(modpath .. "/goodtorch/init.lua")
 
 
-dofile(modpath .. "/creatura/init.lua")
-dofile(modpath .. "/animalia/init.lua")
 
 
 

@@ -171,7 +171,7 @@ local max_per_block = tonumber(minetest.settings:get("creatura_mapblock_limit"))
 local max_in_abr = tonumber(minetest.settings:get("creatura_abr_limit")) or 24
 local min_abm_dist = min(abr / 2, tonumber(minetest.settings:get("creatura_min_abm_dist")) or 32)
 
-local mobs_spawn = minetest.settings:get_bool("mobs_spawn") ~= false
+local mobs_spawn = false --minetest.settings:get_bool("mobs_spawn") ~= false
 
 local mapgen_mobs = {}
 
