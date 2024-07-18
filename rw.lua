@@ -1484,7 +1484,7 @@ local function generic_proj_on_step(self, dtime, moveresult, customops)
 						
 						specialops.on_hit_object(self, obj, is_player)
 					-- end
-					for i=1,math.random(math.ceil(10*0.66),math.ceil(10*1.5)) do
+					--[[for i=1,math.random(math.ceil(10*0.66),math.ceil(10*1.5)) do
 						minetest.add_particle({
 							pos = obj:get_pos(),
 							velocity = {x=math.random(-15.0,15.0)/10, y=math.random(2.0,5.0), z=math.random(-15.0,15.0)/10},
@@ -1497,7 +1497,7 @@ local function generic_proj_on_step(self, dtime, moveresult, customops)
 							animation = {type="vertical_frames", aspect_w=8, aspect_h=8, length = 0.8,},
 							glow = 0,
 						})
-					end
+					end--]
 
 				-- end
 

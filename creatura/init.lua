@@ -23,4 +23,4 @@ local function load_file(filepath, filename)
 end
 
 load_file(path, "boids.lua")
-load_file(path, "spawning.lua")
+--load_file(path, "spawning.lua")
