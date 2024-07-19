@@ -14,7 +14,14 @@ for i,v in ipairs(itemlist) do
     minetest.register_node(modname .. ":items_" .. v, {
         description = v,
         drawtype = "nodebox",
-        tiles = {"z_items_" .. v .. ".png"},
+        tiles = {
+            {name = "z_items_" .. v .. ".png"},
+            {name = "z_items_" .. v .. ".png"},
+            {name = "blank.png"},
+            {name = "blank.png"},
+            {name = "blank.png"},
+            {name = "blank.png"},
+        },
         use_texture_alpha = "clip",
         node_box = fbox,
         collision_box = fbox,
@@ -39,7 +46,14 @@ for i,v in ipairs(itemlist) do
     minetest.register_node(modname .. ":items_" .. v, {
         description = v,
         drawtype = "nodebox",
-        tiles = {"z_arkacia_" .. v .. ".png"},
+        tiles = {
+            {name = "z_arkacia_" .. v .. ".png"},
+            {name = "z_arkacia_" .. v .. ".png"},
+            {name = "blank.png"},
+            {name = "blank.png"},
+            {name = "blank.png"},
+            {name = "blank.png"},
+        },
         use_texture_alpha = "clip",
         node_box = fbox,
         collision_box = fbox,
@@ -158,6 +172,8 @@ itemlist = {
     {"deal_with_it", 512, 24/10},
     {"arnott_eye", 64, 125/30},
     {"liang_wind", 64, 16/8},
+    {"spinning_bear", 128, 21/30},
+    
 }
 
 for i, v in ipairs(itemlist) do
@@ -174,6 +190,19 @@ for i, v in ipairs(itemlist) do
                     length = v[3]
                 }
             },
+            {
+                name = "z_items_" .. v[1] .. ".png",
+                animation = {
+                    type = "vertical_frames",
+                    aspect_w = v[2],
+                    aspect_h = v[2],
+                    length = v[3]
+                }
+            },
+            {name = "blank.png"},
+            {name = "blank.png"},
+            {name = "blank.png"},
+            {name = "blank.png"},
         },
         use_texture_alpha = "clip",
         node_box = fbox,
@@ -187,3 +216,12 @@ for i, v in ipairs(itemlist) do
         node_placement_prediction = "",
     })
 end
+
+
+
+mcl_stairs.register_stair_and_slab("BEDROCK", {
+	baseitem = "mcl_core:bedrock",
+	description_stair = minetest.colorize("#FF0000", "OMG BEDROCK STAIRS"),
+	description_slab = minetest.colorize("#FF0000", "OMG BEDROCK SLABS"),
+	overrides = {_mcl_stonecutter_recipes = {"mcl_core:bedrock"}},
+})

@@ -5,7 +5,7 @@ local modname = minetest.get_current_modname()
 
 -- local RW_ammo_capabilities = {}
 
-local tools = {}
+local rwtools = {}
 
 local rw = {}
 
@@ -36,9 +36,16 @@ for i, v in ipairs(l) do
 				and not name:match("_rld$")
 				and not name:match("_uld$")
 			then
-				table.insert(tools, name)
+				table.insert(rwtools, name)
 			end
 		elseif v == "craftitem" then
+
+			if name == modname .. ":rw_diamond_shuriken" or
+			   name == modname .. ":rw_hand_grenade"
+			then
+				defaultgroups.not_in_creative_inventory = 0
+				table.insert(rwtools, name)
+			end
 			-- local ammoname = string.gsub(name, modname .. ":rw_", "")
 			-- minetest.log(tostring(ammoname))
 			-- RW_ammo_capabilities[ammoname] = def.RW_ammo_capabilities
@@ -77,7 +84,7 @@ minetest.register_chatcommand("rw", {
     },
     func = function(name, param)
 		local pos = minetest.get_player_by_name(name):getpos()
-		for k, v in ipairs(tools) do
+		for k, v in ipairs(rwtools) do
 			-- minetest.chat_send_player(name, "Spawning Item at " .. minetest.pos_to_string(pos) .. ", please wait")
 			minetest.spawn_item(pos, v)
 		end
@@ -1352,41 +1359,57 @@ local use_particles = minetest.settings:get_bool(modname .. "_impact_particles",
 local max_lifetime = tonumber(minetest.settings:get(modname .. "_bullet_lifetime")) or 10.0
 
 local function generic_proj_on_step(self, dtime, moveresult, customops)
+	mcl_burning.tick(self.object, dtime, self)
+	-- mcl_burning.tick may remove object immediately
+	if not self.object:get_pos() then return end
+	
+	if self.owner == nil then
+		self.object:remove()
+		return
+	end
+
 	local specialops = {}
 	local defaultops = {
 		on_hit_node = function(self, node)
+			if self == nil then return end
+			if self.OnCollision ~= nil then
+				self.OnCollision(self.owner, self, node)
+			end
+
 			minetest.sound_play("default_dig_cracky", {
 				object = self.object,
 				max_hear_distance = 32
 			}, true)
 			mcl_burning.extinguish(self.object)
+			
 			self.object:remove()
 		end,
 		on_hit_object = function(this, obj, is_player)
+			if this == nil then return end
+			if this.OnCollision ~= nil then
+				this.OnCollision(this.owner, this, obj)
+			end
+
 			minetest.sound_play("default_punch", {
 				object = obj,
 				max_hear_distance = 32
 			}, true)
 			mcl_burning.extinguish(this.object)
 			this.object:remove()
-			-- minetest.log("obj hit")
 		end,
 	}
 	
 	
 	for k, v in pairs(defaultops) do
-		specialops[k] = function(a, b, c)
+		specialops[k] = function(...)
 			if customops and customops[k] then
-				customops[k](a, b, c)
+				customops[k](...)
 			end
-			defaultops[k](a, b, c)
+			defaultops[k](...)
 		end
 	end
 
 
-	mcl_burning.tick(self.object, dtime, self)
-	-- mcl_burning.tick may remove object immediately
-	if not self.object:get_pos() then return end
 
 
 	local pos = self.object:get_pos()
@@ -1400,10 +1423,9 @@ local function generic_proj_on_step(self, dtime, moveresult, customops)
 		return
 	end
 
-	if self.owner == nil then
-		self.object:remove()
-		return
-	end
+
+	local owner = minetest.get_player_by_name(self.owner)
+
 			
 	local closest_object
 	local closest_distance
@@ -1414,12 +1436,13 @@ local function generic_proj_on_step(self, dtime, moveresult, customops)
 	local raycast = minetest.raycast(pos, vector.add(pos, vector.multiply(arrow_dir, 0.1)), true, false)
 	for hitpoint in raycast do
 		if hitpoint.type == "object" then
+			local reflua = hitpoint.ref:get_luaentity()
 			-- find the closest object that is in the way of the arrow
 			local ok = false
-			if hitpoint.ref:is_player() and enable_pvp then
+			if hitpoint.ref:is_player() then
 				ok = true
-			elseif not hitpoint.ref:is_player() and hitpoint.ref:get_luaentity() then
-				if (hitpoint.ref:get_luaentity().is_mob or hitpoint.ref:get_luaentity()._hittable_by_projectile) then
+			elseif not hitpoint.ref:is_player() and reflua then
+				if (reflua.is_mob or reflua._hittable_by_projectile or reflua._vitals ~= nil) then
 					ok = true
 				end
 			end
@@ -1440,7 +1463,7 @@ local function generic_proj_on_step(self, dtime, moveresult, customops)
 		local obj = closest_object
 		local is_player = obj:is_player()
 		local lua = obj:get_luaentity()
-		if obj ~= self.owner and obj ~= self._shooter and (is_player or (lua and (lua.is_mob or lua._hittable_by_projectile or lua.indicate_damage or lua._vitals))) then
+		if obj ~= owner and obj ~= self._shooter and (is_player or (lua and (lua.is_mob or lua._hittable_by_projectile or lua.indicate_damage or lua._vitals))) then
 			if obj:get_hp() > 0 or creatura.is_alive(obj) then
 				-- Check if there is no solid node between arrow and object
 				local ray = minetest.raycast(self.object:get_pos(), obj:get_pos(), true)
@@ -1460,57 +1483,32 @@ local function generic_proj_on_step(self, dtime, moveresult, customops)
 				end
 
 				-- Punch target object
-				-- if  lua then
-					-- if not self._in_player then
-						damage_particles(vector.add(pos, vector.multiply(self.object:get_velocity(), 0.0)), true)
-					-- end
-					if mcl_burning.is_burning(self.object) then
-						mcl_burning.set_on_fire(obj, 5)
-					end
-					-- if not self._in_player then
-						mcl_util.deal_damage(obj, self.damage.fleshy or self._damage or 10, {type = "arrow", source = self._shooter, direct = self.object})
-						if self._extra_hit_func then
-							self._extra_hit_func(obj)
-						end
-						if obj.indicate_damage ~= nil then
-							obj:hurt(damage)
-							obj:indicate_damage()
-						end	
-						-- minetest.log("damage")
-						-- if self.damage then
-						-- 	minetest.log(self.damage.fleshy)
-						-- end
-						
-						specialops.on_hit_object(self, obj, is_player)
-					-- end
-					--[[for i=1,math.random(math.ceil(10*0.66),math.ceil(10*1.5)) do
-						minetest.add_particle({
-							pos = obj:get_pos(),
-							velocity = {x=math.random(-15.0,15.0)/10, y=math.random(2.0,5.0), z=math.random(-15.0,15.0)/10},
-							acceleration = {x=math.random(-3.0,3.0), y=math.random(-10.0,-15.0), z=math.random(-3.0,3.0)},
-							expirationtime = 0.75,
-							size = math.random(10,20)/10,
-							collisiondetection = true,
-							vertical = false,
-							texture = "blood.png",
-							animation = {type="vertical_frames", aspect_w=8, aspect_h=8, length = 0.8,},
-							glow = 0,
-						})
-					end--]]
-
-				-- end
-
-
+				damage_particles(--[[vector.add(]]pos--[[, vector.multiply(self.object:get_velocity(), 0.0))]], true)
+				if mcl_burning.is_burning(self.object) then
+					mcl_burning.set_on_fire(obj, 5)
+				end
+				mcl_util.deal_damage(obj, self.damage.fleshy or self._damage or 10, {type = "arrow", source = self._shooter, direct = self.object})
+				if self._extra_hit_func then
+					self._extra_hit_func(obj)
+				end
+				if obj.indicate_damage ~= nil then
+					obj:hurt(damage)
+					obj:indicate_damage()
+				end	
+				
+				
 				if is_player then
-					if self._shooter and self._shooter:is_player() and not self._in_player and not self._blocked then
+					if self._shooter and self._shooter:is_player() then
 						-- “Ding” sound for hitting another player
-						minetest.sound_play({name="mcl_bows_hit_player", gain=0.1}, {to_player=self._shooter:get_player_name()}, true)
+						minetest.sound_play({name="mcl_bows_hit_player", gain=0.1}, {to_player=owner:get_player_name()}, true)
 					end
 				end
-
+				
 				if not self._in_player and not self._blocked then
 					minetest.sound_play({name="default_dig_cracky", gain=0.3}, {pos=self.object:get_pos(), max_hear_distance=16}, true)
 				end
+				specialops.on_hit_object(self, obj, is_player)
+				return
 			end
 			if not obj:is_player() then
 				specialops.on_hit_object(self, obj, false)
@@ -1530,9 +1528,8 @@ local function generic_proj_on_step(self, dtime, moveresult, customops)
 		-- Arrow has stopped in one axis, so it probably hit something.
 		-- This detection is a bit clunky, but sadly, MT does not offer a direct collision detection for us. :-(
 		if (math.abs(vel.x) < 0.0001) or (math.abs(vel.z) < 0.0001) or (math.abs(vel.y) < 0.00001) then
-
-			mcl_burning.extinguish(self.object)
-			self.object:remove()
+			specialops.on_hit_node(self, minetest.get_node(self.object:get_pos()))
+			-- return
 		end
 	end
 
@@ -1552,375 +1549,7 @@ end
 
 
 
-ammo = (function()
-	--[[
-	rangedweapons_shot_bullet.on_step = function(self, dtime, moveresult)
-		----------------------------------------
-		---------------------------------------
-		
-		if self.owner == nil then
-			self.object:remove()
-			return
-		end
-		
-		local pos = self.object:get_pos()
-		local dpos = vector.round(vector.new(pos)) -- digital pos
-		local node = minetest.get_node(dpos)
-		
-		
-		
-		local sparks = self.sparks or 0
-		local ignite = self.ignite or 0
-		local size = self.size or 0.0025
-		
-		local SBP = self.bullet_particles
-		if SBP ~= nil then
-			for i=1,math.random(SBP.amount[1],SBP.amount[2]) do
-				minetest.add_particle({
-					pos = {x=self.object:get_pos().x+(math.random(-SBP.pos_randomness,SBP.pos_randomness)/100),y=self.object:get_pos().y+(math.random(-SBP.pos_randomness,SBP.pos_randomness)/100),z=self.object:get_pos().z+(math.random(-SBP.pos_randomness,SBP.pos_randomness)/100)},
-					velocity = {x=math.random(-SBP.velocity.x,SBP.velocity.x), y=math.random(-SBP.velocity.y,SBP.velocity.y), z=math.random(-SBP.velocity.z,SBP.velocity.z)},
-					acceleration = {x=math.random(-SBP.acceleration.x,SBP.acceleration.x), y=math.random(-SBP.acceleration.y,SBP.acceleration.y)-SBP.gravity, z=math.random(-SBP.acceleration.z,SBP.acceleration.z)},
-					expirationtime = SBP.lifetime,
-					size = math.random(SBP.minsize,SBP.maxsize)/10,
-					collisiondetection = SBP.collisiondetection,
-					vertical = false,
-					texture = SBP.texture,
-					animation = {type="vertical_frames", aspect_w=8, aspect_h=8, length = SBP.lifetime+0.1,},
-					glow = SBP.glow,
-				})
-			end
-		end
-		
-		
-		self.timer = self.timer + dtime
-		
-		if self.timer >= 0 then
-			self.object:set_properties({collide_with_objects = true})
-			self.object:set_properties({collisionbox = {-size, -size, -size, size, size, size}})
-		end
-		
-		if self.timer > max_lifetime then
-			self.object:remove()
-		end
-		
-		if moveresult.collides == true then
-			if moveresult.collisions[1] ~= nil then
-				
-				local mobPen = self.mobPen or 0
-				local nodePen = self.nodePen or 0
-				local door_break = self.door_break or 0
-				local glass_break = self.glass_break or 0
-				
-				if moveresult.collisions[1].type == "node" then
-				
-					minetest.check_for_falling(moveresult.collisions[1].node_pos)
-					
-					
-					if use_particles and
-						minetest.registered_nodes[minetest.get_node(moveresult.collisions[1].node_pos).name]  and
-						minetest.registered_nodes[minetest.get_node(moveresult.collisions[1].node_pos).name].tiles and
-						minetest.registered_nodes[minetest.get_node(moveresult.collisions[1].node_pos).name].tiles[1]
-					then
-					
-					local hit_texture = minetest.registered_nodes[minetest.get_node(moveresult.collisions[1].node_pos).name].tiles[1]
-					
-					if hit_texture.name ~= nil then
-						hit_texture = hit_texture.name
-					end
-					
-						minetest.add_particle({
-							pos = self.object:get_pos(),
-							velocity = {x=0, y=0, z=0},
-							acceleration = {x=0, y=0, z=0},
-							expirationtime = 30,
-							size = math.random(10,20)/10,
-							collisiondetection = false,
-							vertical = false,
-							texture = "bullethole.png",
-							glow = 0,
-						})
-					
-						for i=1,math.random(4,8) do
-							minetest.add_particle({
-								pos = self.object:get_pos(),
-								velocity = {x=math.random(-3.0,3.0), y=math.random(2.0,5.0), z=math.random(-3.0,3.0)},
-									acceleration = {x=math.random(-3.0,3.0), y=math.random(-10.0,-15.0), z=math.random(-3.0,3.0)},
-								expirationtime = 0.5,
-								size = math.random(10,20)/10,
-								collisiondetection = true,
-								vertical = false,
-								texture = ""..hit_texture.."^[resize:4x4".."",
-								glow = 0,
-							})
-						end
-					
-					end 
-					
-					
-					minetest.sound_play("default_dig_cracky", {pos = self.object:get_pos(), gain = 1.0})
-					
-					if ignite > 0 then
-					
-						if minetest.get_node(moveresult.collisions[1].node_pos).name == modname .. ":rw_barrel" then
-							minetest.swap_node(moveresult.collisions[1].node_pos, {name = "air"})
-							mcl_explosions.explode(bullet.object:get_pos(), 3, {drop_chance = 1.0}, nil)
-						end 
-						
-						if minetest.get_node(moveresult.collisions[1].node_pos).name == "tnt:tnt" then
-							minetest.swap_node(moveresult.collisions[1].node_pos, {name = "tnt:tnt_burning"})
-							minetest.sound_play("tnt_ignite", {pos = moveresult.collisions[1].node_pos}, true)
-							minetest.get_node_timer(moveresult.collisions[1].node_pos):start(3)
-							minetest.check_for_falling(moveresult.collisions[1].node_pos)
-						end
-					
-					end
-					
-					
-					if minetest.get_item_group(minetest.get_node(moveresult.collisions[1].node_pos).name, "level") > 1  then
-						if minetest.settings:get_bool(modname .. "_bullet_ricochet", true) then
-							self.object:set_velocity(moveresult.collisions[1].old_velocity)
-							
-							if sparks > 0 then
-								make_sparks(self.object:get_pos())
-							end
-							
-							local objVel = moveresult.collisions[1].old_velocity
-							local objRot = self.object:get_rotation()
-							
-							if objRot and objVel then
-								if moveresult.collisions[1].axis == "x" then
-									self.object:set_rotation({x=0,y=objRot.y,z=objRot.z+3})
-									self.object:set_velocity({x=objVel.x*-1,y=objVel.y,z=objVel.z})
-								end
-								
-								if moveresult.collisions[1].axis == "z" then
-									self.object:set_rotation({x=0,y=objRot.y,z=objRot.z+3})
-									self.object:set_velocity({x=objVel.x,y=objVel.y,z=objVel.z*-1})
-								end
-							
-								if moveresult.collisions[1].axis == "y" then
-									self.object:set_rotation({x=0,y=objRot.y+3,z=objRot.z+3})
-									self.object:set_velocity({x=objVel.x,y=objVel.y*-1,z=objVel.z})
-								end
-							end
-						else
-							self.object:remove()
-						end
-						
-					else
-						
-						if math.random(1,100) <= nodePen then
-							if use_particles then
-								for i=1, 10 do
-									minetest.add_particle({
-										pos = self.object:get_pos(),
-										velocity = {x=1.5, y=1.5, z=1.5} ,
-										acceleration = {x=math.random(-3.0,3.0), y=math.random(-4.0,4.0), z=math.random(-3.0,3.0)},
-										expirationtime = 1.25,
-										size = math.random(3,6),
-										collisiondetection = false,
-										vertical = false,
-										texture = "tnt_smoke.png",
-										glow = 2,
-									})
-								end
-							end
-							minetest.sound_play("default_dig_cracky", {pos = self.object:get_pos(), gain = 1.0})
-							self.object:set_properties({collisionbox = {0,0,0,0,0,0}})
-							--minetest.chat_send_all("hit")
-							self.object:set_velocity(moveresult.collisions[1].old_velocity)
-						else
-							
-							if minetest.get_item_group(minetest.get_node(moveresult.collisions[1].node_pos).name, "leaves") > 0  then
-								minetest.sound_play("default_dig_snappy", {pos = self.object:get_pos(), gain = 1.5})
-								
-								if use_particles then
-									for i = 1,math.random(3,6) do
-										minetest.add_particle({
-											pos = self.object:get_pos(),
-											velocity = {x=math.random(-2,2), y=math.random(3,6), z=math.random(-2,2)},
-											acceleration = {x=math.random(-2,2), y=math.random(-3,-6), z=math.random(-2,2)},
-											expirationtime = math.random(2,4), 
-											size = math.random(6,9), 
-											collisiondetection = true,
-											collision_removal = false,
-											vertical = false,
-											texture = "leaf.png",
-											animation = {type="vertical_frames", aspect_w=8, aspect_h=8, length = 0.8,},
-											glow = 15,
-										})
-									end
-								end
-								
-								self.object:set_properties({collisionbox = {0,0,0,0,0,0}})
-								self.object:set_velocity(moveresult.collisions[1].old_velocity)
-								
-							else
-								if self.OnCollision ~= nil then
-									self.OnCollision(self.owner,self,moveresult.collisions[1])
-								end
-								self.object:remove()
-							end
-						end
-					end
-					
-				end
-				
-				
-				local closest_object
-				local base_closest_object
-				local closest_distance
-		
---				if self._deflection_cooloff > 0 then
---					self._deflection_cooloff = self._deflection_cooloff - dtime
---				end
-		
-				local arrow_dir = self.object:get_velocity() or vector.zero()
-				--create a raycast from the arrow based on the velocity of the arrow to deal with lag
-				local raycast = minetest.raycast(pos, vector.add(pos, vector.multiply(arrow_dir, 0.1)), true, false)
-				for hitpoint in raycast do
-					if hitpoint.type == "object" then
-						-- find the closest object that is in the way of the arrow
-						local ok = false
-						if hitpoint.ref:is_player() or hitpoint.ref:get_player_name() ~= self.owner then
-							ok = true
-							--minetest.chat_send_all("true1")
-						elseif not hitpoint.ref:is_player() and hitpoint.ref:get_luaentity() then
-							if (hitpoint.ref:get_luaentity().is_mob or hitpoint.ref:get_luaentity()._hittable_by_projectile) then
-								ok = true
-								--minetest.chat_send_all("true2")
-							end
-						else
-							--minetest.chat_send_all("false")
-						end
-						if ok then
-							local dist = vector.distance(hitpoint.ref:get_pos(), pos)
-							if not closest_object or not closest_distance then
-								closest_object = hitpoint.ref
-								base_closest_object = hitpoint.ref
-								closest_distance = dist
-							elseif dist < closest_distance then
-								closest_object = hitpoint.ref
-								base_closest_object = hitpoint.ref
-								closest_distance = dist
-							end
-						end
-					end
-				end
-				
-				if closest_object then
-					--minetest.chat_send_all(tostring(closest_object))
-					local actualDamage = self.damage or {fleshy=1}
-					local damage = {}
-					local crit = self.crit or 0
-					local critEffc = self.critEffc or 1
-					local owner = minetest.get_player_by_name(self.owner)
-					local hit_texture = "hit.png"
-					local dps = self.dps or 0
-					local skill = self.skill_value or 1
-					
-					for _, dmg in pairs(actualDamage) do
-						damage[_] = actualDamage[_]
-					end
-					
-					local player_dmg_multiplier = tonumber(minetest.settings:get(modname .. "_player_dmg_multiplier")) or 1.0
-					local headshot_dmg_multiplier = tonumber(minetest.settings:get(modname .. "_headshot_dmg_multiplier")) or 1.75
-					local mob_dmg_multiplier = tonumber(minetest.settings:get(modname .. "_mob_dmg_multiplier")) or 1.0
-					
-					if closest_object:is_player() then
-						for _, player_dmg in pairs(damage) do
-							damage[_] = damage[_] * player_dmg_multiplier * 10
-						end
-						if self.object:get_pos().y - closest_object:get_pos().y > 1.5 then
-							for _, hs_dmg in pairs(damage) do
-								damage[_] = damage[_] * headshot_dmg_multiplier * 10
-							end
-						end
-						knockback = damage.knockback or 0
-						projectile_kb(closest_object,self.object,knockback)
-					else
-						for _, mob_dmg in pairs(damage) do
-							damage[_] = damage[_] * mob_dmg_multiplier * 10
-						end
-					end
-					
-					for _, bonus_dmg in pairs(damage) do
-						damage[_] = (damage[_]*skill) + (self.dps*self.timer)
-					end
-					
-					--minetest.chat_send_all(critEffc)
-					if math.random(1,100) <= crit+((skill*10)-10) then
-						for _, critDmg in pairs(damage) do
-							damage[_] = damage[_] * critEffc
-						end
-						
-						
-						local entpos = self.object:get_pos()
-						minetest.add_particle({
-							pos = entpos, velocity = 0, acceleration = {x=0, y=5, z=0},
-							expirationtime = 0.75, size = 12, collisiondetection = false,
-							vertical = false, texture = "crit.png", glow = 30,})
-						hit_texture = "crithit.png"
-					end
-					
-					--minetest.chat_send_all(damage)
-					closest_object:punch(owner, 1.0, {
-						full_punch_interval = 1.0,
-						damage_groups = damage,}, nil)
-					owner:hud_change(hit, "text", hit_texture)
-					
-					local bloodyness = tonumber(minetest.settings:get(modname .. "_bloodyness")) or 10
-					for i=1,math.random(math.ceil(bloodyness*0.66),math.ceil(bloodyness*1.5)) do
-						minetest.add_particle({
-							pos = self.object:get_pos(),
-							velocity = {x=math.random(-15.0,15.0)/10, y=math.random(2.0,5.0), z=math.random(-15.0,15.0)/10},
-							acceleration = {x=math.random(-3.0,3.0), y=math.random(-10.0,-15.0), z=math.random(-3.0,3.0)},
-							expirationtime = 0.75,
-							size = math.random(10,20)/10,
-							collisiondetection = true,
-							vertical = false,
-							texture = "blood.png",
-							animation = {type="vertical_frames", aspect_w=8, aspect_h=8, length = 0.8,},
-							glow = 0,
-						})
-					end
-					
-					
-					--if math.random(1,100) <= mobPen then
---						if use_particles then
---							for i=1,10 do
---								minetest.add_particle({
---									pos = self.object:get_pos(),
---									velocity = {x=1.5, y=1.5, z=1.5} ,
---										acceleration = {x=math.random(-3.0,3.0), y=math.random(-4.0,4.0), z=math.random(-3.0,3.0)},
---									expirationtime = 1.25,
---									size = math.random(3,6),
---									collisiondetection = false,
---									vertical = false,
---									texture = "tnt_smoke.png",
---									glow = 2,
---								})
---							end
---						end
---						minetest.sound_play("default_dig_cracky", {pos = self.object:get_pos(), gain = 1.0})
---						self.object:set_properties({collisionbox = {0,0,0,0,0,0}})
---						self.object:set_velocity(base_closest_object.old_velocity)
---				else
-						if self.OnCollision ~= nil then
-							self.OnCollision(self.owner,self,base_closest_object)
-						end
-						self.object:remove()
-					--end
-				end
-			else
-			
-				self.object:remove()
-			
-			end
-		end
-	end
-	--]]
-	
+ammo = (function()	
 	----------------------------------------------
 	
 	rangedweapons_shot_bullet.on_step = function(self, dtime, moveresult)
@@ -2703,7 +2332,7 @@ makarov = (function()
 	})
 end)()
 
-luger = (function()
+--[[luger = (function()
 	------------reload--------------------
 	rw.register_tool(modname .. ":rw_luger_r", {
 		stack_max= 1,
@@ -2914,7 +2543,7 @@ m1991 = (function()
 			return itemstack
 		end,
 	})
-end)()
+end)()]]
 
 glock17 = (function()
 	rw.register_tool(modname .. ":rw_glock17_rld", {
@@ -3001,7 +2630,7 @@ glock17 = (function()
 end)()
 
 deagle = (function()
-	rw.register_tool(modname .. ":rw_deagle_rld", {
+	--[[rw.register_tool(modname .. ":rw_deagle_rld", {
 		stack_max= 1,
 		wield_scale = {x=1.25,y=1.25,z=1.5},
 		description = "",
@@ -3057,7 +2686,7 @@ deagle = (function()
 			rangedweapons_shoot_gun(itemstack, user)
 			return itemstack
 		end,
-	})
+	})]]
 	
 	rw.register_tool(modname .. ":rw_golden_deagle_rld", {
 		stack_max= 1,
@@ -3517,7 +3146,7 @@ end)()
 --end
 
 --if minetest.settings:get_bool(modname .. "_machine_pistols", true) then
-tmp = (function()
+--[[tmp = (function()
 	rw.register_tool(modname .. ":rw_tmp_r", {
 		stack_max= 1,
 		wield_scale = {x=1.15,y=1.15,z=1.15},
@@ -3586,7 +3215,7 @@ tmp = (function()
 end)()
 
 tec9 = (function()
-	rw.register_craftitem(modname .. ":rw_tec9_r", {
+	rw.register_tool(modname .. ":rw_tec9_r", {
 		stack_max= 1,
 		wield_scale = {x=1.25,y=1.25,z=1.50},
 		description = "",
@@ -3597,7 +3226,7 @@ tec9 = (function()
 		inventory_image = "tec9_rld.png",
 	})
 	
-	rw.register_craftitem(modname .. ":rw_tec9_rr", {
+	rw.register_tool(modname .. ":rw_tec9_rr", {
 		stack_max= 1,
 		wield_scale = {x=1.25,y=1.25,z=1.50},
 		description = "",
@@ -3608,7 +3237,7 @@ tec9 = (function()
 		inventory_image = "tec9.png",
 	})
 	
-	rw.register_craftitem(modname .. ":rw_tec9_rrr", {
+	rw.register_tool(modname .. ":rw_tec9_rrr", {
 		stack_max= 1,
 		wield_scale = {x=1.25,y=1.25,z=1.50},
 		description = "",
@@ -3619,7 +3248,7 @@ tec9 = (function()
 		inventory_image = "tec9.png",
 	})
 	
-	rw.register_craftitem(modname .. ":rw_tec9", {
+	rw.register_tool(modname .. ":rw_tec9", {
 		stack_max= 1,
 		wield_scale = {x=1.25,y=1.25,z=1.50},
 		description = "" ..core.colorize("#35cdff","TEC-9\n") ..core.colorize("#FFFFFF", "Gun damage: 1\n") ..core.colorize("#FFFFFF", "accuracy: 75%\n") ..core.colorize("#FFFFFF", "Gun knockback: 0\n")  ..core.colorize("#FFFFFF", "Gun Critical chance: 9%\n") ..core.colorize("#FFFFFF", "Gun Critical efficiency: 1.9x\n") ..core.colorize("#FFFFFF", "Reload delay: 1.0\n") ..core.colorize("#FFFFFF", "Clip size: 50\n")   ..core.colorize("#FFFFFF", "Ammunition: 9x19mm parabellum\n")  ..core.colorize("#FFFFFF", "Rate of fire: 0.2\n") ..core.colorize("#FFFFFF", "Gun type: machine pistol\n") ..core.colorize("#FFFFFF", "Bullet velocity: 20"),
@@ -3651,7 +3280,7 @@ tec9 = (function()
 			return itemstack
 		end,
 	})
-end)()
+end)()--]]
 
 uzi = (function()
 	rw.register_tool(modname .. ":rw_uzi_r", {
@@ -3720,7 +3349,7 @@ uzi = (function()
 	})
 end)()
 
-kriss_sv = (function()
+--[[kriss_sv = (function()
 	rw.register_tool(modname .. ":rw_kriss_sv_r", {
 		stack_max= 1,
 		wield_scale = {x=1.75,y=1.75,z=1.15},
@@ -3787,7 +3416,7 @@ kriss_sv = (function()
 			return itemstack
 		end,
 	})
-end)()
+end)()--]]
 
 --end
 --if minetest.settings:get_bool(modname .. "_shotguns", true) then
@@ -3856,6 +3485,7 @@ remington = (function()
 	})
 end)()
 
+--[[
 spas12 = (function()
 	rw.register_tool(modname .. ":rw_spas12_rld", {
 		stack_max= 1,
@@ -3985,6 +3615,7 @@ benelli = (function()
 		end,
 	})
 end)()
+--]]
 
 --end
 --if minetest.settings:get_bool(modname .. "_auto_shotguns", true) then
@@ -4057,6 +3688,7 @@ jackhammer = (function()
 	})
 end)()
 
+--[[
 aa12 = (function()
 	rw.register_tool(modname .. ":rw_aa12_r", {
 		stack_max= 1,
@@ -4125,6 +3757,7 @@ aa12 = (function()
 		end,
 	})
 end)()
+--]]
 
 --end
 --if minetest.settings:get_bool(modname .. "_smgs", true) then
@@ -4197,7 +3830,7 @@ mp5 = (function()
 	})
 end)()
 
-ump = (function()
+--[[ump = (function()
 	rw.register_tool(modname .. ":rw_ump_r", {
 		stack_max= 1,
 		wield_scale = {x=1.9,y=1.9,z=1.25},
@@ -4393,11 +4026,11 @@ thompson = (function()
 			return itemstack
 		end,
 	})
-end)()
+end)()--]]
 
 --end
 --if minetest.settings:get_bool(modname .. "_rifles", true) then
-awp = (function()
+--[[awp = (function()
 	rw.register_tool(modname .. ":rw_awp_uld", {
 		stack_max= 1,
 		wield_scale = {x=1.9,y=1.9,z=1.1},
@@ -4597,7 +4230,7 @@ svd = (function()
 		end,
 	
 	})
-end)()
+end)()--]]
 
 m200 = (function()
 	rw.register_tool(modname .. ":rw_m200_uld", {
@@ -4752,7 +4385,7 @@ m60 = (function()
 	})
 end)()
 
-rpk = (function()
+--[[rpk = (function()
 	rw.register_tool(modname .. ":rw_rpk_r", {
 		stack_max= 1,
 		wield_scale = {x=1.75,y=1.75,z=1.3},
@@ -4824,7 +4457,7 @@ rpk = (function()
 	
 		inventory_image = "rpk.png",
 	})
-end)()
+end)()--]]
 
 minigun = (function()
 	if minetest.settings:get_bool("minigun_aswell") or true then
@@ -4883,7 +4516,7 @@ end)()
 --end
 --if minetest.settings:get_bool(modname .. "_revolvers", true) then
 python = (function()
-	rw.register_tool(modname .. ":rw_remington_rld", {
+	--[[rw.register_tool(modname .. ":rw_remington_rld", {
 		stack_max= 1,
 		range = 0,
 		wield_scale = {x=1.9,y=1.9,z=1.1},
@@ -4944,7 +4577,7 @@ python = (function()
 			eject_shell(itemstack,user,modname .. ":rw_remington_rld",0.8,modname .. "_shotgun_reload_a",modname .. ":rw_empty_shell")
 			return itemstack
 		end,
-	})
+	})--]]
 	
 	
 	
@@ -4962,13 +4595,13 @@ python = (function()
 	
 	
 	rw.register_tool(modname .. ":rw_python", {
-		description = "" ..core.colorize("#35cdff","Colt Python \n") ..core.colorize("#FFFFFF", "Ranged damage: 10\n")..core.colorize("#FFFFFF", "Accuracy: 95%\n") ..core.colorize("#FFFFFF", "Gun knockback: 6\n") ..core.colorize("#FFFFFF", "Critical chance: 19%\n") ..core.colorize("#FFFFFF", "Critical efficiency: 2.5x\n") ..core.colorize("#FFFFFF", "Ammunition: .357 Magnum rounds\n") ..core.colorize("#FFFFFF", "Reload time: 0.25\n") ..core.colorize("#FFFFFF", "Clip Size: 6\n")..core.colorize("#FFFFFF", "Gun type: Revolver\n")..core.colorize("#FFFFFF", "Block penetration: 5%\n")
+		description = "" ..core.colorize("#35cdff","Colt Python \n") ..core.colorize("#FFFFFF", "Ranged damage: 15\n")..core.colorize("#FFFFFF", "Accuracy: 95%\n") ..core.colorize("#FFFFFF", "Gun knockback: 6\n") ..core.colorize("#FFFFFF", "Critical chance: 19%\n") ..core.colorize("#FFFFFF", "Critical efficiency: 2.5x\n") ..core.colorize("#FFFFFF", "Ammunition: .357 Magnum rounds\n") ..core.colorize("#FFFFFF", "Reload time: 0.25\n") ..core.colorize("#FFFFFF", "Clip Size: 6\n")..core.colorize("#FFFFFF", "Gun type: Revolver\n")..core.colorize("#FFFFFF", "Block penetration: 5%\n")
 		..core.colorize("#FFFFFF", "penetration: 15%\n") ..core.colorize("#FFFFFF", "Bullet velocity: 55"),
 		range = 0,
 		wield_scale = {x=1.25,y=1.25,z=1.1},
 		inventory_image = "python.png",
 		RW_gun_capabilities = {
-			gun_damage = {fleshy=10,knockback=6},
+			gun_damage = {fleshy=15,knockback=6},
 			gun_crit = 19,
 			gun_critEffc = 2.2,
 			suitable_ammo = {{modname .. ":rw_357",6}},
@@ -4998,7 +4631,7 @@ python = (function()
 	})
 end)()
 
-taurus = (function()
+--[[taurus = (function()
 	rw.register_tool(modname .. ":rw_taurus_rld", {
 		stack_max= 1,
 		range = 0,
@@ -5045,11 +4678,11 @@ taurus = (function()
 			return itemstack
 		end,
 	})
-end)()
+end)()--]]
 
 --end
 --if minetest.settings:get_bool(modname .. "_assault_rifles", true) then
-m16 = (function()
+--[[m16 = (function()
 	rw.register_tool(modname .. ":rw_m16_r", {
 		stack_max= 1,
 		wield_scale = {x=1.75,y=1.75,z=1.3},
@@ -5194,7 +4827,7 @@ g36 = (function()
 	
 		inventory_image = "g36.png",
 	})
-end)()
+end)()--]]
 
 ak47 = (function()
 	rw.register_tool(modname .. ":rw_ak47_r", {
@@ -5270,7 +4903,7 @@ ak47 = (function()
 	})
 end)()
 
-scar = (function()
+--[[scar = (function()
 	rw.register_tool(modname .. ":rw_scar_r", {
 		stack_max= 1,
 		wield_scale = {x=1.7,y=1.7,z=1.25},
@@ -5340,7 +4973,7 @@ scar = (function()
 		end,
 		inventory_image = "scar.png",
 	})
-end)()
+end)()--]]
 
 --end
 
@@ -5519,7 +5152,7 @@ explosives = (function()
 	})
 end)()
 
-m79 = (function()
+--[[m79 = (function()
 	rw.register_tool(modname .. ":rw_m79_r", {
 		stack_max= 1,
 		wield_scale = {x=2.0,y=2.0,z=2.5},
@@ -5565,7 +5198,7 @@ m79 = (function()
 			return itemstack
 		end,
 	})
-end)()
+end)()--]]
 
 milkor = (function()
 	rw.register_tool(modname .. ":rw_milkor_rld", {
