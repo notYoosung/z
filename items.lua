@@ -150,3 +150,40 @@ end
 
 
 
+
+itemlist = {
+    {"robin_dance", 256, 20/30},
+    {"iso", 64, 91/30},
+    {"blob", 128, 15/30},
+    {"deal_with_it", 512, 24/10},
+    {"arnott_eye", 64, 125/30},
+    {"liang_wind", 64, 16/8},
+}
+
+for i, v in ipairs(itemlist) do
+    minetest.register_node(modname .. ":items_" .. v[1], {
+        description = v[1],
+        drawtype = "nodebox",
+        tiles = {
+            {
+                name = "z_items_" .. v[1] .. ".png",
+                animation = {
+                    type = "vertical_frames",
+                    aspect_w = v[2],
+                    aspect_h = v[2],
+                    length = v[3]
+                }
+            },
+        },
+        use_texture_alpha = "clip",
+        node_box = fbox,
+        collision_box = fbox,
+        groups = {oddly_breakable_by_hand=1, z_item=1},
+        selection_box = fbox,
+
+        paramtype = "light",
+        paramtype2 = "wallmounted",
+        sunlight_propagates = true,
+        node_placement_prediction = "",
+    })
+end

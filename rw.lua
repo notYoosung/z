@@ -26,8 +26,8 @@ for i, v in ipairs(l) do
 
 		if v == "tool" then
 			defaultdef.on_use = function() return end
-			defaultdef.wield_scale = mcl_vars.tool_wield_scale
-			
+			-- defaultdef.wield_scale = mcl_vars.tool_wield_scale
+			defaultdef._mcl_toollike_wield = true
 			defaultgroups.weapon = 1
 			defaultgroups.weapon_ranged = 1
 
