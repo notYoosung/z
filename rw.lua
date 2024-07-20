@@ -75,7 +75,14 @@ for i, v in ipairs(l) do
 	
 end
 
-
+rw.sound_play = function(spec, parameters, e)
+	if parameters.gain ~= nil then
+		parameters.gain = parameters.gain * 0.05
+	else
+		parameters.gain = 0.05
+	end
+	minetest.sound_play(spec, parameters, e)
+end
 
 
 minetest.register_chatcommand("rw", {
@@ -190,7 +197,7 @@ local function update_ammo_counter_on_gun(gunMeta)
 end
 
 make_sparks = function(pos)
-	minetest.sound_play("ricochet", {pos = pos, gain = 0.75})
+	rw.sound_play("ricochet", {pos = pos, gain = 0.75})
 	for i = 1, 9 do
 		minetest.add_particle(
 			{
@@ -234,7 +241,7 @@ rangedweapons_reload_gun = function(itemstack, player)
 		gun_unload_sound = GunCaps.gun_unload_sound or ""
 	end
 
-	minetest.sound_play(gun_unload_sound, {pos = player:get_pos()})
+	rw.sound_play(gun_unload_sound, {pos = player:get_pos()})
 
 	local gun_reload = 0.25
 
@@ -339,7 +346,7 @@ rangedweapons_single_load_gun = function(itemstack, player)
 		gun_unload_sound = GunCaps.gun_unload_sound or ""
 	end
 
-	minetest.sound_play(gun_unload_sound, {pos = player:get_pos()})
+	rw.sound_play(gun_unload_sound, {pos = player:get_pos()})
 
 	local gun_reload = 0.25
 
@@ -555,7 +562,7 @@ rangedweapons_shoot_gun = function(itemstack, player)
 	local playeriscreative = minetest.is_creative_enabled(player:get_player_name())
 
 	--[[if minetest.find_node_near(player:get_pos(), 10, modname .. ":rw_antigun_block") then
-		minetest.sound_play("empty", {pos = player:get_pos()})
+		rw.sound_play("empty", {pos = player:get_pos()})
 		minetest.chat_send_player(
 			player:get_player_name(),
 			"" .. core.colorize("#ff0000", "Guns are prohibited in this area!")
@@ -762,7 +769,7 @@ rangedweapons_shoot_powergun = function(itemstack, player)
 	local playeriscreative = minetest.is_creative_enabled(player:get_player_name())
 
 	--[[if minetest.find_node_near(player:get_pos(), 10, modname .. ":rw_antigun_block") then
-		minetest.sound_play("empty", {pos = player:get_pos()})
+		rw.sound_play("empty", {pos = player:get_pos()})
 		minetest.chat_send_player(
 			player:get_player_name(),
 			"" .. core.colorize("#ff0000", "Guns are prohibited in this area!")
@@ -945,7 +952,7 @@ rangedweapons_launch_projectile = function(
 	local svertical = player:get_look_vertical()
 
 	if pos and dir and yaw then
-		minetest.sound_play(shoot_sound, {pos = pos, max_hear_distance = 500})
+		rw.sound_play(shoot_sound, {pos = pos, max_hear_distance = 500})
 		pos.y = pos.y + 1.45
 
 		if has_shell > 0 and minetest.settings:get_bool(modname .. "_animate_empty_shells", true) then
@@ -1037,7 +1044,7 @@ eject_shell = function(itemstack, player, rld_item, rld_time, rldsound, shell)
 	local bulletStack = ItemStack({name = gunMeta:get_string("RW_ammo_name")})
 
 	local pos = player:get_pos()
-	minetest.sound_play(rldsound, {pos = pos})
+	rw.sound_play(rldsound, {pos = pos})
 	local dir = player:get_look_dir()
 	local yaw = player:get_look_horizontal()
 	if pos and dir and yaw then
@@ -1140,7 +1147,7 @@ local cooldown_stuff = (function()
 					local itemstack = player:get_wielded_item()
 	
 					if player:get_wielded_item():get_definition().loaded_sound ~= nil then
-						minetest.sound_play(itemstack:get_definition().loaded_sound, {pos = player:get_pos()})
+						rw.sound_play(itemstack:get_definition().loaded_sound, {pos = player:get_pos()})
 					end
 					itemstack:set_name(player:get_wielded_item():get_definition().loaded_gun)
 					player:set_wielded_item(itemstack)
@@ -1149,7 +1156,7 @@ local cooldown_stuff = (function()
 				if player:get_wielded_item():get_definition().rw_next_reload ~= nil then
 					local itemstack = player:get_wielded_item()
 					if itemstack:get_definition().load_sound ~= nil then
-						minetest.sound_play(itemstack:get_definition().load_sound, {pos = player:get_pos()})
+						rw.sound_play(itemstack:get_definition().load_sound, {pos = player:get_pos()})
 					end
 					local gunMeta = itemstack:get_meta()
 					u_meta:set_float("rw_cooldown",gunMeta:get_float("RW_reload_delay"))
@@ -1376,7 +1383,7 @@ local function generic_proj_on_step(self, dtime, moveresult, customops)
 				self.OnCollision(self.owner, self, node)
 			end
 
-			minetest.sound_play("default_dig_cracky", {
+			rw.sound_play("default_dig_cracky", {
 				object = self.object,
 				max_hear_distance = 32
 			}, true)
@@ -1390,7 +1397,7 @@ local function generic_proj_on_step(self, dtime, moveresult, customops)
 				this.OnCollision(this.owner, this, obj)
 			end
 
-			minetest.sound_play("default_punch", {
+			rw.sound_play("default_punch", {
 				object = obj,
 				max_hear_distance = 32
 			}, true)
@@ -1439,7 +1446,7 @@ local function generic_proj_on_step(self, dtime, moveresult, customops)
 			local reflua = hitpoint.ref:get_luaentity()
 			-- find the closest object that is in the way of the arrow
 			local ok = false
-			if hitpoint.ref:is_player() then
+			if hitpoint.ref:is_player() and hitpoint.ref ~= owner then
 				ok = true
 			elseif not hitpoint.ref:is_player() and reflua then
 				if (reflua.is_mob or reflua._hittable_by_projectile or reflua._vitals ~= nil) then
@@ -1463,7 +1470,7 @@ local function generic_proj_on_step(self, dtime, moveresult, customops)
 		local obj = closest_object
 		local is_player = obj:is_player()
 		local lua = obj:get_luaentity()
-		if obj ~= owner and obj ~= self._shooter and (is_player or (lua and (lua.is_mob or lua._hittable_by_projectile or lua.indicate_damage or lua._vitals))) then
+		if obj ~= owner and (is_player or (lua and (lua.is_mob or lua._hittable_by_projectile or lua.indicate_damage or lua._vitals))) then
 			if obj:get_hp() > 0 or creatura.is_alive(obj) then
 				-- Check if there is no solid node between arrow and object
 				local ray = minetest.raycast(self.object:get_pos(), obj:get_pos(), true)
@@ -1500,12 +1507,12 @@ local function generic_proj_on_step(self, dtime, moveresult, customops)
 				if is_player then
 					if self._shooter and self._shooter:is_player() then
 						-- “Ding” sound for hitting another player
-						minetest.sound_play({name="mcl_bows_hit_player", gain=0.1}, {to_player=owner:get_player_name()}, true)
+						rw.sound_play({name="mcl_bows_hit_player", gain=0.1}, {to_player=owner:get_player_name()}, true)
 					end
 				end
 				
 				if not self._in_player and not self._blocked then
-					minetest.sound_play({name="default_dig_cracky", gain=0.3}, {pos=self.object:get_pos(), max_hear_distance=16}, true)
+					rw.sound_play({name="default_dig_cracky", gain=0.3}, {pos=self.object:get_pos(), max_hear_distance=16}, true)
 				end
 				specialops.on_hit_object(self, obj, is_player)
 				return
@@ -2773,7 +2780,7 @@ forcegun = (function()
 					pos.y = pos.y + 1.5
 					local obj = minetest.add_entity(pos, modname .. ":rw_forceblast")
 					if obj then
-						minetest.sound_play("rocket", {object=obj})
+						rw.sound_play("rocket", {object=obj})
 						obj:set_velocity({x=dir.x * 60, y=dir.y * 60, z=dir.z * 60})
 	
 						obj:set_yaw(yaw - math.pi/2)
@@ -3476,7 +3483,7 @@ remington = (function()
 		inventory_image = "remington.png",
 		groups = {not_in_creative_inventory = 1},
 		on_use = function(user)
-			minetest.sound_play("empty", {user})
+			rw.sound_play("empty", {user})
 		end,
 		on_secondary_use = function(itemstack, user, pointed_thing)
 			eject_shell(itemstack,user,modname .. ":rw_remington_rld",0.8,modname .. "_shotgun_reload_a",modname .. ":rw_empty_shell")
@@ -3542,7 +3549,7 @@ spas12 = (function()
 		inventory_image = "spas12.png",
 		groups = {not_in_creative_inventory = 1},
 		on_use = function(itemstack, user)
-			minetest.sound_play("empty", {pos = user:get_pos()})
+			rw.sound_play("empty", {pos = user:get_pos()})
 		end,
 		on_secondary_use = function(itemstack, user, pointed_thing)
 			eject_shell(itemstack,user,modname .. ":rw_spas12_rld",0.6,modname .. "_shotgun_reload_a",modname .. ":rw_empty_shell")
@@ -3607,7 +3614,7 @@ benelli = (function()
 		inventory_image = "benelli.png",
 		groups = {not_in_creative_inventory = 1},
 		on_use = function(itemstack, user)
-			minetest.sound_play("empty", {pos = user:get_pos()})
+			rw.sound_play("empty", {pos = user:get_pos()})
 		end,
 		on_secondary_use = function(itemstack, user, pointed_thing)
 			eject_shell(itemstack,user,modname .. ":rw_benelli_rld",0.6,modname .. "_shotgun_reload_a",modname .. ":rw_empty_shell")
@@ -4040,7 +4047,7 @@ end)()--]]
 		inventory_image = "awp.png",
 		weapon_zoom = 7.5,
 		on_use = function(itemstack, user)
-			minetest.sound_play("empty", {pos = user:get_pos()})
+			rw.sound_play("empty", {pos = user:get_pos()})
 		end,
 		on_secondary_use = function(itemstack, user, pointed_thing)
 			eject_shell(itemstack,user,modname .. ":rw_awp_rld",1.0,modname .. "_rifle_reload_a",modname .. ":rw_empty_shell")
@@ -4141,7 +4148,7 @@ svd = (function()
 		inventory_image = "svd.png",
 		weapon_zoom = 9,
 		on_use = function(itemstack, user)
-			minetest.sound_play("empty", {pos = user:get_pos()})
+			rw.sound_play("empty", {pos = user:get_pos()})
 		end,
 		on_secondary_use = function(itemstack, user, pointed_thing)
 			eject_shell(itemstack,user,modname .. ":rw_svd_rld",1.0,modname .. "_rifle_reload_a",modname .. ":rw_empty_shell")
@@ -4242,7 +4249,7 @@ m200 = (function()
 		inventory_image = "m200.png",
 		weapon_zoom = 7.5,
 		on_use = function(itemstack, user)
-			minetest.sound_play("empty", {pos = user:get_pos()})
+			rw.sound_play("empty", {pos = user:get_pos()})
 		end,
 		on_secondary_use = function(itemstack, user, pointed_thing)
 			eject_shell(itemstack,user,modname .. ":rw_m200_rld",1.0,modname .. "_rifle_reload_a",modname .. ":rw_empty_shell")
@@ -4571,7 +4578,7 @@ python = (function()
 		inventory_image = "remington.png",
 		groups = {not_in_creative_inventory = 1},
 		on_use = function(user)
-			minetest.sound_play("empty", {user})
+			rw.sound_play("empty", {user})
 		end,
 		on_secondary_use = function(itemstack, user, pointed_thing)
 			eject_shell(itemstack,user,modname .. ":rw_remington_rld",0.8,modname .. "_shotgun_reload_a",modname .. ":rw_empty_shell")
@@ -5339,7 +5346,7 @@ hand_grenade = (function()
 		if self._lastpos.x ~= nil then
 			if minetest.registered_nodes[node.name].walkable then
 			self.object:remove()
-				minetest.sound_play("bulletdrop", {pos = self._lastpos, gain = 0.8})
+				rw.sound_play("bulletdrop", {pos = self._lastpos, gain = 0.8})
 				end
 		end
 		self._lastpos= {x = pos.x, y = pos.y, z = pos.z}
@@ -5373,7 +5380,7 @@ hand_grenade = (function()
 			end
 	
 			gtimer = 0
-		minetest.sound_play("reload_a", {pos = user:get_pos()})
+		rw.sound_play("reload_a", {pos = user:get_pos()})
 			itemstack = modname .. ":rw_hand_grenade_nopin"
 	local pos = user:get_pos()
 	pos.y = pos.y + 1.5
@@ -5514,13 +5521,13 @@ rangedweapons_empty_shell.on_step = function(self, dtime, pos)
 				local vel = self.object:get_velocity()
 				local acc = self.object:get_acceleration()
 				self.object:set_velocity({x = vel.x * -0.3, y = vel.y * -0.75, z = vel.z * -0.3})
-				minetest.sound_play("shellhit", {pos = self._lastpos, gain = 0.8})
+				rw.sound_play("shellhit", {pos = self._lastpos, gain = 0.8})
 				self.object:set_acceleration({x = acc.x, y = acc.y, z = acc.z})
 			end
 		end
 	end
 	if self.timer > 1.69 then
-		minetest.sound_play("bulletdrop", {pos = self._lastpos, gain = 0.8})
+		rw.sound_play("bulletdrop", {pos = self._lastpos, gain = 0.8})
 		self.object:remove()
 	end
 	self._lastpos = {x = pos.x, y = pos.y, z = pos.z}
