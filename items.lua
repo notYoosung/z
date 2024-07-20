@@ -166,14 +166,26 @@ end
 
 
 itemlist = {
-    {"robin_dance", 256, 20/30},
+    {"robin_dance", 256, 20*0.03},
     {"iso", 64, 91/30},
     {"blob", 128, 15/30},
-    {"deal_with_it", 512, 24/10},
-    {"arnott_eye", 64, 125/30},
-    {"liang_wind", 64, 16/8},
-    {"spinning_bear", 128, 21/30},
-    
+    {"deal_with_it", 512, 24*0.1},
+    {"arnott_eye", 64, 125*0.03},
+    {"liang_wind", 64, 16*0.2},
+    {"spinning_bear", 128, 21*0.08},
+
+    {"you_didnt_have_to_cut_me_off", 128, 324*0.03},
+    {"uno_reverse", 128, 38*0.05},
+    {"skeleton_berserk", 128, 223*.03},
+    {"legendary_uno_reverse", 128, 23*0.06},
+    {"honk", 256, 27*0.05},
+    {"happy_happy_cat", 128, 120*0.04},
+    {"duck", 128, 12*0.05},
+    {"duck_dance", 128, 95*0.05},
+    {"dance_dance_blob", 128, 8*0.07},
+    {"do_the_goos", 256, 5*0.05},
+    {"bfdi_factory_top", 256, 49*0.05},
+    {"bfdi_factory_bottom", 256, 49*0.05},
 }
 
 for i, v in ipairs(itemlist) do

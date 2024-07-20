@@ -33,6 +33,7 @@ dofile(modpath .. "/powers.lua")
 dofile(modpath .. "/tools.lua")
 dofile(modpath .. "/freeze.lua")
 dofile(modpath .. "/rw.lua")
+dofile(modpath .. "/tuff.lua")
 
 dofile(modpath .. "/ctf/init.lua")
 
@@ -102,3 +103,5 @@ dofile(modpath .. "/ctf/init.lua")
 
 
 --planes
+
+--lightning/explosion staff
