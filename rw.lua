@@ -1077,39 +1077,46 @@ local cooldown_stuff = (function()
 		for _, player in pairs(minetest.get_connected_players()) do
 			local w_item = player:get_wielded_item()
 			local controls = player:get_player_control()
-			if w_item:get_definition().weapon_zoom ~= nil then
-	
-				if controls.zoom then
-					player:hud_change(scope_hud, "text", "scopehud.png")
-				else
-					player:hud_change(scope_hud, "text", "empty_icon.png")
-				end
-	
-				local wpn_zoom = w_item:get_definition().weapon_zoom
-				if player:get_properties().zoom_fov ~= wpn_zoom then
-					player:set_properties({zoom_fov = wpn_zoom})
-	
-				end
-	
-			end
-	
-			if w_item:get_definition().weapon_zoom == nil then
-				player:hud_change(scope_hud, "text", "empty_icon.png")
-				if player:get_inventory():contains_item(
-					"main", "binoculars:binoculars") then
-					local new_zoom_fov = 10
-					if player:get_properties().zoom_fov ~= new_zoom_fov then
-						player:set_properties({zoom_fov = new_zoom_fov})
+			if controls.zoom then
+				if w_item:get_definition().weapon_zoom ~= nil then
+		
+					
+					local wpn_zoom = w_item:get_definition().weapon_zoom
+					-- if player:get_properties().zoom_fov ~= wpn_zoom then
+					-- 	player:set_properties({zoom_fov = wpn_zoom})
+					
+					-- end
+					
+					-- if player:get_fov() ~= wpn_zoom then
+					player:set_fov(wpn_zoom, false, 0.1)
+					-- end
+					
+				elseif w_item:get_definition().weapon_zoom == nil then
+					-- player:hud_change(scope_hud, "text", "empty_icon.png")
+					if player:get_inventory():contains_item(
+						"main", "binoculars:binoculars") then
+						local new_zoom_fov = 10
+						if player:get_properties().zoom_fov ~= new_zoom_fov then
+							player:set_properties({zoom_fov = new_zoom_fov})
+						end
+					else
+						local new_zoom_fov = 0
+						if player:get_properties().zoom_fov ~= new_zoom_fov then
+							player:set_properties({zoom_fov = new_zoom_fov})
+						end
 					end
-				else
-					local new_zoom_fov = 0
-					if player:get_properties().zoom_fov ~= new_zoom_fov then
-						player:set_properties({zoom_fov = new_zoom_fov})
-					end
+					
 				end
+				
+				-- player:hud_change(scope_hud, "text", "scopehud.png")
+			else
+				-- player:hud_change(scope_hud, "text", "empty_icon.png")
+				player:set_fov(86.1, false, 0.1)
+
 			end
-	
-	
+			
+			
+			
 			local u_meta = player:get_meta()
 			local cool_down = u_meta:get_float("rw_cooldown") or 0
 	

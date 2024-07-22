@@ -3,8 +3,61 @@ local modpath = minetest.get_modpath(modname)
 
 local S = mcl_deepslate.translator
 
+
+
+
+
+local function register_variants(name, defs)
+	-- assert(name, "[mcl_deepslate] register_variants called without a valid name, refer to API.md in mcl_deepslate.")
+	-- assert(defs.basename, "[mcl_deepslate] register_variants needs a basename field to work, refer to API.md in mcl_deepslate.")
+	-- assert(defs.basetiles, "[mcl_deepslate] register_variants needs a basetiles field to work, refer to API.md in mcl_deepslate.")
+
+	local main_itemstring = "z:tuff_"..defs.basename.."_"..name
+	local main_def = table.merge({
+		_doc_items_hidden = false,
+		tiles = { defs.basetiles.."_"..name..".png" },
+		is_ground_content = false,
+		groups = { pickaxey = 1, building_block = 1, material_stone = 1 },
+		sounds = mcl_sounds.node_sound_stone_defaults(),
+		_mcl_blast_resistance = 6,
+		_mcl_hardness = 3.5,
+		_mcl_silk_touch_drop = true,
+	}, defs.basedef or {})
+	if defs.node then
+		defs.node.groups = table.merge(main_def.groups, defs.node.groups)
+		minetest.register_node(main_itemstring, table.merge(main_def, defs.node))
+	end
+
+	if defs.cracked then
+		minetest.register_node(main_itemstring.."_cracked", table.merge(main_def, {
+			_doc_items_longdesc = S("@1 are a cracked variant.", defs.cracked.description),
+			tiles = { defs.basetiles.."_"..name.."_cracked.png" },
+		}, defs.cracked))
+	end
+	if defs.node and defs.stair then
+		mcl_stairs.register_stair(defs.basename.."_"..name, {
+			description = defs.stair.description,
+			baseitem = main_itemstring,
+			overrides = defs.stair
+		})
+	end
+	if defs.node and defs.slab then
+		mcl_stairs.register_slab(defs.basename.."_"..name, {
+			description = defs.slab.description,
+			baseitem = main_itemstring,
+			overrides = defs.slab
+		})
+	end
+
+	if defs.node and defs.wall then
+		mcl_walls.register_wall("z:tuff_"..defs.basename..name.."wall", defs.wall.description, main_itemstring, nil, nil, nil, nil, defs.wall)
+	end
+end
+
+
+
 local function register_tuff_variant(name, defs)
-	mcl_deepslate.register_variants(name,table.update({
+	register_variants(name,table.update({
 		basename = "tuff",
 		basetiles = "mcl_deepslate_tuff",
 		basedef = {
