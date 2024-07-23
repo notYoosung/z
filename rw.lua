@@ -77,9 +77,9 @@ end
 
 rw.sound_play = function(spec, parameters, e)
 	if parameters.gain ~= nil then
-		parameters.gain = parameters.gain * 0.05
+		parameters.gain = parameters.gain * 0.1
 	else
-		parameters.gain = 0.05
+		parameters.gain = 0.1
 	end
 	minetest.sound_play(spec, parameters, e)
 end
@@ -690,7 +690,7 @@ rangedweapons_shoot_gun = function(itemstack, player)
 				bullet_particles = AmmoCaps.ammo_particles or nil
 				bullet_sparks = AmmoCaps.has_sparks or 0
 				bullet_bomb_ignite = AmmoCaps.ignites_explosives or 0
-				bullet_size = AmmoCaps.ammo_projectile_size or 0.0025
+				bullet_size = AmmoCaps.ammo_projectile_size or 0.0050
 				bullet_glow = AmmoCaps.ammo_projectile_glow or 20
 			end
 
@@ -846,7 +846,7 @@ rangedweapons_shoot_powergun = function(itemstack, player)
 				power_particles = PowerCaps.power_particles or nil
 				power_sparks = PowerCaps.has_sparks or 0
 				power_bomb_ignite = PowerCaps.ignites_explosives or 0
-				power_size = PowerCaps.power_projectile_size or 0.0025
+				power_size = PowerCaps.power_projectile_size or 0.0050
 				power_glow = PowerCaps.power_projectile_glow or 20
 
 				if PowerCaps.power_skill ~= nil then
@@ -1022,12 +1022,12 @@ rangedweapons_launch_projectile = function(
 				local acc = (((100 - accuracy) / 10) / skill_value) or 0
 				obj:set_velocity(
 					{
-						x = dir.x * combined_velocity + math.random(-acc, acc),
-						y = dir.y * combined_velocity + math.random(-acc, acc),
-						z = dir.z * combined_velocity + math.random(-acc, acc)
+						x = (dir.x * combined_velocity + math.random(-acc, acc))*3,
+						y = (dir.y * combined_velocity + math.random(-acc, acc))*3,
+						z = (dir.z * combined_velocity + math.random(-acc, acc))*3
 					}
 				)
-				obj:set_acceleration({x = 0, y = -gravity, z = 0})
+				-- obj:set_acceleration({x = 0, y = -gravity, z = 0})
 				obj:set_rotation({x = 0, y = yaw - math.pi / 2, z = -svertical})
 			end
 		end
@@ -1350,7 +1350,7 @@ local rangedweapons_shot_bullet = {
 		textures = {modname .. ":rw_shot_bullet_visual"},
 		_lastpos = {},
 			collide_with_objects = true,
-		collisionbox = {-0.0025, -0.0025, -0.0025, 0.0025, 0.0025, 0.0025},
+		collisionbox = {-0.0050, -0.0050, -0.0050, 0.0050, 0.0050, 0.0050},
 	},
 	_fire_damage_resistant = true,
 	_lastpos={},
@@ -1662,7 +1662,7 @@ ammo = (function()
 			shell_entity = modname .. ":rw_empty_shell",
 			shell_visual = "wielditem",
 			shell_texture = modname .. ":rw_shelldrop",
-			ammo_projectile_size = 0.0025,
+			ammo_projectile_size = 0.0050,
 			has_sparks = 1,
 			ignites_explosives = 1,
 		}
@@ -1686,7 +1686,7 @@ ammo = (function()
 			shell_entity = modname .. ":rw_empty_shell",
 			shell_visual = "wielditem",
 			shell_texture = modname .. ":rw_shelldrop",
-			ammo_projectile_size = 0.0025,
+			ammo_projectile_size = 0.0050,
 			has_sparks = 1,
 			ignites_explosives = 1,
 		},
@@ -1709,7 +1709,7 @@ ammo = (function()
 			shell_entity = modname .. ":rw_empty_shell",
 			shell_visual = "wielditem",
 			shell_texture = modname .. ":rw_shell_whitedrop",
-			ammo_projectile_size = 0.0025,
+			ammo_projectile_size = 0.0050,
 			has_sparks = 1,
 			ignites_explosives = 1,
 		}
@@ -1734,7 +1734,7 @@ ammo = (function()
 			shell_entity = modname .. ":rw_empty_shell",
 			shell_visual = "wielditem",
 			shell_texture = modname .. ":rw_shelldrop",
-			ammo_projectile_size = 0.0025,
+			ammo_projectile_size = 0.0050,
 			has_sparks = 1,
 			ignites_explosives = 1,
 		}
@@ -1758,7 +1758,7 @@ ammo = (function()
 			shell_entity = modname .. ":rw_empty_shell",
 			shell_visual = "wielditem",
 			shell_texture = modname .. ":rw_shelldrop",
-			ammo_projectile_size = 0.0025,
+			ammo_projectile_size = 0.0050,
 			has_sparks = 1,
 			ignites_explosives = 1,
 		}
@@ -1782,7 +1782,7 @@ ammo = (function()
 			shell_entity = modname .. ":rw_empty_shell",
 			shell_visual = "wielditem",
 			shell_texture = modname .. ":rw_shelldrop",
-			ammo_projectile_size = 0.0025,
+			ammo_projectile_size = 0.0050,
 			has_sparks = 1,
 			ignites_explosives = 1,
 		}
@@ -1805,7 +1805,7 @@ ammo = (function()
 			shell_visual = "wielditem",
 			shell_texture = modname .. ":rw_shelldrop",
 			ammo_mob_penetration = 5,
-			ammo_projectile_size = 0.0025,
+			ammo_projectile_size = 0.0050,
 			has_sparks = 1,
 			ignites_explosives = 1,
 		},
@@ -1827,7 +1827,7 @@ ammo = (function()
 			shell_entity = modname .. ":rw_empty_shell",
 			shell_visual = "wielditem",
 			shell_texture = modname .. ":rw_shelldrop",
-			ammo_projectile_size = 0.0025,
+			ammo_projectile_size = 0.0050,
 			has_sparks = 1,
 			ignites_explosives = 1,
 		},
@@ -1876,7 +1876,7 @@ ammo = (function()
 			shell_texture = modname .. ":rw_shelldrop",
 			ammo_mob_penetration = 20,
 			ammo_node_penetration = 10,
-			ammo_projectile_size = 0.0025,
+			ammo_projectile_size = 0.0050,
 			ammo_dps = 40,
 			has_sparks = 1,
 			ignites_explosives = 1,
@@ -1902,7 +1902,7 @@ ammo = (function()
 			shell_texture = modname .. ":rw_shelldrop",
 			ammo_mob_penetration = 45,
 			ammo_node_penetration = 20,
-			ammo_projectile_size = 0.0025,
+			ammo_projectile_size = 0.0050,
 			ammo_dps = 80,
 			has_sparks = 1,
 			ignites_explosives = 1,
@@ -3447,15 +3447,15 @@ remington = (function()
 	})
 	
 	rw.register_tool(modname .. ":rw_remington", {
-		description = "" ..core.colorize("#35cdff","Remington 870\n") ..core.colorize("#FFFFFF", "Ranged damage: 1\n") ..core.colorize("#FFFFFF", "projectiles: 4\n") ..core.colorize("#FFFFFF", "Gun gravity: 5\n") ..core.colorize("#FFFFFF", "Accuracy: 40%\n")..core.colorize("#FFFFFF", "knockback: 5\n") ..core.colorize("#FFFFFF", "Critical chance: 4%\n") ..core.colorize("#FFFFFF", "Critical efficiency: 2.0x\n") ..core.colorize("#FFFFFF", "Ammunition: 12 gauge shells\n") ..core.colorize("#FFFFFF", "Pump delay: 0.8\n")..core.colorize("#FFFFFF", "Clip size: 4\n") ..core.colorize("#27a600", "Gun is ready to fire!\n") ..core.colorize("#fff21c", "Right-click to load in a bullet!\n")  ..core.colorize("#FFFFFF", "Gun type: shotgun\n") ..core.colorize("#FFFFFF", "Bullet velocity: 18"),
+		description = "" ..core.colorize("#35cdff","Remington 870\n") ..core.colorize("#FFFFFF", "Ranged damage: 5\n") ..core.colorize("#FFFFFF", "projectiles: 8\n") ..core.colorize("#FFFFFF", "Gun gravity: 5\n") ..core.colorize("#FFFFFF", "Accuracy: 40%\n")..core.colorize("#FFFFFF", "knockback: 5\n") ..core.colorize("#FFFFFF", "Critical chance: 4%\n") ..core.colorize("#FFFFFF", "Critical efficiency: 2.0x\n") ..core.colorize("#FFFFFF", "Ammunition: 12 gauge shells\n") ..core.colorize("#FFFFFF", "Pump delay: 0.8\n")..core.colorize("#FFFFFF", "Clip size: 4\n") ..core.colorize("#27a600", "Gun is ready to fire!\n") ..core.colorize("#fff21c", "Right-click to load in a bullet!\n")  ..core.colorize("#FFFFFF", "Gun type: shotgun\n") ..core.colorize("#FFFFFF", "Bullet velocity: 18"),
 		range = 0,
 		wield_scale = {x=1.9,y=1.9,z=1.1},
 		inventory_image = "remington.png",
 		RW_gun_capabilities = {
-			gun_damage = {fleshy=1,knockback=5},
+			gun_damage = {fleshy=5,knockback=5},
 			gun_crit = 4,
 			gun_critEffc = 2.0,
-			suitable_ammo = {{modname .. ":rw_shell",4}},
+			suitable_ammo = {{modname .. ":rw_shell",8}},
 			gun_skill = {"shotgun_skill",20},
 			gun_unloaded = modname .. ":rw_remington_rld",
 			gun_cooling = modname .. ":rw_remington_uld",

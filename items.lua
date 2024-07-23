@@ -237,3 +237,10 @@ mcl_stairs.register_stair_and_slab("BEDROCK", {
 	description_slab = minetest.colorize("#FF0000", "OMG BEDROCK SLABS"),
 	overrides = {_mcl_stonecutter_recipes = {"mcl_core:bedrock"}},
 })
+
+
+
+
+
+minetest.registered_nodes["mcl_core:ice"].drawtype = "normal"
+minetest.registered_nodes["mcl_core:ice"].use_texture_alpha = minetest.features.use_texture_alpha_string_modes and "opaque" or false

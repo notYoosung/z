@@ -8,6 +8,8 @@ dofile(modpath .. "/hidename/init.lua")
 dofile(modpath .. "/creatura/init.lua")
 dofile(modpath .. "/animalia/init.lua")
 
+dofile(modpath .. "/FumoPlushies/init.lua")
+
 dofile(modpath .. "/sounds.lua")
 dofile(modpath .. "/items.lua")
 dofile(modpath .. "/metal.lua")
