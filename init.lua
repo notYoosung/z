@@ -120,3 +120,39 @@ dofile(modpath .. "/ctf/init.lua")
 --remove npc
 --flying fairy
 --pets follow/mount
+
+
+--[[
+SUGGESTED BY SEBAASTIAN 
+
+(adventurer dreams) thats the mods name :P
+
+a mod that includes a node i call adventurer task
+
+what is does is allows players to put up tasks for people to complete player
+ tasks are limited to things like gather that resource like gather string and
+ some spider eyes with amount ofc gather those items and submit the task to be
+ complete and it will be taken Off the task block unles that person makes the
+ req again
+
+basicly task given by player
+
+::::: the admin section ::::
+
+a admin version of the block making repeatble quests 
+
+that you can do ofc with a timelimit per person on each quest example you do
+ one of the quests and claim your reward then it gives you a 10 min timer that
+ when runs out allows you to accept the quest you can only accept one quest at
+ a time tho on this new version of the block you can earn ranks heigher rank
+ higher paying jobs you can get you start out as a f rank up to a S Rank which
+ is very hard to get to 
+
+this rank by heigher paying jobs i mean jobs that differ from ranks as a f
+ rank youll earn maybe 10 of the 10 bits but as a A rank the second best you
+ can earn 10 100 bits S rank the hardest VERY HARD to get maybe like 100 100
+ bits per S rank job the job determans the pay so s rank jobs are harder but
+ pay more as a heigher rank you can accept jobs lower then your rank but they
+ wont count towords geting yr next rank and they also pay less somtin like
+ dat :P
+]]
