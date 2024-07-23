@@ -29,7 +29,7 @@ entity_modifier.resize_player = function(player, size)
 	end
 
 	local model = mcl_player.player_get_animation(player).model
-	minetest.log(tostring(model))
+	-- minetest.log(tostring(model))
 	local default_properties =
 		entity_modifier.player_original_disguise_properties[player_name] or
 		model--player_api.registered_models[player:get_properties().mesh]

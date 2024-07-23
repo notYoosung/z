@@ -114,3 +114,9 @@ dofile(modpath .. "/ctf/init.lua")
 --planes
 
 --lightning/explosion staff
+
+
+--zoonami mob node 
+--remove npc
+--flying fairy
+--pets follow/mount
