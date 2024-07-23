@@ -1,0 +1,53 @@
+#    If true, villages will generate during mapgen. Villages will never generate if using mapgen v6 due to it lacking biome info.
+zoonami_generate_villages (Generate villages) bool true
+
+#    If true, berry bushes will generate during mapgen.
+zoonami_generate_berry_bushes (Generate berry bushes) bool true
+
+#    If true, flowers will generate during mapgen.
+zoonami_generate_flowers (Generate flowers) bool true
+
+#    If true, NPCs spawn in villages during mapgen.
+zoonami_prepopulate_villages (Prepopulate villages) bool true
+
+#    If true, monsters and NPCs spawn in the wild during mapgen.
+zoonami_prepopulate_world (Prepopulate world) bool true
+
+#    Controls the amount of NPCs that spawn in villages during mapgen.
+zoonami_prepopulate_villages_multiplier (Prepopulate villages multiplier) float 1 0
+
+#    Controls the amount of monsters and NPCs that spawn in the wild during mapgen.
+zoonami_prepopulate_world_multiplier (Prepopulate world multiplier) float 1 0
+
+#    Controls the amount of villages that generate during mapgen.
+zoonami_village_multiplier (Village multiplier) float 1 0
+
+#    If true, monsters and NPCs will spawn in the wild and in villages around players on an interval.
+zoonami_mobs_spawn_around_players (Mobs spawn around players) bool true
+
+#    If true, monsters and NPCs that spawn in the wild and in villages around players can spawn in player protected areas.
+zoonami_spawn_in_protected_areas (Mobs can spawn in protected areas) bool false
+
+#    Number of seconds between attempting to spawn monsters and NPCs around players.
+zoonami_spawn_interval (Spawning interval around players) float 8 1
+
+#    Maximum nearby NPCs when NPCs spawn in villages around players.
+zoonami_max_nearby_npcs (Max nearby NPCs when spawning) int 1 0
+
+#    Maximum nearby mobs when monsters spawn in the wild around players.
+zoonami_max_nearby_mobs (Max nearby mobs when spawning) int 2 0
+
+#    If true, monsters and NPCs collide with other entities.
+zoonami_mob_collisions (Mob Collisions) bool false
+
+#    If true, monsters and NPCs roam around.
+zoonami_mob_ai (Mob AI) bool true
+
+#    The odds that a wild monster spawn will be a prisma color. A larger number means prisma monsters will spawn less frequently.
+zoonami_prisma_chance (Prisma Chance) int 1500 1
+
+#    If true, the monster journal will only show pages for monsters that a player has tamed or traded for.
+zoonami_monster_journal_progression (Monster Journal Progression) bool true
+
+#    Controls the amount of EXP earned from battles.
+zoonami_exp_multiplier (EXP Multiplier) float 1 0

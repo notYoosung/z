@@ -1,0 +1,2 @@
+#    If true, Zoonami monsters mobs will be 3D.
+zoonami_3d_mobs (Zoonami 3D Mobs) bool true

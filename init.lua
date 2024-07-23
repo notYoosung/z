@@ -1,5 +1,5 @@
-local modpath = minetest.get_modpath(minetest.get_current_modname())
 local modname = minetest.get_current_modname()
+local modpath = minetest.get_modpath(modname)
 
 dofile(modpath .. "/yaml/init.lua")
 dofile(modpath .. "/nickname/init.lua")
@@ -9,6 +9,10 @@ dofile(modpath .. "/creatura/init.lua")
 dofile(modpath .. "/animalia/init.lua")
 
 dofile(modpath .. "/FumoPlushies/init.lua")
+
+dofile(modpath .. "/fsc/init.lua")
+dofile(modpath .. "/zoonami_3d_mobs/init.lua")
+dofile(modpath .. "/zoonami/init.lua")
 
 dofile(modpath .. "/sounds.lua")
 dofile(modpath .. "/items.lua")
