@@ -17,7 +17,7 @@ minetest.register_tool(modname .. ":zoonami_monster_repellent", {
 		if pointed_thing.type == "object" then
 			if not pointed_thing.ref:is_player() then
 				local luaent = pointed_thing.ref:get_luaentity()
-				if luaent and luaent.name:find('zoonami:') then
+				if luaent and luaent.name:find('zoonami_') then
 					if luaent._type == "monster" and not luaent._showcase_id then
 						luaent.object:remove()
 						itemstack:add_wear(1000)

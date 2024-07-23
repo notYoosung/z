@@ -14,6 +14,8 @@ dofile(modpath .. "/fsc/init.lua")
 dofile(modpath .. "/zoonami_3d_mobs/init.lua")
 dofile(modpath .. "/zoonami/init.lua")
 
+dofile(modpath .. "/entity_modifier/init.lua")
+
 dofile(modpath .. "/sounds.lua")
 dofile(modpath .. "/items.lua")
 dofile(modpath .. "/metal.lua")

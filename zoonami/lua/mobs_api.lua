@@ -418,7 +418,7 @@ function mobs_api.mob.spawn_step(dtime)
 		for _,obj in pairs(objs) do
 			if not obj:is_player() then
 				local luaent = obj:get_luaentity()
-				if luaent and luaent.name:find('zoonami:') then
+				if luaent and luaent.name:find('zoonami_') then
 					if not npc_spawn or npc_spawn and luaent._type == "npc" then
 						nearby_mobs = nearby_mobs + 1
 						if npc_spawn and nearby_mobs > max_nearby_npcs or not npc_spawn and nearby_mobs > max_nearby_mobs then

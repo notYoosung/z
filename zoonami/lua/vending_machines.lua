@@ -385,3 +385,6 @@ minetest.register_node(modname .. ":zoonami_vending_machine", {
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 1.5,
 })
+minetest.register_alias(modname .. ":zoonami_vending_machine", "zoonami:vending_machine")
+minetest.register_alias(modname .. ":zoonami_vending_machine_top", "zoonami:vending_machine_top")
+minetest.register_alias(modname .. ":zoonami_automatic_vending_machine", "zoonami:automatic_vending_machine")

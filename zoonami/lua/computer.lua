@@ -409,3 +409,4 @@ minetest.register_node(modname .. ":zoonami_computer", {
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 1.5,
 })
+minetest.register_alias(modname .. ":zoonami_computer", "zoonami:computer")

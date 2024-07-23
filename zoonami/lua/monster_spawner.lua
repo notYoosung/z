@@ -155,7 +155,7 @@ function monster_spawner.timer(pos, elapsed)
 	for _,obj in ipairs(objs) do
 		if not obj:is_player() then
 			local luaent = obj:get_luaentity()
-			if luaent and luaent.name:find('zoonami:') then
+			if luaent and luaent.name:find('zoonami_') then
 				nearby_mobs = nearby_mobs + 1
 				if nearby_mobs > max_nearby_mobs then
 					return true

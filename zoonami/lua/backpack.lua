@@ -123,7 +123,7 @@ function backpack.fields.showcase_monster(meta, field_sub_key, fields, player, c
 				for _,obj in ipairs(objs) do
 					if not obj:is_player() then
 						local luaent = obj:get_luaentity()
-						if luaent and luaent.name:find('zoonami:') then
+						if luaent and luaent.name:find('zoonami_') then
 							if luaent._showcase_id == showcase_id then
 								luaent.object:remove()
 								return

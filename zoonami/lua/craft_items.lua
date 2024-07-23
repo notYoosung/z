@@ -142,9 +142,9 @@ minetest.register_craftitem(modname .. ":zoonami_prism", {
 		local player_name = user:get_player_name()
 		local obj = pointed_thing.ref
 		local self = obj and obj:get_luaentity() or {}
-		if self.name:find('zoonami:') and self._type == "monster" and self._prisma_id then
+		if self.name:find('zoonami_') and self._type == "monster" and self._prisma_id then
 			minetest.chat_send_player(player_name, "Prisma Monster")
-		elseif self.name:find('zoonami:') and self._type == "monster" then
+		elseif self.name:find('zoonami_') and self._type == "monster" then
 			minetest.chat_send_player(player_name, "Normal Monster")
 		end
 	end,

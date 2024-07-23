@@ -102,6 +102,8 @@ local function register_berry_bush(name, asset_name)
 		_mcl_blast_resistance = 0.2,
 		_mcl_hardness = 0.2,
 	})
+	minetest.register_alias("zoonami:"..asset_name.."_berry_bush_1", modname .. ":zoonami_"..asset_name.."_berry_bush_1")
+	minetest.register_alias("zoonami:"..asset_name.."_berry_bush_2", modname .. ":zoonami_"..asset_name.."_berry_bush_2")
 end
 
 -- Berry Bushes
@@ -140,6 +142,7 @@ local function register_flower(name, asset_name)
 		_mcl_blast_resistance = 0.2,
 		_mcl_hardness = 0.2,
 	})
+	minetest.register_alias("zoonami:"..asset_name, modname .. ":zoonami_"..asset_name)
 end
 
 -- Flowers
@@ -164,6 +167,7 @@ local function register_mapgen_node(name, asset_name)
 		on_blast = function() end,
 		groups = {not_in_creative_inventory = 1},
 	})
+	minetest.register_alias("zoonami:"..asset_name, modname .. ":zoonami_"..asset_name)
 end
 
 -- Mapgen Nodes
@@ -235,6 +239,7 @@ local function register_tile_node(name, asset_name)
 		_mcl_blast_resistance = 6,
 		_mcl_hardness = 1.5,
 	})
+	minetest.register_alias("zoonami:"..asset_name, modname .. ":zoonami_"..asset_name)
 end
 
 -- Tile nodes
@@ -532,6 +537,7 @@ local function register_picture(name, asset_name)
 		_mcl_blast_resistance = 0.2,
 		_mcl_hardness = 0.2,
 	})
+	minetest.register_alias("zoonami:"..asset_name, modname .. ":zoonami_"..asset_name)
 end
 
 -- Pictures
@@ -566,6 +572,7 @@ local function register_rug(name, asset_name)
 		_mcl_blast_resistance = 0.2,
 		_mcl_hardness = 0.2,
 	})
+	minetest.register_alias("zoonami:"..asset_name, modname .. ":zoonami_"..asset_name)
 end
 
 -- Rugs
@@ -588,6 +595,7 @@ local function register_roof(name, asset_name)
 		_mcl_blast_resistance = 6,
 		_mcl_hardness = 1.5,
 	})
+	minetest.register_alias("zoonami:"..asset_name, modname .. ":zoonami_"..asset_name)
 	minetest.register_node(modname .. ":zoonami_"..asset_name.."_stairs", {
 		description = name.." Stairs",
 		drawtype = "nodebox",
@@ -611,6 +619,7 @@ local function register_roof(name, asset_name)
 		_mcl_blast_resistance = 6,
 		_mcl_hardness = 1.5,
 	})
+	minetest.register_alias("zoonami:"..asset_name.."_stairs", modname .. ":zoonami_"..asset_name.."_stairs")
 end
 
 -- Roofs
@@ -774,8 +783,10 @@ local function register_door(name, asset_name)
 		node_def._mcl_hardness = 2
 		if i == 1 then
 			minetest.register_node(modname .. ":zoonami_"..asset_name, node_def)
+			minetest.register_alias("zoonami:"..asset_name, modname .. ":zoonami_"..asset_name)
 		else
 			minetest.register_node(modname .. ":zoonami_"..asset_name.."_open", node_def)
+			minetest.register_alias("zoonami:"..asset_name.."_open", modname .. ":zoonami_"..asset_name.."_open")
 		end
 	end
 end
@@ -1088,7 +1099,8 @@ minetest.register_node(modname .. ":zoonami_mystery_egg", {
 		local monster_pool = {"brontore", "rampede", "ruptore"}
 		local monster = monster_pool[math.random(#monster_pool)]
 		local def = minetest.registered_entities[modname .. ":zoonami_"..monster]
-		local spawn_pos = vector.offset(pos, 0, -def.collisionbox[2], 0)
+		local collbox = def.collisionbox or {-0.85, -0.02, -0.85, 0.8, 2.2, 0.85}
+		local spawn_pos = vector.offset(pos, 0, -collbox[2], 0)
 		local prisma_chance = tonumber(minetest.settings:get("zoonami_prisma_chance") or 1500)
 		local staticdata = nil
 		if math.random(prisma_chance) == 1 then
@@ -1211,3 +1223,44 @@ minetest.register_node(modname .. ":zoonami_crystal_water_flowing", {
 	},
 	sounds = sounds.water,
 })
+
+
+
+minetest.register_alias("zoonami:gravel_path", modname .. ":zoonami_gravel_path")
+minetest.register_alias("zoonami:dirt_path", modname .. ":zoonami_dirt_path")
+minetest.register_alias("zoonami:white_brick", modname .. ":zoonami_white_brick")
+
+
+minetest.register_alias("zoonami:countertop", modname .. ":zoonami_countertop")
+minetest.register_alias("zoonami:countertop_cabinet", modname .. ":zoonami_countertop_cabinet")
+minetest.register_alias("zoonami:countertop_drawers", modname .. ":zoonami_countertop_drawers")
+minetest.register_alias("zoonami:plank_floor", modname .. ":zoonami_plank_floor")
+minetest.register_alias("zoonami:cube_floor", modname .. ":zoonami_cube_floor")
+minetest.register_alias("zoonami:bookshelf", modname .. ":zoonami_bookshelf")
+minetest.register_alias("zoonami:wood_table", modname .. ":zoonami_wood_table")
+minetest.register_alias("zoonami:wood_chair", modname .. ":zoonami_wood_chair")
+minetest.register_alias("zoonami:npc_wood_chair_active", modname .. ":zoonami_npc_wood_chair_active")
+minetest.register_alias("zoonami:npc_wood_chair_inactive", modname .. ":zoonami_npc_wood_chair_inactive")
+minetest.register_alias("zoonami:light", modname .. ":zoonami_light")
+
+minetest.register_alias("zoonami:crystal_glass", modname .. ":zoonami_crystal_glass")
+minetest.register_alias("zoonami:window", modname .. ":zoonami_window")
+minetest.register_alias("zoonami:door_top", modname .. ":zoonami_door_top")
+
+
+minetest.register_alias("zoonami:healer", modname .. ":zoonami_healer")
+minetest.register_alias("zoonami:zeenite_ore", modname .. ":zoonami_zeenite_ore")
+minetest.register_alias("zoonami:zeenite_block", modname .. ":zoonami_zeenite_block")
+minetest.register_alias("zoonami:crystal_wall", modname .. ":zoonami_crystal_wall")
+minetest.register_alias("zoonami:crystal_fragment_block", modname .. ":zoonami_crystal_fragment_block")
+minetest.register_alias("zoonami:crystal_light_off", modname .. ":zoonami_crystal_light_off")
+minetest.register_alias("zoonami:crystal_light_on", modname .. ":zoonami_crystal_light_on")
+minetest.register_alias("zoonami:excavation_core", modname .. ":zoonami_excavation_core")
+minetest.register_alias("zoonami:excavation_debris", modname .. ":zoonami_excavation_debris")
+minetest.register_alias("zoonami:mystery_egg", modname .. ":zoonami_mystery_egg")
+minetest.register_alias("zoonami:crystal_water_source", modname .. ":zoonami_crystal_water_source")
+minetest.register_alias("zoonami:crystal_water_flowing", modname .. ":zoonami_crystal_water_flowing")
+
+
+
+
