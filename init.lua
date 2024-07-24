@@ -1,6 +1,8 @@
 local modname = minetest.get_current_modname()
 local modpath = minetest.get_modpath(modname)
 
+dofile(modpath .. "/player_api/init.lua")
+
 dofile(modpath .. "/yaml/init.lua")
 dofile(modpath .. "/nickname/init.lua")
 dofile(modpath .. "/hidename/init.lua")
@@ -15,6 +17,8 @@ dofile(modpath .. "/zoonami_3d_mobs/init.lua")
 dofile(modpath .. "/zoonami/init.lua")
 
 dofile(modpath .. "/entity_modifier/init.lua")
+
+dofile(modpath .. "/vehicles/init.lua")
 
 dofile(modpath .. "/sounds.lua")
 dofile(modpath .. "/items.lua")
