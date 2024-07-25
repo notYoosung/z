@@ -1,3 +1,6 @@
+local modname = minetest.get_current_modname()
+local modpath = minetest.get_modpath(modname) .. "/automobiles"
+
 local S = trans_am.S
 
 --
@@ -5,13 +8,13 @@ local S = trans_am.S
 --
 
 -- body
-minetest.register_craftitem("automobiles_trans_am:trans_am_body",{
+minetest.register_craftitem(modname .. ":automobiles_trans_am_trans_am_body",{
 	description = S("Trans Am Body"),
 	inventory_image = "automobiles_trans_am_body.png",
 })
 
 -- trans_am
-minetest.register_tool("automobiles_trans_am:trans_am", {
+minetest.register_tool(modname .. ":automobiles_trans_am_trans_am", {
 	description = S("Trans Am"),
 	inventory_image = "automobiles_trans_am.png",
     liquids_pointable = false,
@@ -27,7 +30,7 @@ minetest.register_tool("automobiles_trans_am:trans_am", {
 
         local pointed_pos = pointed_thing.above
 		--pointed_pos.y=pointed_pos.y+0.2
-		local car = minetest.add_entity(pointed_pos, "automobiles_trans_am:trans_am", staticdata)
+		local car = minetest.add_entity(pointed_pos, modname .. ":automobiles_trans_am_trans_am", staticdata)
 		if car and placer then
             local ent = car:get_luaentity()
             local owner = placer:get_player_name()
@@ -54,14 +57,14 @@ minetest.register_tool("automobiles_trans_am:trans_am", {
 --
 if minetest.get_modpath("default") then
 	minetest.register_craft({
-		output = "automobiles_trans_am:trans_am",
+		output = modname .. ":automobiles_trans_am_trans_am",
 		recipe = {
-			{"automobiles_lib:wheel", "automobiles_lib:engine", "automobiles_lib:wheel"},
-			{"automobiles_lib:wheel","automobiles_trans_am:trans_am_body",  "automobiles_lib:wheel"},
+			{modname .. ":automobiles_lib_wheel", modname .. ":automobiles_lib_engine", modname .. ":automobiles_lib_wheel"},
+			{modname .. ":automobiles_lib_wheel",modname .. ":automobiles_trans_am_trans_am_body",  modname .. ":automobiles_lib_wheel"},
 		}
 	})
 	minetest.register_craft({
-		output = "automobiles_trans_am:trans_am_body",
+		output = modname .. ":automobiles_trans_am_trans_am_body",
 		recipe = {
             {"default:glass","default:mese","default:steel_ingot"},
 			{"default:steel_ingot","default:steelblock","default:steel_ingot"},

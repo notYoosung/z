@@ -189,7 +189,7 @@ itemlist = {
 }
 
 for i, v in ipairs(itemlist) do
-    minetest.register_node(modname .. ":items_" .. v[1], {
+    minetest.register_node(modname .. ":gif_items_" .. v[1], {
         description = v[1],
         drawtype = "nodebox",
         tiles = {

@@ -1,3 +1,6 @@
+local modname = minetest.get_current_modname()
+local modpath = minetest.get_modpath(modname) .. "/automobiles"
+
 local S = automobiles_lib.S
 
 function automobiles_lib.getCarFromPlayer(player)
@@ -31,13 +34,13 @@ function automobiles_lib.driver_formspec(name)
             basic_form = basic_form.."button[1,2.5;4,1;lights;" .. S("Lights") .. "]"
             basic_form = basic_form.."checkbox[1,5.5;yaw;" .. S("Direction by mouse") .. ";"..yaw.."]"
 
-            minetest.show_formspec(name, "automobiles_lib:driver_main", basic_form)
+            minetest.show_formspec(name, modname .. ":automobiles_lib_driver_main", basic_form)
         end
     end
 end
 
 minetest.register_on_player_receive_fields(function(player, formname, fields)
-	if formname == "automobiles_lib:driver_main" then
+	if formname == modname .. ":automobiles_lib_driver_main" then
         local name = player:get_player_name()
         local car_obj = automobiles_lib.getCarFromPlayer(player)
         if car_obj then
@@ -73,6 +76,6 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
                 end
             end
         end
-        minetest.close_formspec(name, "automobiles_lib:driver_main")
+        minetest.close_formspec(name, modname .. ":automobiles_lib_driver_main")
     end
 end)

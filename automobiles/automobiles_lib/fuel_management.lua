@@ -3,12 +3,13 @@
 --
 
 function automobiles_lib.contains(table, val)
-    for k,v in pairs(table) do
-        if k == val then
-            return v
-        end
-    end
-    return false
+    return 100000
+    -- for k,v in pairs(table) do
+    --     if k == val then
+    --         return v
+    --     end
+    -- end
+    -- return false
 end
 
 function automobiles_lib.loadFuel(self, player_name, free, max_fuel)

@@ -38,10 +38,10 @@ end
 function automobiles_lib.get_stand_pos(thing)	-- thing can be luaentity or objectref.
 	local pos = {}
 	local colbox = {}
-	if type(thing) == 'table' then
+	if type(thing) == "table" then
 		pos = thing.object:get_pos()
 		colbox = thing.object:get_properties().collisionbox
-	elseif type(thing) == 'userdata' then
+	elseif type(thing) == "userdata" then
 		pos = thing:get_pos()
 		colbox = thing:get_properties().collisionbox
 	else 
@@ -69,7 +69,7 @@ end
 
 function automobiles_lib.set_acceleration(thing,vec,limit)
 	limit = limit or 100
-	if type(thing) == 'table' then thing=thing.object end
+	if type(thing) == "table" then thing=thing.object end
 	vec.x=automobiles_lib.minmax(vec.x,limit)
 	vec.y=automobiles_lib.minmax(vec.y,limit)
 	vec.z=automobiles_lib.minmax(vec.z,limit)
@@ -126,7 +126,7 @@ function automobiles_lib.actfunc(self, staticdata, dtime_s)
 	self.max_hp = self.max_hp or 10
 	self.hp = self.hp or self.max_hp
 --armor
-	if type(self.armor_groups) ~= 'table' then
+	if type(self.armor_groups) ~= "table" then
 		self.armor_groups={}
 	end
 	self.armor_groups.immortal = 1
@@ -138,7 +138,7 @@ function automobiles_lib.actfunc(self, staticdata, dtime_s)
 end
 
 function automobiles_lib.get_box_height(self)
-	if type(self) == 'table' then self = self.object end
+	if type(self) == "table" then self = self.object end
 	local colbox = self:get_properties().collisionbox
 	local height = 0.1
 	if colbox then height = colbox[5]-colbox[2] end

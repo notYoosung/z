@@ -69,16 +69,64 @@ minetest.register_on_joinplayer(function(player)
 	minetest.after(0.5, after_join, player:get_player_name())
 end)
 
+local hotbar_bgs = {
+	"black",
+	"blue",
+	"cyan",
+	"green",
+	"grey",
+	"lime",
+	"orange",
+	"pink",
+	"purple",
+	"red",
+	"white",
+	"yellow",
+	"invisible",
+}
+
+minetest.register_on_joinplayer(function(player)
+	local pmeta = player:get_meta()
+	local bg = pmeta:get_string("z_hotbar_bg")
+
+	if bg == "" then
+		bg = "mcl_inventory_hotbar.png"
+	else
+		player:hud_set_hotbar_image(bg)
+	end
+	
+end)
+
 minetest.register_chatcommand("hotbar", {
-	params = "<size>",
-	description = "Sets the size of your hotbar, from 1 to 32 slots. Default " .. hotbar_size_default,
+	params = "<size/color>",
+	description = "Sets the size of your hotbar, from 1 to 32 slots. Default " .. hotbar_size_default .. ". Can also set the color of your hotbar. Do /hotbar default for the default background. " .. table.concat(hotbar_bgs, ", "),
 	func = function(name, slots)
 		local player = minetest.get_player_by_name(name)
+
+		for _, v in ipairs(hotbar_bgs) do
+			if slots == v then
+				local pmeta = player:get_meta()
+				pmeta:set_string("z_hotbar_bg", "z_hotbar_" .. slots .. ".png")
+				player:hud_set_hotbar_image("z_hotbar_" .. slots .. ".png")
+				minetest.chat_send_player(name, "Hotbar background set to " .. slots)
+				return
+			end
+		end
+		if slots == "default" then
+			pmeta:set_string("z_hotbar_bg", "mcl_inventory_hotbar.png")
+			player:hud_set_hotbar_image("mcl_inventory_hotbar.png")
+			minetest.chat_send_player(name, "Hotbar background set to default")
+			return
+		end
+
+
 		if not player then
 			return false, "Player is not online."
 		end
 		local size = set_hotbar_size(player, slots)
 		return true, "Hotbar size set to "..size
+
+		
 	end
 })
 
@@ -101,3 +149,6 @@ local function migrate_storage()
 	end
 end
 migrate_storage()
+
+
+

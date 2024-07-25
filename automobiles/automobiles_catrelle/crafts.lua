@@ -1,3 +1,6 @@
+local modname = minetest.get_current_modname()
+local modpath = minetest.get_modpath(modname) .. "/automobiles"
+
 local S = catrelle.S
 
 --
@@ -5,13 +8,13 @@ local S = catrelle.S
 --
 
 -- body
-minetest.register_craftitem("automobiles_catrelle:catrelle_body",{
+minetest.register_craftitem(modname .. ":automobiles_catrelle_catrelle_body",{
 	description = S("Catrelle Body"),
 	inventory_image = "automobiles_catrelle_body.png",
 })
 
 -- catrelle
-minetest.register_tool("automobiles_catrelle:catrelle", {
+minetest.register_tool(modname .. ":automobiles_catrelle_catrelle", {
 	description = S("Catrelle"),
 	inventory_image = "automobiles_catrelle.png",
     liquids_pointable = false,
@@ -27,7 +30,7 @@ minetest.register_tool("automobiles_catrelle:catrelle", {
 
         local pointed_pos = pointed_thing.above
 		--pointed_pos.y=pointed_pos.y+0.2
-		local car = minetest.add_entity(pointed_pos, "automobiles_catrelle:catrelle", staticdata)
+		local car = minetest.add_entity(pointed_pos, modname .. ":automobiles_catrelle_catrelle", staticdata)
 		if car and placer then
             local ent = car:get_luaentity()
             local owner = placer:get_player_name()
@@ -49,7 +52,7 @@ minetest.register_tool("automobiles_catrelle:catrelle", {
 })
 
 -- catrelle TL
-minetest.register_tool("automobiles_catrelle:catrelle_4f", {
+minetest.register_tool(modname .. ":automobiles_catrelle_catrelle_4f", {
 	description = S("Catrelle 4F"),
 	inventory_image = "automobiles_catrelle.png",
     liquids_pointable = false,
@@ -65,7 +68,7 @@ minetest.register_tool("automobiles_catrelle:catrelle_4f", {
 
         local pointed_pos = pointed_thing.above
 		--pointed_pos.y=pointed_pos.y+0.2
-		local car = minetest.add_entity(pointed_pos, "automobiles_catrelle:catrelle_4f", staticdata)
+		local car = minetest.add_entity(pointed_pos, modname .. ":automobiles_catrelle_catrelle_4f", staticdata)
 		if car and placer then
             local ent = car:get_luaentity()
             local owner = placer:get_player_name()
@@ -91,20 +94,20 @@ minetest.register_tool("automobiles_catrelle:catrelle_4f", {
 --
 if minetest.get_modpath("default") then
 	minetest.register_craft({
-		output = "automobiles_catrelle:catrelle_4f",
+		output = modname .. ":automobiles_catrelle_catrelle_4f",
 		recipe = {
-			{"automobiles_catrelle:catrelle", "default:glass", "default:steelblock"},
+			{modname .. ":automobiles_catrelle_catrelle", "default:glass", "default:steelblock"},
 		}
 	})
 	minetest.register_craft({
-		output = "automobiles_catrelle:catrelle",
+		output = modname .. ":automobiles_catrelle_catrelle",
 		recipe = {
-			{"automobiles_lib:wheel", "automobiles_lib:engine", "automobiles_lib:wheel"},
-			{"automobiles_lib:wheel","automobiles_catrelle:catrelle_body",  "automobiles_lib:wheel"},
+			{modname .. ":automobiles_lib_wheel", modname .. ":automobiles_lib_engine", modname .. ":automobiles_lib_wheel"},
+			{modname .. ":automobiles_lib_wheel",modname .. ":automobiles_catrelle_catrelle_body",  modname .. ":automobiles_lib_wheel"},
 		}
 	})
 	minetest.register_craft({
-		output = "automobiles_catrelle:catrelle_body",
+		output = modname .. ":automobiles_catrelle_catrelle_body",
 		recipe = {
             {"default:glass" ,"default:steel_ingot","default:steel_ingot"},
 			{"default:steel_ingot","default:steel_ingot","default:steel_ingot"},

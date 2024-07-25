@@ -1,8 +1,11 @@
+local modname = minetest.get_current_modname()
+local modpath = minetest.get_modpath(modname) .. "/automobiles"
+
 --
 -- entity
 --
 
-minetest.register_entity('automobiles_buggy:front_suspension',{
+minetest.register_entity(modname .. ":automobiles_buggy_front_suspension",{
 initial_properties = {
 	physical = true,
 	collide_with_objects=true,
@@ -29,7 +32,7 @@ initial_properties = {
 	
 })
 
-minetest.register_entity('automobiles_buggy:rear_suspension',{
+minetest.register_entity(modname .. ":automobiles_buggy_rear_suspension",{
 initial_properties = {
 	physical = true,
 	collide_with_objects=true,
@@ -51,7 +54,7 @@ initial_properties = {
 	
 })
 
-minetest.register_entity('automobiles_buggy:f_lights',{
+minetest.register_entity(modname .. ":automobiles_buggy_f_lights",{
 initial_properties = {
 	physical = false,
 	collide_with_objects=false,
@@ -74,7 +77,7 @@ initial_properties = {
 	
 })
 
-minetest.register_entity('automobiles_buggy:r_lights',{
+minetest.register_entity(modname .. ":automobiles_buggy_r_lights",{
 initial_properties = {
 	physical = false,
 	collide_with_objects=false,
@@ -97,7 +100,7 @@ initial_properties = {
 	
 })
 
-minetest.register_entity('automobiles_buggy:f_wheel',{
+minetest.register_entity(modname .. ":automobiles_buggy_f_wheel",{
 initial_properties = {
 	physical = false,
 	collide_with_objects=false,
@@ -120,7 +123,7 @@ initial_properties = {
 	
 })
 
-minetest.register_entity('automobiles_buggy:r_wheel',{
+minetest.register_entity(modname .. ":automobiles_buggy_r_wheel",{
 initial_properties = {
 	physical = false,
 	collide_with_objects=false,
@@ -143,7 +146,7 @@ initial_properties = {
 	
 })
 
-minetest.register_entity('automobiles_buggy:rag',{
+minetest.register_entity(modname .. ":automobiles_buggy_rag",{
 initial_properties = {
 	physical = false,
 	collide_with_objects=false,
@@ -167,7 +170,7 @@ initial_properties = {
 	
 })
 
-minetest.register_entity("automobiles_buggy:buggy", {
+minetest.register_entity(modname .. ":automobiles_buggy_buggy", {
 	initial_properties = {
 	    physical = true,
         collide_with_objects = true,
@@ -239,23 +242,23 @@ minetest.register_entity("automobiles_buggy:buggy", {
     _vehicle_name = "Buggy",
     _drive_wheel_pos = {x=-4.26,y=6.01,z=16},
     _drive_wheel_angle = 15,
-    _rag_extended_ent = 'automobiles_buggy:rag',
+    _rag_extended_ent = modname .. ":automobiles_buggy_rag",
     _seat_pos = {{x=-4.25,y=0.48,z=9.5},{x=4.25,y=0.48,z=9.5}},
 
-    _front_suspension_ent = 'automobiles_buggy:front_suspension',
+    _front_suspension_ent = modname .. ":automobiles_buggy_front_suspension",
     _front_suspension_pos = {x=0,y=-0.7,z=23},
-    _front_wheel_ent = 'automobiles_buggy:f_wheel',
+    _front_wheel_ent = modname .. ":automobiles_buggy_f_wheel",
     _front_wheel_xpos = 8,
     _front_wheel_frames = {x = 1, y = 13},
-    _rear_suspension_ent = 'automobiles_buggy:rear_suspension',
+    _rear_suspension_ent = modname .. ":automobiles_buggy_rear_suspension",
     _rear_suspension_pos = {x=0,y=0,z=0},
-    _rear_wheel_ent = 'automobiles_buggy:r_wheel',
+    _rear_wheel_ent = modname .. ":automobiles_buggy_r_wheel",
     _rear_wheel_xpos = 8,
     _rear_wheel_frames = {x = 1, y = 13},
 
     _fuel_gauge_pos = {x=0,y=4.65,z=15.17},
-    _front_lights = 'automobiles_buggy:f_lights',
-    _rear_lights = 'automobiles_buggy:r_lights',
+    _front_lights = modname .. ":automobiles_buggy_f_lights",
+    _rear_lights = modname .. ":automobiles_buggy_r_lights",
 
     _LONGIT_DRAG_FACTOR = 0.12*0.12,
     _LATER_DRAG_FACTOR = 6.0,

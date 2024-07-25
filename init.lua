@@ -1,6 +1,8 @@
 local modname = minetest.get_current_modname()
 local modpath = minetest.get_modpath(modname)
 
+dofile(modpath .. "/aliases.lua")
+
 dofile(modpath .. "/player_api/init.lua")
 
 dofile(modpath .. "/yaml/init.lua")
@@ -19,6 +21,7 @@ dofile(modpath .. "/zoonami/init.lua")
 dofile(modpath .. "/entity_modifier/init.lua")
 
 dofile(modpath .. "/vehicles/init.lua")
+dofile(modpath .. "/automobiles/init.lua")
 
 dofile(modpath .. "/sounds.lua")
 dofile(modpath .. "/items.lua")
@@ -124,6 +127,19 @@ dofile(modpath .. "/ctf/init.lua")
 --remove npc
 --flying fairy
 --pets follow/mount
+
+
+-- sit
+
+---glow invis item frame
+
+--bear bed
+
+--disguise priv
+--textures
+
+
+--hotbar colors
 
 
 --[[

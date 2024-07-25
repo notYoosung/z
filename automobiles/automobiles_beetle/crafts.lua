@@ -1,3 +1,6 @@
+local modname = minetest.get_current_modname()
+local modpath = minetest.get_modpath(modname) .. "/automobiles"
+
 local S = auto_beetle.S
 
 --
@@ -5,13 +8,13 @@ local S = auto_beetle.S
 --
 
 -- body
-minetest.register_craftitem("automobiles_beetle:beetle_body",{
+minetest.register_craftitem(modname .. ":automobiles_beetle_beetle_body",{
 	description = S("Beetle Body"),
 	inventory_image = "beetle_body.png",
 })
 
 -- beetle
-minetest.register_tool("automobiles_beetle:beetle", {
+minetest.register_tool(modname .. ":automobiles_beetle_beetle", {
     description = "Beetle",
     inventory_image = "automobiles_beetle.png",
     liquids_pointable = false,
@@ -27,7 +30,7 @@ minetest.register_tool("automobiles_beetle:beetle", {
 
         local pointed_pos = pointed_thing.above
 		--pointed_pos.y=pointed_pos.y+0.2
-		local car = minetest.add_entity(pointed_pos, "automobiles_beetle:beetle", staticdata)
+		local car = minetest.add_entity(pointed_pos, modname .. ":automobiles_beetle_beetle", staticdata)
 		if car and placer then
             local ent = car:get_luaentity()
             local owner = placer:get_player_name()
@@ -52,14 +55,14 @@ minetest.register_tool("automobiles_beetle:beetle", {
 --
 if minetest.get_modpath("default") then
 	minetest.register_craft({
-		output = "automobiles_beetle:beetle",
+		output = modname .. ":automobiles_beetle_beetle",
 		recipe = {
-			{"automobiles_lib:wheel", "automobiles_lib:engine", "automobiles_lib:wheel"},
-			{"automobiles_lib:wheel","automobiles_beetle:beetle_body",  "automobiles_lib:wheel"},
+			{modname .. ":automobiles_lib_wheel", modname .. ":automobiles_lib_engine", modname .. ":automobiles_lib_wheel"},
+			{modname .. ":automobiles_lib_wheel",modname .. ":automobiles_beetle_beetle_body",  modname .. ":automobiles_lib_wheel"},
 		}
 	})
 	minetest.register_craft({
-		output = "automobiles_beetle:beetle_body",
+		output = modname .. ":automobiles_beetle_beetle_body",
 		recipe = {
             {"default:glass" ,"default:steel_ingot","default:glass"},
 			{"default:steel_ingot","default:steel_ingot","default:steel_ingot"},

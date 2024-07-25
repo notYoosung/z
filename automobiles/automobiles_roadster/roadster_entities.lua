@@ -1,8 +1,11 @@
+local modname = minetest.get_current_modname()
+local modpath = minetest.get_modpath(modname) .. "/automobiles"
+
 --
 -- entity
 --
 
-minetest.register_entity('automobiles_roadster:front_suspension',{
+minetest.register_entity(modname .. ":automobiles_roadster_front_suspension",{
 initial_properties = {
 	physical = true,
 	collide_with_objects=true,
@@ -29,7 +32,7 @@ initial_properties = {
 	
 })
 
-minetest.register_entity('automobiles_roadster:rear_suspension',{
+minetest.register_entity(modname .. ":automobiles_roadster_rear_suspension",{
 initial_properties = {
 	physical = true,
 	collide_with_objects=true,
@@ -51,7 +54,7 @@ initial_properties = {
 	
 })
 
-minetest.register_entity('automobiles_roadster:lights',{
+minetest.register_entity(modname .. ":automobiles_roadster_lights",{
 initial_properties = {
 	physical = false,
 	collide_with_objects=false,
@@ -74,7 +77,7 @@ initial_properties = {
 	
 })
 
-minetest.register_entity('automobiles_roadster:wheel',{
+minetest.register_entity(modname .. ":automobiles_roadster_wheel",{
 initial_properties = {
 	physical = false,
 	collide_with_objects=false,
@@ -97,7 +100,7 @@ initial_properties = {
 	
 })
 
-minetest.register_entity('automobiles_roadster:top1',{
+minetest.register_entity(modname .. ":automobiles_roadster_top1",{
 initial_properties = {
 	physical = false,
 	collide_with_objects=false,
@@ -120,7 +123,7 @@ initial_properties = {
 	
 })
 
-minetest.register_entity('automobiles_roadster:top2',{
+minetest.register_entity(modname .. ":automobiles_roadster_top2",{
 initial_properties = {
 	physical = false,
 	collide_with_objects=false,
@@ -143,7 +146,7 @@ initial_properties = {
 	
 })
 
-minetest.register_entity('automobiles_roadster:steering',{
+minetest.register_entity(modname .. ":automobiles_roadster_steering",{
 initial_properties = {
 	physical = false,
 	collide_with_objects=false,
@@ -165,7 +168,7 @@ initial_properties = {
 	
 })
 
-minetest.register_entity('automobiles_roadster:pointer',{
+minetest.register_entity(modname .. ":automobiles_roadster_pointer",{
 initial_properties = {
 	physical = false,
 	collide_with_objects=false,
@@ -187,7 +190,7 @@ initial_properties = {
     end,
 })
 
-minetest.register_entity("automobiles_roadster:roadster", {
+minetest.register_entity(modname .. ":automobiles_roadster_roadster", {
 	initial_properties = {
 	    physical = true,
         collide_with_objects = true,
@@ -264,30 +267,30 @@ minetest.register_entity("automobiles_roadster:roadster", {
     _vehicle_name = "Roadster",
     _drive_wheel_pos = {x=-4.25,y=12,z=14},
     _drive_wheel_angle = 70,
-    _steering_ent = 'automobiles_roadster:steering',
-    _rag_extended_ent = 'automobiles_roadster:top1',
-    _rag_retracted_ent = 'automobiles_roadster:top2',
+    _steering_ent = modname .. ":automobiles_roadster_steering",
+    _rag_extended_ent = modname .. ":automobiles_roadster_top1",
+    _rag_retracted_ent = modname .. ":automobiles_roadster_top2",
     _windshield_pos = {x=0, z=15.8317, y=15.0394},
     _windshield_ext_rotation = {x=145, y=0, z=0},
     _seat_pos = {{x=-4.25,y=7.12,z=9.5},{x=4.25,y=7.12,z=9.5}},
 
-    _front_suspension_ent = 'automobiles_roadster:front_suspension',
+    _front_suspension_ent = modname .. ":automobiles_roadster_front_suspension",
     _front_suspension_pos = {x=0,y=0,z=24.22},
-    _front_wheel_ent = 'automobiles_roadster:wheel',
+    _front_wheel_ent = modname .. ":automobiles_roadster_wheel",
     _front_wheel_xpos = 10.26,
     _front_wheel_frames = {x = 1, y = 24},
-    _rear_suspension_ent = 'automobiles_roadster:rear_suspension',
+    _rear_suspension_ent = modname .. ":automobiles_roadster_rear_suspension",
     _rear_suspension_pos = {x=0,y=0,z=0},
-    _rear_wheel_ent = 'automobiles_roadster:wheel',
+    _rear_wheel_ent = modname .. ":automobiles_roadster_wheel",
     _rear_wheel_xpos = 10.26,
     _rear_wheel_frames = {x = 1, y = 24},
     _wheel_compensation = 0.5,
 
     _fuel_gauge_pos = {x=0,y=8.04,z=17.84},
-    _gauge_pointer_ent = 'automobiles_roadster:pointer',
-    _front_lights = 'automobiles_roadster:lights',
+    _gauge_pointer_ent = modname .. ":automobiles_roadster_pointer",
+    _front_lights = modname .. ":automobiles_roadster_lights",
 
-    _horn_sound = 'roadster_horn',
+    _horn_sound = "roadster_horn",
 
     _LONGIT_DRAG_FACTOR = 0.16*0.16,
     _LATER_DRAG_FACTOR = 20.0,

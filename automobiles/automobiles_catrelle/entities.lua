@@ -1,7 +1,10 @@
+local modname = minetest.get_current_modname()
+local modpath = minetest.get_modpath(modname) .. "/automobiles"
+
 function catrelle.extra_parts(self)
     local pos = self.object:get_pos()
-    local back_seat = minetest.add_entity(pos,'automobiles_catrelle:back_seat')
-    back_seat:set_attach(self.object,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
+    local back_seat = minetest.add_entity(pos,modname .. ":automobiles_catrelle_back_seat")
+    back_seat:set_attach(self.object,"",{x=0,y=0,z=0},{x=0,y=0,z=0})
     self.back_seat = back_seat
 end
 
@@ -9,7 +12,7 @@ end
 -- entity
 --
 
-minetest.register_entity('automobiles_catrelle:wheel',{
+minetest.register_entity(modname .. ":automobiles_catrelle_wheel",{
 initial_properties = {
 	physical = false,
 	collide_with_objects=false,
@@ -32,7 +35,7 @@ initial_properties = {
 
 })
 
-minetest.register_entity('automobiles_catrelle:front_suspension',{
+minetest.register_entity(modname .. ":automobiles_catrelle_front_suspension",{
 initial_properties = {
 	physical = true,
 	collide_with_objects=true,
@@ -59,7 +62,7 @@ initial_properties = {
 	
 })
 
-minetest.register_entity('automobiles_catrelle:rear_suspension',{
+minetest.register_entity(modname .. ":automobiles_catrelle_rear_suspension",{
 initial_properties = {
 	physical = true,
 	collide_with_objects=true,
@@ -81,7 +84,7 @@ initial_properties = {
 	
 })
 
-minetest.register_entity('automobiles_catrelle:f_lights',{
+minetest.register_entity(modname .. ":automobiles_catrelle_f_lights",{
 initial_properties = {
 	physical = false,
 	collide_with_objects=false,
@@ -104,7 +107,7 @@ initial_properties = {
 	
 })
 
-minetest.register_entity('automobiles_catrelle:r_lights',{
+minetest.register_entity(modname .. ":automobiles_catrelle_r_lights",{
 initial_properties = {
 	physical = false,
 	collide_with_objects=false,
@@ -127,7 +130,7 @@ initial_properties = {
 	
 })
 
-minetest.register_entity('automobiles_catrelle:turn_left_light',{
+minetest.register_entity(modname .. ":automobiles_catrelle_turn_left_light",{
 initial_properties = {
 	physical = false,
 	collide_with_objects=false,
@@ -150,7 +153,7 @@ initial_properties = {
 	
 })
 
-minetest.register_entity('automobiles_catrelle:turn_right_light',{
+minetest.register_entity(modname .. ":automobiles_catrelle_turn_right_light",{
 initial_properties = {
 	physical = false,
 	collide_with_objects=false,
@@ -173,7 +176,7 @@ initial_properties = {
 	
 })
 
-minetest.register_entity('automobiles_catrelle:back_seat',{
+minetest.register_entity(modname .. ":automobiles_catrelle_back_seat",{
 initial_properties = {
 	physical = true,
 	collide_with_objects=true,
@@ -279,22 +282,22 @@ catrelle.car_properties1 = {
     _drive_wheel_angle = 15,
     _seat_pos = {{x=-4.0,y=3,z=15},{x=4.0,y=3,z=15}},
 
-    _front_suspension_ent = 'automobiles_catrelle:front_suspension',
+    _front_suspension_ent = modname .. ":automobiles_catrelle_front_suspension",
     _front_suspension_pos = {x=0,y=-0.2,z=29},
-    _front_wheel_ent = 'automobiles_catrelle:wheel',
+    _front_wheel_ent = modname .. ":automobiles_catrelle_wheel",
     _front_wheel_xpos = 7.5,
     _front_wheel_frames = {x = 1, y = 49},
-    _rear_suspension_ent = 'automobiles_catrelle:rear_suspension',
+    _rear_suspension_ent = modname .. ":automobiles_catrelle_rear_suspension",
     _rear_suspension_pos = {x=0,y=-0.2,z=0},
-    _rear_wheel_ent = 'automobiles_catrelle:wheel',
+    _rear_wheel_ent = modname .. ":automobiles_catrelle_wheel",
     _rear_wheel_xpos = 7.5,
     _rear_wheel_frames = {x = 1, y = 49},
 
     _fuel_gauge_pos = {x=-4.47,y=8.50,z=20.5},
-    _front_lights = 'automobiles_catrelle:f_lights',
-    _rear_lights = 'automobiles_catrelle:r_lights',
-    _turn_left_lights = 'automobiles_catrelle:turn_left_light',
-    _turn_right_lights = 'automobiles_catrelle:turn_right_light',
+    _front_lights = modname .. ":automobiles_catrelle_f_lights",
+    _rear_lights = modname .. ":automobiles_catrelle_r_lights",
+    _turn_left_lights = modname .. ":automobiles_catrelle_turn_left_light",
+    _turn_right_lights = modname .. ":automobiles_catrelle_turn_right_light",
     _textures_turn_lights_off = {"automobiles_turn.png", },
     _textures_turn_lights_on = { "automobiles_turn_on.png", },
 
@@ -318,7 +321,7 @@ catrelle.car_properties1 = {
 	on_rightclick = automobiles_lib.on_rightclick,
 }
 
-minetest.register_entity("automobiles_catrelle:catrelle", catrelle.car_properties1)
+minetest.register_entity(modname .. ":automobiles_catrelle_catrelle", catrelle.car_properties1)
 
 catrelle.car_properties2 = automobiles_lib.properties_copy(catrelle.car_properties1)
 catrelle.car_properties2._vehicle_name = "Catrelle 4F"
@@ -331,5 +334,5 @@ catrelle.car_properties2._color = "#0063b0"
 catrelle.car_properties2._trunk_slots = 16
 catrelle.car_properties2._extra_items_function = catrelle.extra_parts
 
-minetest.register_entity("automobiles_catrelle:catrelle_4f", catrelle.car_properties2)
+minetest.register_entity(modname .. ":automobiles_catrelle_catrelle_4f", catrelle.car_properties2)
 

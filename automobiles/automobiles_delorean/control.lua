@@ -17,7 +17,7 @@ function delorean.control(self, dtime, hull_direction, longit_speed, longit_drag
             if longit_speed < max_speed and ctrl.up then
                 --get acceleration factor
                 acc = automobiles_lib.check_road_is_ok(self.object, max_acc_factor)
-                --minetest.chat_send_all('engineacc: '.. engineacc)
+                --minetest.chat_send_all("engineacc: ".. engineacc)
                 if acc > 1 and acc < max_acc_factor and longit_speed > 0 then
                     --improper road will reduce speed
                     acc = -1

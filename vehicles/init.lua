@@ -1854,3 +1854,78 @@ if enable_built_in then
 	end
 
 end--if enable_built_in then
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--[[
+minetest.register_entity(modname .. ":vehicles_lambogoni", {
+	visual = "mesh",
+	mesh = "lambogoni.b3d",
+	textures = {"vehicles_lambogoni.png"},
+	velocity = 19,
+	acceleration = -5,
+	stepheight = step,
+	hp_max = 200,
+	physical = true,
+	collisionbox = {-1, 0, -1, 1.3, 1, 1},
+	on_rightclick = function(self, clicker)
+		if self.driver and clicker == self.driver then
+			vehicles.object_detach(self, clicker, {x=1, y=0, z=1})
+		elseif not self.driver then
+			vehicles.object_attach(self, clicker, {x=0, y=5, z=4}, false, {x=0, y=2, z=4})
+			minetest.sound_play("engine_start",
+				{to_player=self.driver:get_player_name(), gain = 4, max_hear_distance = 3, loop = false})
+			self.sound_ready = false
+			minetest.after(14, function()
+				self.sound_ready = true
+			end)
+		end
+	end,
+	on_punch = vehicles.on_punch,
+	on_activate = function(self)
+		self.nitro = true
+	end,
+	on_step = function(self, dtime)
+		return vehicles.on_step(self, dtime, {
+			speed = 19,
+			decell = 0.99,
+			boost = true,
+			boost_duration = 4,
+			boost_effect = "vehicles_nitro.png",
+			driving_sound = "engine",
+			sound_duration = 11,
+			brakes = true,
+		})
+	end,
+})
+
+vehicles.register_spawner(modname .. ":vehicles_lambogoni", S("Lambogoni (grey)"), "vehicles_lambogoni_inv.png")
+
+]]
+

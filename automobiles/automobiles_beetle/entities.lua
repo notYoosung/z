@@ -1,3 +1,6 @@
+local modname = minetest.get_current_modname()
+local modpath = minetest.get_modpath(modname) .. "/automobiles"
+
 -- destroy the beetle
 function auto_beetle.destroy(self, puncher)
     automobiles_lib.remove_light(self)
@@ -43,17 +46,17 @@ function auto_beetle.destroy(self, puncher)
 
     pos.y=pos.y+2
 
-    minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_lib:engine')
-    minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_lib:wheel')
-    minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_lib:wheel')
-    minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_lib:wheel')
-    minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_lib:wheel')
+    minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},modname .. ":automobiles_lib_engine")
+    minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},modname .. ":automobiles_lib_wheel")
+    minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},modname .. ":automobiles_lib_wheel")
+    minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},modname .. ":automobiles_lib_wheel")
+    minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},modname .. ":automobiles_lib_wheel")
 end
 --
 -- entity
 --
 
-minetest.register_entity('automobiles_beetle:wheel',{
+minetest.register_entity(modname .. ":automobiles_beetle_wheel",{
 initial_properties = {
 	physical = false,
 	collide_with_objects=false,
@@ -76,7 +79,7 @@ initial_properties = {
 	
 })
 
-minetest.register_entity('automobiles_beetle:front_suspension',{
+minetest.register_entity(modname .. ":automobiles_beetle_front_suspension",{
 initial_properties = {
 	physical = true,
 	collide_with_objects=true,
@@ -103,7 +106,7 @@ initial_properties = {
 	
 })
 
-minetest.register_entity('automobiles_beetle:rear_suspension',{
+minetest.register_entity(modname .. ":automobiles_beetle_rear_suspension",{
 initial_properties = {
 	physical = true,
 	collide_with_objects=true,
@@ -125,7 +128,7 @@ initial_properties = {
 	
 })
 
-minetest.register_entity('automobiles_beetle:f_lights',{
+minetest.register_entity(modname .. ":automobiles_beetle_f_lights",{
 initial_properties = {
 	physical = false,
 	collide_with_objects=false,
@@ -148,7 +151,7 @@ initial_properties = {
 	
 })
 
-minetest.register_entity('automobiles_beetle:r_lights',{
+minetest.register_entity(modname .. ":automobiles_beetle_r_lights",{
 initial_properties = {
 	physical = false,
 	collide_with_objects=false,
@@ -171,7 +174,7 @@ initial_properties = {
 	
 })
 
-minetest.register_entity('automobiles_beetle:turn_left_light',{
+minetest.register_entity(modname .. ":automobiles_beetle_turn_left_light",{
 initial_properties = {
 	physical = false,
 	collide_with_objects=false,
@@ -194,7 +197,7 @@ initial_properties = {
 	
 })
 
-minetest.register_entity('automobiles_beetle:turn_right_light',{
+minetest.register_entity(modname .. ":automobiles_beetle_turn_right_light",{
 initial_properties = {
 	physical = false,
 	collide_with_objects=false,
@@ -217,7 +220,7 @@ initial_properties = {
 	
 })
 
-minetest.register_entity('automobiles_beetle:reverse_lights',{
+minetest.register_entity(modname .. ":automobiles_beetle_reverse_lights",{
 initial_properties = {
 	physical = false,
 	collide_with_objects=false,
@@ -280,7 +283,7 @@ function auto_beetle.set_paint(self, puncher, itmstck)
         --painting with dyes
         local split = string.split(item_name, ":")
         local color, indx, _
-        if split[1] then _,indx = split[1]:find('dye') end
+        if split[1] then _,indx = split[1]:find("dye") end
         if indx then
             --[[for clr,_ in pairs(automobiles_lib.colors) do
                 local _,x = split[2]:find(clr)
@@ -289,7 +292,7 @@ function auto_beetle.set_paint(self, puncher, itmstck)
             --lets paint!!!!
 	        local color = (item_name:sub(indx+1)):gsub(":", "")
 	        local colstr = automobiles_lib.colors[color]
-            --minetest.chat_send_all(color ..' '.. dump(colstr))
+            --minetest.chat_send_all(color .." ".. dump(colstr))
 	        if colstr then
                 auto_beetle.paint(self, colstr)
 		        itmstck:set_count(itmstck:get_count()-1)
@@ -380,24 +383,24 @@ auto_beetle.car_properties1 = {
     _drive_wheel_angle = 12,
     _seat_pos = {{x=-4.0,y=2,z=13.8},{x=4.0,y=2,z=13.8}, {x=-3.5,y=2,z=5},{x=3.5,y=2,z=5}},
 
-    _front_suspension_ent = 'automobiles_beetle:front_suspension',
+    _front_suspension_ent = modname .. ":automobiles_beetle_front_suspension",
     _front_suspension_pos = {x=0,y=1.8,z=27.6},
-    _front_wheel_ent = 'automobiles_beetle:wheel',
+    _front_wheel_ent = modname .. ":automobiles_beetle_wheel",
     _front_wheel_xpos = 8.5,
     _front_wheel_frames = {x = 1, y = 24},
-    _rear_suspension_ent = 'automobiles_beetle:rear_suspension',
+    _rear_suspension_ent = modname .. ":automobiles_beetle_rear_suspension",
     _rear_suspension_pos = {x=0,y=1.8,z=0},
-    _rear_wheel_ent = 'automobiles_beetle:wheel',
+    _rear_wheel_ent = modname .. ":automobiles_beetle_wheel",
     _rear_wheel_xpos = 8.5,
     _rear_wheel_frames = {x = 1, y = 24},
     _wheel_compensation = 0.9,
 
     _fuel_gauge_pos = {x=-4.42,y=8.70,z=20.2},
-    _front_lights = 'automobiles_beetle:f_lights',
-    _rear_lights = 'automobiles_beetle:r_lights',
-    _reverse_lights = 'automobiles_beetle:reverse_lights',
-    _turn_left_lights = 'automobiles_beetle:turn_left_light',
-    _turn_right_lights = 'automobiles_beetle:turn_right_light',
+    _front_lights = modname .. ":automobiles_beetle_f_lights",
+    _rear_lights = modname .. ":automobiles_beetle_r_lights",
+    _reverse_lights = modname .. ":automobiles_beetle_reverse_lights",
+    _turn_left_lights = modname .. ":automobiles_beetle_turn_left_light",
+    _turn_right_lights = modname .. ":automobiles_beetle_turn_right_light",
     _textures_turn_lights_off = {"automobiles_rear_lights.png", "automobiles_turn.png", },
     _textures_turn_lights_on = {"automobiles_rear_lights_full.png", "automobiles_turn_on.png", },
 
@@ -406,7 +409,7 @@ auto_beetle.car_properties1 = {
     _painting_load = auto_beetle.paint,
     _transmission_state = 1,
 
-    _horn_sound = 'beetle_horn',
+    _horn_sound = "beetle_horn",
 
     _LONGIT_DRAG_FACTOR = 0.12*0.12,
     _LATER_DRAG_FACTOR = 6.0,
@@ -429,4 +432,4 @@ auto_beetle.car_properties1 = {
 	on_rightclick = automobiles_lib.on_rightclick,
 }
 
-minetest.register_entity("automobiles_beetle:beetle", auto_beetle.car_properties1)
+minetest.register_entity(modname .. ":automobiles_beetle_beetle", auto_beetle.car_properties1)

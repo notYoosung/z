@@ -1,3 +1,6 @@
+local modname = minetest.get_current_modname()
+local modpath = minetest.get_modpath(modname) .. "/automobiles"
+
 local S = delorean.S
 
 --
@@ -5,13 +8,13 @@ local S = delorean.S
 --
 
 -- body
-minetest.register_craftitem("automobiles_delorean:delorean_body",{
+minetest.register_craftitem(modname .. ":automobiles_delorean_delorean_body",{
 	description = S("Delorean Body"),
 	inventory_image = "automobiles_delorean_body.png",
 })
 
 -- delorean
-minetest.register_tool("automobiles_delorean:delorean", {
+minetest.register_tool(modname .. ":automobiles_delorean_delorean", {
 	description = S("Delorean"),
 	inventory_image = "automobiles_delorean.png",
     liquids_pointable = false,
@@ -27,7 +30,7 @@ minetest.register_tool("automobiles_delorean:delorean", {
 
         local pointed_pos = pointed_thing.above
 		--pointed_pos.y=pointed_pos.y+0.2
-		local car = minetest.add_entity(pointed_pos, "automobiles_delorean:delorean", staticdata)
+		local car = minetest.add_entity(pointed_pos, modname .. ":automobiles_delorean_delorean", staticdata)
 		if car and placer then
             local ent = car:get_luaentity()
             local owner = placer:get_player_name()
@@ -49,7 +52,7 @@ minetest.register_tool("automobiles_delorean:delorean", {
 })
 
 -- delorean
-minetest.register_tool("automobiles_delorean:time_machine", {
+minetest.register_tool(modname .. ":automobiles_delorean_time_machine", {
 	description = S("Time Machine"),
 	inventory_image = "automobiles_delorean.png",
     liquids_pointable = false,
@@ -65,7 +68,7 @@ minetest.register_tool("automobiles_delorean:time_machine", {
 
         local pointed_pos = pointed_thing.above
 		--pointed_pos.y=pointed_pos.y+0.2
-		local car = minetest.add_entity(pointed_pos, "automobiles_delorean:delorean", staticdata)
+		local car = minetest.add_entity(pointed_pos, modname .. ":automobiles_delorean_delorean", staticdata)
 		if car and placer then
             local ent = car:get_luaentity()
             local owner = placer:get_player_name()
@@ -92,14 +95,14 @@ minetest.register_tool("automobiles_delorean:time_machine", {
 --
 if minetest.get_modpath("default") then
 	minetest.register_craft({
-		output = "automobiles_delorean:delorean",
+		output = modname .. ":automobiles_delorean_delorean",
 		recipe = {
-			{"automobiles_lib:wheel", "automobiles_lib:engine", "automobiles_lib:wheel"},
-			{"automobiles_lib:wheel","automobiles_delorean:delorean_body",  "automobiles_lib:wheel"},
+			{modname .. ":automobiles_lib_wheel", modname .. ":automobiles_lib_engine", modname .. ":automobiles_lib_wheel"},
+			{modname .. ":automobiles_lib_wheel",modname .. ":automobiles_delorean_delorean_body",  modname .. ":automobiles_lib_wheel"},
 		}
 	})
 	minetest.register_craft({
-		output = "automobiles_delorean:delorean_body",
+		output = modname .. ":automobiles_delorean_delorean_body",
 		recipe = {
             {"default:glass" ,"default:glass","default:steelblock"},
 			{"default:steelblock","","default:steelblock"},

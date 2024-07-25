@@ -1,3 +1,6 @@
+local modname = minetest.get_current_modname()
+local modpath = minetest.get_modpath(modname) .. "/automobiles"
+
 --dofile(minetest.get_modpath("automobiles_vespa") .. DIR_DELIM .. "vespa_global_definitions.lua")
 --dofile(minetest.get_modpath("automobiles_vespa") .. DIR_DELIM .. "vespa_hud.lua")
 
@@ -37,10 +40,10 @@ function vespa.destroy(self, puncher)
     pos.y=pos.y+2
 
     if automobiles_lib.can_collect_car == false then
-        --minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_vespa:vespa')
-        minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_lib:engine')
-        minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_vespa:wheel')
-        minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_vespa:wheel')
+        --minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},modname .. ":automobiles_vespa_vespa")
+        minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},modname .. ":automobiles_lib_engine")
+        minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},modname .. ":automobiles_vespa_wheel")
+        minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},modname .. ":automobiles_vespa_wheel")
     else
         local lua_ent = self.object:get_luaentity()
         local staticdata = lua_ent:get_staticdata(self)
