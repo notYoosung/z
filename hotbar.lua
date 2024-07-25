@@ -102,10 +102,10 @@ minetest.register_chatcommand("hotbar", {
 	description = "Sets the size of your hotbar, from 1 to 32 slots. Default " .. hotbar_size_default .. ". Can also set the color of your hotbar. Do /hotbar default for the default background. " .. table.concat(hotbar_bgs, ", "),
 	func = function(name, slots)
 		local player = minetest.get_player_by_name(name)
+		local pmeta = player:get_meta()
 
 		for _, v in ipairs(hotbar_bgs) do
 			if slots == v then
-				local pmeta = player:get_meta()
 				pmeta:set_string("z_hotbar_bg", "z_hotbar_" .. slots .. ".png")
 				player:hud_set_hotbar_image("z_hotbar_" .. slots .. ".png")
 				minetest.chat_send_player(name, "Hotbar background set to " .. slots)

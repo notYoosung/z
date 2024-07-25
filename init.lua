@@ -3,6 +3,8 @@ local modpath = minetest.get_modpath(modname)
 
 dofile(modpath .. "/aliases.lua")
 
+dofile(modpath .. "/fov_api/init.lua")
+
 dofile(modpath .. "/player_api/init.lua")
 
 dofile(modpath .. "/yaml/init.lua")

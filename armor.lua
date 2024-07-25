@@ -38,12 +38,19 @@ minetest.register_on_leaveplayer(function(ObjectRef, timed_out)
 end)
 
 local void_equip_callback = function(obj, itemstack)
+	local inv = obj:get_inventory()
 	if not hidename.hidden(obj:get_nametag_attributes()) then
 		hidden_players[obj:get_player_name()] = false
 		hidename.hide(obj:get_player_name())
-	else
+	elseif not (inv:contains_item("armor", "z:helmet_void") or
+		   inv:contains_item("armor", "z:chestplate_void") or
+		   inv:contains_item("armor", "z:leggings_void") or
+		   inv:contains_item("armor", "z:boots_void"))
+	then
 		hidden_players[obj:get_player_name()] = true
 		minetest.chat_send_player(obj:get_player_name(), "Void armor equipped, but nametag is already hidden")
+	else
+		-- minetest.chat_send_player(obj:get_player_name(), "Void armor equipped, but nametag is already hidden")
 	end
 end
 
@@ -58,7 +65,7 @@ local void_unequip_callback = function(obj, itemstack)
 	then
 		minetest.chat_send_player(obj:get_player_name(), "Void armor is still equiped; nametag will stay hidden")
 	else
-		if not hidden_players[obj:get_player_name()] then
+		if hidden_players[obj:get_player_name()] == false then
 			hidename.show(obj:get_player_name())
 		else
 			minetest.chat_send_player(obj:get_player_name(), "Nametag was previously hidden, so it will stay hidden")

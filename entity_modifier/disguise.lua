@@ -59,6 +59,9 @@ function entity_modifier.get_node_disguise(node_def)
 		if model_properties.collide_with_objects == nil then
 			model_properties.collide_with_objects = true
 		end
+		-- model_properties:set_pos({ x = model_properties.x, y = model_properties.y + 1, z = model_properties.z })
+
+		-- model_properties.initial_sprite_basepos = {x = 0, y = 0.5}
 	elseif node_def.drawtype == "airlike" then
 		model_properties.visual_size = {x = 0, y = 0}
 		return model_properties
@@ -88,6 +91,7 @@ function entity_modifier.get_entity_properties_with_defaults(properties, player_
 end
 
 function entity_modifier.disguise_player(player, model_name, model_properties)
+	player:move_to(vector.add(player:get_pos(), {x=0, y=0.5, z=0}))
 	-- don't reduce the player's max HP
 	if (model_properties.hp_max or 1) < minetest.PLAYER_MAX_HP_DEFAULT then
 		model_properties.hp_max = minetest.PLAYER_MAX_HP_DEFAULT
@@ -181,6 +185,7 @@ function entity_modifier.disguise_tool_primary(_, player, pointed_object)
 			return
 		elseif pointed_object.ref:is_player() then
 			entity_modifier.disguise_player(pointed_object.ref, name, copied_model.properties)
+			-- pointed_object.ref:move_to(vector.add(pointed_object.ref:get_pos(), {x=0, y=1, z=0}))
 		else
 			-- required for the `on_step` callback.
 
@@ -188,6 +193,7 @@ function entity_modifier.disguise_tool_primary(_, player, pointed_object)
 			if luaentity.on_step then
 				pointed_object.ref:set_properties({physical = true})
 			end
+			pointed_object.ref:move_to(vector.add(pointed_object.ref:get_pos(), {x=0, y=1, z=0}))
 		end
 		minetest.chat_send_player(player_name, "Entity "..name.." disguised to "..copied_model.name)
 	elseif pointed_object.type == "nothing" then
@@ -257,6 +263,7 @@ function entity_modifier.disguise_to_model(player_name, model_name, doer_name)
 			model_properties
 		)
 		minetest.chat_send_player(doer_name, "Player "..player_name.." is disguised to "..model_name)
+		-- player:move_to(vector.add(player:get_pos(), {x=0, y=1, z=0}))
 	end
 end
 
@@ -372,6 +379,7 @@ function entity_modifier.disguise_tool_secondary(_, player, _)
 	local copied_model = player_clipboard[player_name]
 	if copied_model and next(copied_model) ~= nil then
 		entity_modifier.disguise_player(player, copied_model.name, copied_model.properties)
+		-- player:move_to(vector.add(player:get_pos(), {x=0, y=1, z=0}))
 	elseif player_initial_properties[player_name] then
 		entity_modifier.reset_player_model(player_name, player)
 	else
