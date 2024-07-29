@@ -141,7 +141,9 @@ dofile(modpath .. "/ctf/init.lua")
 --textures
 
 
---hotbar colors
+--trident
+
+--toggle minimap block
 
 
 --[[

@@ -68,6 +68,6 @@ dofile(mod_path .. "/lua/give_initial_stuff.lua")
 dofile(mod_path .. "/lua/mesecons.lua")
 
 -- Mapgen
-minetest.register_on_mods_loaded(function()
+--[[minetest.register_on_mods_loaded(function()
     dofile(mod_path .. "/lua/mapgen.lua")
-end)
+end)]]

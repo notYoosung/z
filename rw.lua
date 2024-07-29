@@ -2866,7 +2866,7 @@ forcegun = (function()
 				if moveresult.collisions[1].type == "object" then
 				end
 	
-				if moveresult.collisions[1].type == "node" then
+				if moveresult.collisions[1].type == "node" or moveresult.collisions[1].type == "object" then
 	
 					local objs = minetest.get_objects_inside_radius({x = pos.x, y = pos.y, z = pos.z}, 7)
 					for k, obj in pairs(objs) do
