@@ -186,7 +186,21 @@ itemlist = {
     {"do_the_goos", 256, 5*0.05},
     {"bfdi_factory_top", 256, 49*0.05},
     {"bfdi_factory_bottom", 256, 49*0.05},
+
+
+
+    {"rainbow_bird", 256, 49*0.05},
+    {"duck_dance_2", 256, 49*0.05},
+    {"fireball_flame_ball", 256, 49*0.05},
+    {"marker_bfb", 256, 49*0.05},
+    {"ninini_no", 256, 49*0.05},
+    {"stonehead", 256, 49*0.05},
+    {"troll_troll_face", 256, 49*0.05},
+    {"rainbow_froggo", 256, 49*0.05},
 }
+
+--[[
+]]
 
 for i, v in ipairs(itemlist) do
     minetest.register_node(modname .. ":gif_items_" .. v[1], {
