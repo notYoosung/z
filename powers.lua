@@ -265,6 +265,51 @@ end)
 --
 
 
+
+
+
+
+
+
+
+
+minetest.register_on_joinplayer(function(player)
+	local inv = player:get_inventory()
+	inv:set_size("powers_inv", 3 * 3)
+end)
+
+
+
+local powers_inv_formspec = table.concat({
+	"formspec_version[4]",
+	"size[11.75,10.425]",
+
+	"label[4.125,0.375;" .. F(C(mcl_formspec.label_color, S("Powers Inventory"))) .. "]",
+
+	mcl_formspec.get_itemslot_bg_v4(4.125, 0.75, 3, 3),
+	"list[player;powers_inv;4.125,0.75;3,3;]",
+
+	"label[0.375,4.7;" .. F(C(mcl_formspec.label_color, S("Inventory"))) .. "]",
+
+	mcl_formspec.get_itemslot_bg_v4(0.375, 5.1, 9, 3),
+	"list[current_player;main;0.375,5.1;9,3;9]",
+
+	mcl_formspec.get_itemslot_bg_v4(0.375, 9.05, 9, 1),
+	"list[current_player;main;0.375,9.05;9,1;]",
+
+	"listring[context;main]",
+	"listring[current_player;main]",
+})
+
+
+minetest.register_craftitem(modname .. ":powers_gauntlet", {})
+
+
+
+
+
+
+
 --SPINNI
 
 
