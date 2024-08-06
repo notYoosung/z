@@ -260,3 +260,110 @@ end)
 -- 	recipe = modname .. ":bookbookshelf",
 -- 	burntime = 15,
 -- })
+
+
+--
+
+
+--SPINNI
+
+
+local magic_circle_entity = {
+	physical = false,
+	collisionbox = {-0.125,-0.125,-0.125, 0.125,0.125,0.125},
+	visual = "wielditem",
+	textures = {"wield3d:hand"},
+	wielder = nil,
+	timer = 0,
+	static_save = false,
+}
+
+minetest.register_entity(modname .. ":powers_magic_circle", {
+
+})
+
+
+
+local location = {
+	"Arm_Right",          -- default bone
+	{x=0, y=5.5, z=3},    -- default position
+	{x=-90, y=225, z=90}, -- default rotation
+	{x=wield_scale, y=wield_scale},
+}
+
+
+local bone = "Arm_Right"
+local pos = {x=0, y=5.5, z=3}
+local scale = {x=0.25, y=0.25}
+local rx = -90
+local rz = 90
+
+wield3d.location = {
+	["default:torch"] = {bone, pos, {x=rx, y=180, z=rz}, scale},
+	["default:sapling"] = {bone, pos, {x=rx, y=180, z=rz}, scale},
+	["flowers:dandelion_white"] = {bone, pos, {x=rx, y=180, z=rz}, scale},
+	["flowers:dandelion_yellow"] = {bone, pos, {x=rx, y=180, z=rz}, scale},
+	["flowers:geranium"] = {bone, pos, {x=rx, y=180, z=rz}, scale},
+	["flowers:rose"] = {bone, pos, {x=rx, y=180, z=rz}, scale},
+	["flowers:tulip"] = {bone, pos, {x=rx, y=180, z=rz}, scale},
+	["flowers:viola"] = {bone, pos, {x=rx, y=180, z=rz}, scale},
+	["default:shovel_wood"] = {bone, pos, {x=rx, y=135, z=rz}, scale},
+	["default:shovel_stone"] = {bone, pos, {x=rx, y=135, z=rz}, scale},
+	["default:shovel_steel"] = {bone, pos, {x=rx, y=135, z=rz}, scale},
+	["default:shovel_bronze"] = {bone, pos, {x=rx, y=135, z=rz}, scale},
+	["default:shovel_mese"] = {bone, pos, {x=rx, y=135, z=rz}, scale},
+	["default:shovel_diamond"] = {bone, pos, {x=rx, y=135, z=rz}, scale},
+	["bucket:bucket_empty"] = {bone, pos, {x=rx, y=135, z=rz}, scale},
+	["bucket:bucket_water"] = {bone, pos, {x=rx, y=135, z=rz}, scale},
+	["bucket:bucket_lava"] = {bone, pos, {x=rx, y=135, z=rz}, scale},
+	["screwdriver:screwdriver"] = {bone, pos, {x=rx, y=135, z=rz}, scale},
+	["screwdriver:screwdriver1"] = {bone, pos, {x=rx, y=135, z=rz}, scale},
+	["screwdriver:screwdriver2"] = {bone, pos, {x=rx, y=135, z=rz}, scale},
+	["screwdriver:screwdriver3"] = {bone, pos, {x=rx, y=135, z=rz}, scale},
+	["screwdriver:screwdriver4"] = {bone, pos, {x=rx, y=135, z=rz}, scale},
+	["vessels:glass_bottle"] = {bone, pos, {x=rx, y=135, z=rz}, scale},
+	["vessels:drinking_glass"] = {bone, pos, {x=rx, y=135, z=rz}, scale},
+	["vessels:steel_bottle"] = {bone, pos, {x=rx, y=135, z=rz}, scale},
+}
+
+function magic_circle_entity:on_step(dtime)
+	if self.wielder == nil then return end
+	self.timer = self.timer + dtime
+	if self.timer < update_time then return end
+	local player = minetest.get_player_by_name(self.wielder)
+	if player == nil or not player:is_player() or sq_dist(player:get_pos(), self.object:get_pos()) > 3 then
+		self.object:remove()
+		return
+	end
+	local wield = player_wielding[self.wielder]
+	local stack = player:get_wielded_item()
+	local item = stack:get_name() or ""
+	if wield and item ~= wield.item then
+		if has_wieldview then
+			local def = minetest.registered_items[item] or {}
+			if def.inventory_image ~= "" then item = "" end
+		end
+		wield.item = item
+		if item == "" then item = "wield3d:hand" end
+		local loc = wield3d.location[item] or location
+		if loc[1] ~= wield.location[1] or not vector.equals(loc[2], wield.location[2]) or not vector.equals(loc[3], wield.location[3]) then
+			self.object:set_attach(player, loc[1], loc[2], loc[3])
+			wield.location = {loc[1], loc[2], loc[3]}
+		end
+		self.object:set_properties({
+			textures = {item},
+			visual_size = loc[4]
+		})
+	end
+	self.timer = 0
+end
+
+
+minetest.register_on_joinplayer(function(ObjectRef, last_login)
+	minetest.add_entity(ObjectRef:get_pos(), modname .. ":powers_magic_circle", {
+
+	})
+end)
+
+
+
