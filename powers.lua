@@ -268,21 +268,17 @@ end)
 --SPINNI
 
 
-local magic_circle_entity = {
-	physical = false,
-	collisionbox = {-0.125,-0.125,-0.125, 0.125,0.125,0.125},
-	visual = "wielditem",
-	textures = {"wield3d:hand"},
-	wielder = nil,
-	timer = 0,
-	static_save = false,
-}
+local wield3d = {}
 
-minetest.register_entity(modname .. ":powers_magic_circle", {
+local player_wielding = {}
+local has_wieldview = minetest.get_modpath("wieldview")
+local update_time = minetest.settings:get("wield3d_update_time")
+local verify_time = minetest.settings:get("wield3d_verify_time")
+local wield_scale = minetest.settings:get("wield3d_scale")
 
-})
-
-
+update_time = update_time and tonumber(update_time) or 1
+verify_time = verify_time and tonumber(verify_time) or 10
+wield_scale = wield_scale and tonumber(wield_scale) or 0.25 -- default scale
 
 local location = {
 	"Arm_Right",          -- default bone
@@ -290,6 +286,14 @@ local location = {
 	{x=-90, y=225, z=90}, -- default rotation
 	{x=wield_scale, y=wield_scale},
 }
+
+
+local function sq_dist(a, b)
+	local x = a.x - b.x
+	local y = a.y - b.y
+	local z = a.z - b.z
+	return x * x + y * y + z * z
+end
 
 
 local bone = "Arm_Right"
@@ -358,12 +362,45 @@ function magic_circle_entity:on_step(dtime)
 	self.timer = 0
 end
 
+local magic_circle_entity = {
+	physical = false,
+	collisionbox = {-0.125, -0.125, -0.125, 0.125, 0.125, 0.125},
+	visual = "wielditem",
+	textures = {"wield3d:hand"},
+	wielder = nil,
+	timer = 0,
+	static_save = false
+}
+
+minetest.register_entity(modname .. ":powers_magic_circle", magic_circle_entity)
+
+
+local function add_magic_circle_entity(player)
+	if not player or not player:is_player() then return end
+	local name = player:get_player_name()
+	local pos = player:get_pos()
+	if name and pos and not player_wielding[name] then
+		pos.y = pos.y + 0.5
+		local object = minetest.add_entity(pos, modname .. ":powers_magic_circle", name)
+		if object then
+			object:set_attach(player, location[1], location[2], location[3])
+			object:set_properties({
+				textures = {"wield3d:hand"},
+				visual_size = location[4]
+			})
+			player_wielding[name] = {
+				item = "",
+				location = location
+			}
+		end
+	end
+end
+
 
 minetest.register_on_joinplayer(function(ObjectRef, last_login)
-	minetest.add_entity(ObjectRef:get_pos(), modname .. ":powers_magic_circle", {
-
-	})
+	minetest.after(2, add_magic_circle_entity, ObjectRef)
 end)
 
 
 
+--pacman
