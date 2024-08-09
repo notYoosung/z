@@ -327,9 +327,9 @@ wield_scale = wield_scale and tonumber(wield_scale) or 0.25 -- default scale
 
 local location = {
 	"Arm_Right",          -- default bone
-	{x=0, y=5.5, z=3},    -- default position
-	{x=-90, y=225, z=90}, -- default rotation
-	{x=wield_scale, y=wield_scale},
+	{x=0, y=2/16, z=0},    -- default position
+	{x=-90, y=0, z=0}, -- default rotation
+	{x=5, y=5, z=0.5},
 }
 
 
@@ -375,51 +375,70 @@ wield3d.location = {
 	["vessels:steel_bottle"] = {bone, pos, {x=rx, y=135, z=rz}, scale},
 }
 
-function magic_circle_entity:on_step(dtime)
-	if self.wielder == nil then return end
-	self.timer = self.timer + dtime
-	if self.timer < update_time then return end
-	local player = minetest.get_player_by_name(self.wielder)
-	if player == nil or not player:is_player() or sq_dist(player:get_pos(), self.object:get_pos()) > 3 then
-		self.object:remove()
-		return
-	end
-	local wield = player_wielding[self.wielder]
-	local stack = player:get_wielded_item()
-	local item = stack:get_name() or ""
-	if wield and item ~= wield.item then
-		if has_wieldview then
-			local def = minetest.registered_items[item] or {}
-			if def.inventory_image ~= "" then item = "" end
-		end
-		wield.item = item
-		if item == "" then item = "wield3d:hand" end
-		local loc = wield3d.location[item] or location
-		if loc[1] ~= wield.location[1] or not vector.equals(loc[2], wield.location[2]) or not vector.equals(loc[3], wield.location[3]) then
-			self.object:set_attach(player, loc[1], loc[2], loc[3])
-			wield.location = {loc[1], loc[2], loc[3]}
-		end
-		self.object:set_properties({
-			textures = {item},
-			visual_size = loc[4]
-		})
-	end
-	self.timer = 0
-end
-
 local magic_circle_entity = {
 	physical = false,
 	collisionbox = {-0.125, -0.125, -0.125, 0.125, 0.125, 0.125},
-	visual = "wielditem",
-	textures = {"wield3d:hand"},
+	-- visual = "mesh",
+	model = "",
+	textures = {
+		{
+			name = "magic_circle",
+			animation = {
+				type = "vertical_frames",
+				aspect_w = 210,
+				aspect_h = 210,
+				length = 75 * 0.06,
+			}
+		},
+		-- {name = "blank.png"},
+		-- {name = "blank.png"},
+		-- {name = "blank.png"},
+		-- {name = "blank.png"},
+		-- {name = "blank.png"},
+	},
 	wielder = nil,
 	timer = 0,
-	static_save = false
+	static_save = false,
+	visual_size = {x=rx, y=180, z=rz},
+	-- wield_image = "magic_circle.png",
+	-- use_texture_alpha = "clip",
 }
+
+-- function magic_circle_entity:on_step(dtime)
+-- 	if self.wielder == nil then return end
+-- 	self.timer = self.timer + dtime
+-- 	if self.timer < update_time then return end
+-- 	local player = minetest.get_player_by_name(self.wielder)
+-- 	if player == nil or not player:is_player() or sq_dist(player:get_pos(), self.object:get_pos()) > 3 then
+-- 		self.object:remove()
+-- 		return
+-- 	end
+	-- local wield = player_wielding[self.wielder]
+	-- local stack = player:get_wielded_item()
+	-- local item = stack:get_name() or ""
+	-- if wield and item ~= wield.item then
+	-- 	if has_wieldview then
+	-- 		local def = minetest.registered_items[item] or {}
+	-- 		if def.inventory_image ~= "" then item = "" end
+	-- 	end
+	-- 	wield.item = item
+	-- 	if item == "" then item = modname .. ":powers_magic_circle" end
+	-- 	local loc = wield3d.location[item] or location
+	-- 	if loc[1] ~= wield.location[1] or not vector.equals(loc[2], wield.location[2]) or not vector.equals(loc[3], wield.location[3]) then
+	-- self.object:set_attach(player, "", location[2], location[3])
+	-- 		wield.location = {loc[1], loc[2], loc[3]}
+	-- 	end
+	-- 	self.object:set_properties({
+	-- 		textures = {item},
+	-- 		visual_size = loc[4]
+	-- 	})
+	-- end
+-- 	self.timer = 0
+-- end
 
 minetest.register_entity(modname .. ":powers_magic_circle", magic_circle_entity)
 
-
+-- temp_magic_circle.png
 local function add_magic_circle_entity(player)
 	if not player or not player:is_player() then return end
 	local name = player:get_player_name()
@@ -428,19 +447,41 @@ local function add_magic_circle_entity(player)
 		pos.y = pos.y + 0.5
 		local object = minetest.add_entity(pos, modname .. ":powers_magic_circle", name)
 		if object then
-			object:set_attach(player, location[1], location[2], location[3])
+			object:set_attach(player, "", location[2], location[3])
 			object:set_properties({
-				textures = {"wield3d:hand"},
-				visual_size = location[4]
+				-- textures = {modname .. ":powers_magic_circle"},
+				-- textures = {"magic_circle.png"},
+				textures = {
+					{
+						name = "magic_circle",
+						animation = {
+							type = "vertical_frames",
+							aspect_w = 210,
+							aspect_h = 210,
+							length = 75 * 0.06,
+						}
+					},
+					{name = "blank.png"},
+					{name = "blank.png"},
+					{name = "blank.png"},
+					{name = "blank.png"},
+					{name = "blank.png"},
+				},
+				visual_size = location[4],
 			})
-			player_wielding[name] = {
-				item = "",
-				location = location
-			}
+			-- player_wielding[name] = {
+			-- 	item = "",
+			-- 	location = location
+			-- }
 		end
 	end
 end
 
+-- minetest.register_item(modname .. ":powers_magic_circle", {
+-- 	type = "none",
+-- 	wield_image = "magic_circle.png",
+-- 	use_texture_alpha = "clip",
+-- })
 
 minetest.register_on_joinplayer(function(ObjectRef, last_login)
 	minetest.after(2, add_magic_circle_entity, ObjectRef)

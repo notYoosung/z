@@ -5,9 +5,9 @@ local modname = minetest.get_current_modname()
 
 minetest.register_tool(modname .. ":kill_hammer", {
 	description = "Kill Hammer",
-	_doc_items_longdesc = pickaxe_longdesc,
+	-- _doc_items_longdesc = pickaxe_longdesc,
 	inventory_image = "z_tools_kill_hammer.png",
-	wield_scale = wield_scale,
+	-- wield_scale = wield_scale,
 	groups = { tool=1, dig_speed_class=7, enchantability=100 },
 	tool_capabilities = {
 		-- 1/1.2

@@ -146,12 +146,12 @@ mcl_armor.register_set({
 
 	--specify textures that will be overlayed on the entity wearing the armor
 	--these fields have default values and its recommanded to keep the code clean by just using the default name for your textures
-	textures = {
-		head = "z_armor_helmet_void.png",  --default: "<modname>_helmet_<material>.png"
-		torso = "z_armor_chestplate_void.png", --default: "<modname>_chestplate_<material>.png"
-		legs = "z_armor_leggings_void.png",  --default: "<modname>_leggings_<material>.png"
-		feet = "z_armor_boots_void.png",  --default: "<modname>_boots_<material>.png"
-	},
+	-- textures = {
+	-- 	head = "z_armor_helmet_void.png",  --default: "<modname>_helmet_<material>.png"
+	-- 	torso = "z_armor_chestplate_void.png", --default: "<modname>_chestplate_<material>.png"
+	-- 	legs = "z_armor_leggings_void.png",  --default: "<modname>_leggings_<material>.png"
+	-- 	feet = "z_armor_boots_void.png",  --default: "<modname>_boots_<material>.png"
+	-- },
 	--you can also define these fields as functions, that will be called each time the API function mcl_armor.update(obj) is called (every time you equip/unequip some armor piece, take damage, and more)
 	--note that the enchanting overlay will not appear unless you implement it in the function
 	--this allow to make armors where the textures change whitout needing to register many other armors with different textures

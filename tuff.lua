@@ -54,7 +54,6 @@ local function register_variants(name, defs)
 end
 
 
-
 local function register_tuff_variant(name, defs)
 	register_variants(name,table.update({
 		basename = "tuff",

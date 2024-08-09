@@ -1,0 +1,19 @@
+{
+    "Lua.diagnostics.globals": [
+        "minetest",
+        "mcl_formspec",
+        "ItemStack",
+        "vector",
+        "mcl_tools",
+        "mcl_stairs",
+        "mcl_util",
+        "mcl_vars",
+        "mcl_colors",
+        "DIR_DELIM",
+        "core",
+        "mcl_explosions",
+        "mcl_burning",
+        "mcl_armor",
+        "mcl_enchanting"
+    ]
+}

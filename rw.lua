@@ -156,7 +156,7 @@ end
 
 
 
-function node_sound_wood_defaults(table)
+local function node_sound_wood_defaults(table)
 	table = table or {}
 	table.footstep = table.footstep or
 			{name="default_wood_footstep", gain=0.15}
@@ -196,7 +196,7 @@ local function update_ammo_counter_on_gun(gunMeta)
 	gunMeta:set_string("count_meta", tostring(gunMeta:get_int("RW_bullets")))
 end
 
-make_sparks = function(pos)
+local make_sparks = function(pos)
 	rw.sound_play("ricochet", {pos = pos, gain = 0.75})
 	for i = 1, 9 do
 		minetest.add_particle(
@@ -217,7 +217,7 @@ end
 
 local max_gun_efficiency = tonumber(minetest.settings:get(modname .. "_max_gun_efficiency")) or 300
 
-rangedweapons_gain_skill = function(player, skill, chance)
+local rangedweapons_gain_skill = function(player, skill, chance)
 	--[[if math.random(1, chance) == 1 then
 		local p_meta = player:get_meta()
 		local skill_num = p_meta:get_int(skill)
@@ -231,7 +231,134 @@ rangedweapons_gain_skill = function(player, skill, chance)
 	end--]]
 end
 
-rangedweapons_reload_gun = function(itemstack, player)
+
+
+local rangedweapons_launch_projectile = function(
+	player,
+	projNum,
+	projDmg,
+	projEnt,
+	visualType,
+	texture,
+	shoot_sound,
+	combined_velocity,
+	accuracy,
+	skill_value,
+	ColResult,
+	projCrit,
+	projCritEffc,
+	mobPen,
+	nodePen,
+	has_shell,
+	shellEnt,
+	shellTexture,
+	shellVisual,
+	dps,
+	gravity,
+	door_break,
+	glass_break,
+	bullet_particles,
+	sparks,
+	ignite,
+	size,
+	smokeSize,
+	proj_wear,
+	proj_glow)
+	--minetest.chat_send_all(accuracy)
+
+	----------------------------------
+	local pos = player:get_pos()
+	local dir = player:get_look_dir()
+	local yaw = player:get_look_horizontal()
+	local svertical = player:get_look_vertical()
+
+	if pos and dir and yaw then
+		rw.sound_play(shoot_sound, {pos = pos, max_hear_distance = 500})
+		pos.y = pos.y + 1.45
+
+		if has_shell > 0 and minetest.settings:get_bool(modname .. "_animate_empty_shells", true) then
+			local shl = minetest.add_entity(pos, shellEnt)
+			shl:set_velocity({x = dir.x * -10, y = dir.y * -10, z = dir.z * -10})
+			shl:set_acceleration({x = dir.x * -5, y = -10, z = dir.z * -5})
+			shl:set_rotation({x = 0, y = yaw - math.pi / 2, z = -svertical})
+			shl:set_properties(
+				{
+					textures = {shellTexture},
+					visual = shellVisual
+				}
+			)
+		end
+
+		if smokeSize > 0 then
+			--[[minetest.add_particle(
+				{
+					pos = pos,
+					velocity = {
+						x = (dir.x * 3) + (math.random(-10, 10) / 10),
+						y = (dir.y * 3) + (math.random(-10, 10) / 10),
+						z = (dir.z * 3) + (math.random(-10, 10) / 10)
+					},
+					acceleration = {x = dir.x * -3, y = 2, z = dir.z * -3},
+					expirationtime = math.random(5, 10) / 10,
+					size = smokeSize / 2,
+					collisiondetection = false,
+					vertical = false,
+					texture = "tnt_smoke.png",
+					glow = 5
+				}
+			)--]]
+		end
+
+		local projectiles = projNum or 1
+		for i = 1, projectiles do
+			local obj = minetest.add_entity(pos, projEnt)
+			local ent = obj:get_luaentity()
+
+			obj:set_properties(
+				{
+					textures = {texture},
+					visual = visualType,
+					collisionbox = {-size, -size, -size, size, size, size},
+					glow = proj_glow
+				}
+			)
+			ent.owner = player:get_player_name()
+			if obj then
+				ent.damage = projDmg
+				ent.crit = projCrit
+				ent.critEffc = projCritEffc
+				ent.OnCollision = ColResult
+				ent.mobPen = mobPen
+				ent.nodePen = nodePen
+				ent.dps = dps
+				ent.door_break = door_break
+				ent.glass_break = glass_break
+				ent.skill_value = skill_value
+				ent.bullet_particles = bullet_particles
+				ent.sparks = sparks
+				ent.ignite = ignite
+				ent.size = size
+				ent.timer = 0 + (combined_velocity / 2000)
+				ent.wear = proj_wear
+				local acc = (((100 - accuracy) / 10) / skill_value) or 0
+				obj:set_velocity(
+					{
+						x = (dir.x * combined_velocity + math.random(-acc, acc))*3,
+						y = (dir.y * combined_velocity + math.random(-acc, acc))*3,
+						z = (dir.z * combined_velocity + math.random(-acc, acc))*3
+					}
+				)
+				-- obj:set_acceleration({x = 0, y = -gravity, z = 0})
+				obj:set_rotation({x = 0, y = yaw - math.pi / 2, z = -svertical})
+			end
+		end
+	end
+end
+
+
+
+
+local rangedweapons_reload_gun = function(itemstack, player)
 	local playeriscreative = minetest.is_creative_enabled(player:get_player_name())
 	
 	local GunCaps = itemstack:get_definition().RW_gun_capabilities
@@ -337,7 +464,7 @@ rangedweapons_reload_gun = function(itemstack, player)
 	end
 end
 
-rangedweapons_single_load_gun = function(itemstack, player)
+local rangedweapons_single_load_gun = function(itemstack, player)
 	local playeriscreative = minetest.is_creative_enabled(player:get_player_name())
 	
 	local GunCaps = itemstack:get_definition().RW_gun_capabilities
@@ -426,7 +553,7 @@ rangedweapons_single_load_gun = function(itemstack, player)
 	end
 end
 
-rangedweapons_yeet = function(itemstack, player)
+local rangedweapons_yeet = function(itemstack, player)
 	local playeriscreative = minetest.is_creative_enabled(player:get_player_name())
 	
 	--[[if minetest.find_node_near(player:get_pos(), 10, modname .. ":rw_antigun_block") then
@@ -558,7 +685,7 @@ rangedweapons_yeet = function(itemstack, player)
 	--end
 end
 
-rangedweapons_shoot_gun = function(itemstack, player)
+local rangedweapons_shoot_gun = function(itemstack, player)
 	local playeriscreative = minetest.is_creative_enabled(player:get_player_name())
 
 	--[[if minetest.find_node_near(player:get_pos(), 10, modname .. ":rw_antigun_block") then
@@ -765,7 +892,7 @@ rangedweapons_shoot_gun = function(itemstack, player)
 	--end
 end
 
-rangedweapons_shoot_powergun = function(itemstack, player)
+local rangedweapons_shoot_powergun = function(itemstack, player)
 	local playeriscreative = minetest.is_creative_enabled(player:get_player_name())
 
 	--[[if minetest.find_node_near(player:get_pos(), 10, modname .. ":rw_antigun_block") then
@@ -912,129 +1039,7 @@ rangedweapons_shoot_powergun = function(itemstack, player)
 	--end
 end
 
-rangedweapons_launch_projectile = function(
-	player,
-	projNum,
-	projDmg,
-	projEnt,
-	visualType,
-	texture,
-	shoot_sound,
-	combined_velocity,
-	accuracy,
-	skill_value,
-	ColResult,
-	projCrit,
-	projCritEffc,
-	mobPen,
-	nodePen,
-	has_shell,
-	shellEnt,
-	shellTexture,
-	shellVisual,
-	dps,
-	gravity,
-	door_break,
-	glass_break,
-	bullet_particles,
-	sparks,
-	ignite,
-	size,
-	smokeSize,
-	proj_wear,
-	proj_glow)
-	--minetest.chat_send_all(accuracy)
-
-	----------------------------------
-	local pos = player:get_pos()
-	local dir = player:get_look_dir()
-	local yaw = player:get_look_horizontal()
-	local svertical = player:get_look_vertical()
-
-	if pos and dir and yaw then
-		rw.sound_play(shoot_sound, {pos = pos, max_hear_distance = 500})
-		pos.y = pos.y + 1.45
-
-		if has_shell > 0 and minetest.settings:get_bool(modname .. "_animate_empty_shells", true) then
-			local shl = minetest.add_entity(pos, shellEnt)
-			shl:set_velocity({x = dir.x * -10, y = dir.y * -10, z = dir.z * -10})
-			shl:set_acceleration({x = dir.x * -5, y = -10, z = dir.z * -5})
-			shl:set_rotation({x = 0, y = yaw - math.pi / 2, z = -svertical})
-			shl:set_properties(
-				{
-					textures = {shellTexture},
-					visual = shellVisual
-				}
-			)
-		end
-
-		if smokeSize > 0 then
-			--[[minetest.add_particle(
-				{
-					pos = pos,
-					velocity = {
-						x = (dir.x * 3) + (math.random(-10, 10) / 10),
-						y = (dir.y * 3) + (math.random(-10, 10) / 10),
-						z = (dir.z * 3) + (math.random(-10, 10) / 10)
-					},
-					acceleration = {x = dir.x * -3, y = 2, z = dir.z * -3},
-					expirationtime = math.random(5, 10) / 10,
-					size = smokeSize / 2,
-					collisiondetection = false,
-					vertical = false,
-					texture = "tnt_smoke.png",
-					glow = 5
-				}
-			)--]]
-		end
-
-		local projectiles = projNum or 1
-		for i = 1, projectiles do
-			local obj = minetest.add_entity(pos, projEnt)
-			local ent = obj:get_luaentity()
-
-			obj:set_properties(
-				{
-					textures = {texture},
-					visual = visualType,
-					collisionbox = {-size, -size, -size, size, size, size},
-					glow = proj_glow
-				}
-			)
-			ent.owner = player:get_player_name()
-			if obj then
-				ent.damage = projDmg
-				ent.crit = projCrit
-				ent.critEffc = projCritEffc
-				ent.OnCollision = ColResult
-				ent.mobPen = mobPen
-				ent.nodePen = nodePen
-				ent.dps = dps
-				ent.door_break = door_break
-				ent.glass_break = glass_break
-				ent.skill_value = skill_value
-				ent.bullet_particles = bullet_particles
-				ent.sparks = sparks
-				ent.ignite = ignite
-				ent.size = size
-				ent.timer = 0 + (combined_velocity / 2000)
-				ent.wear = proj_wear
-				local acc = (((100 - accuracy) / 10) / skill_value) or 0
-				obj:set_velocity(
-					{
-						x = (dir.x * combined_velocity + math.random(-acc, acc))*3,
-						y = (dir.y * combined_velocity + math.random(-acc, acc))*3,
-						z = (dir.z * combined_velocity + math.random(-acc, acc))*3
-					}
-				)
-				-- obj:set_acceleration({x = 0, y = -gravity, z = 0})
-				obj:set_rotation({x = 0, y = yaw - math.pi / 2, z = -svertical})
-			end
-		end
-	end
-end
-
-eject_shell = function(itemstack, player, rld_item, rld_time, rldsound, shell)
+local eject_shell = function(itemstack, player, rld_item, rld_time, rldsound, shell)
 	itemstack:set_name(rld_item)
 	local meta = player:get_meta()
 	meta:set_float("rw_cooldown", rld_time)
@@ -1176,7 +1181,7 @@ local cooldown_stuff = (function()
 	end)
 end)()
 
-skills = (function()
+local skills = (function()
 	minetest.register_on_joinplayer(function(player)
 		local meta = player:get_meta()
 		if meta:get_int("handgun_skill") == 0
@@ -1259,7 +1264,7 @@ skills = (function()
 	})
 end)()
 
-misc = (function()
+local misc = (function()
 	rw.register_craftitem(modname .. ":rw_shell_shotgundrop", {
 		wield_scale = {x=2.5,y=1.5,z=1.0},
 		inventory_image = "shelldrop_shotgun.png",
@@ -1307,7 +1312,7 @@ misc = (function()
 	})
 end)()
 
-bullet_knockback = (function()
+local bullet_knockback = (function()
 	function projectile_kb(victim,projectile,kbamount)
 	
 		if victim:get_pos() and projectile:get_pos() then
@@ -1326,7 +1331,7 @@ bullet_knockback = (function()
 end)()
 
 
-forbidden_ents = {
+local forbidden_ents = {
 	"",
 }
 
@@ -1563,7 +1568,7 @@ end
 
 
 
-ammo = (function()	
+local ammo = (function()	
 	----------------------------------------------
 	
 	rangedweapons_shot_bullet.on_step = function(self, dtime, moveresult)
@@ -1988,12 +1993,12 @@ ammo = (function()
 	})
 end)()
 
-crafting = (function()
+local crafting = (function()
 
 end)()
 
 --if minetest.settings:get_bool(modname .. "_shurikens", true) then
-shurikens = (function()
+local shurikens = (function()
 	rw.register_craftitem(modname .. ":rw_wooden_shuriken", {
 		description = "" ..core.colorize("#35cdff","Wooden shuriken\n") ..core.colorize("#FFFFFF", "Ranged damage: 2\n") ..core.colorize("#FFFFFF", "Accuracy: 80%\n") ..core.colorize("#FFFFFF", "knockback: 5\n") ..core.colorize("#FFFFFF", "Critical chance: 6%\n") ..core.colorize("#FFFFFF", "Critical efficiency: 2x\n") ..core.colorize("#FFFFFF", "Shuriken survival rate: 10%\n") ..core.colorize("#FFFFFF", "Projectile gravity: 10\n") ..core.colorize("#FFFFFF", "Throwing cooldown: 0.35\n") ..core.colorize("#FFFFFF", "Projectile velocity: 25"),
 		range = 0,
@@ -2266,7 +2271,7 @@ end)()
 --end
 
 --if minetest.settings:get_bool(modname .. "_handguns", true) then
-makarov = (function()
+local makarov = (function()
 	rw.register_tool(modname .. ":rw_makarov_rld", {
 		stack_max= 1,
 		wield_scale = {x=0.9,y=0.9,z=1.0},
@@ -2346,7 +2351,7 @@ makarov = (function()
 	})
 end)()
 
---[[luger = (function()
+--[[local luger = (function()
 	------------reload--------------------
 	rw.register_tool(modname .. ":rw_luger_r", {
 		stack_max= 1,
@@ -2559,7 +2564,7 @@ m1991 = (function()
 	})
 end)()]]
 
-glock17 = (function()
+local glock17 = (function()
 	rw.register_tool(modname .. ":rw_glock17_rld", {
 		stack_max= 1,
 		wield_scale = {x=1.1,y=1.1,z=1.05},
@@ -2643,7 +2648,7 @@ glock17 = (function()
 	})
 end)()
 
-deagle = (function()
+local deagle = (function()
 	--[[rw.register_tool(modname .. ":rw_deagle_rld", {
 		stack_max= 1,
 		wield_scale = {x=1.25,y=1.25,z=1.5},
@@ -2764,7 +2769,7 @@ end)()
 --end
 
 --if minetest.settings:get_bool("rangedweapon_forceguns", true) then
-forcegun = (function()
+local forcegun = (function()
 	local proj_dir
 	
 	rw.register_tool(modname .. ":rw_forcegun", {
@@ -2935,7 +2940,7 @@ end)()
 --end
 
 --if minetest.settings:get_bool(modname .. "_javelins", true) then
-javelin = (function()
+local javelin = (function()
 	rw.register_craftitem(modname .. ":rw_thrown_javelin", {
 		wield_scale = {x=2.0,y=2.0,z=1.0},
 		inventory_image = "thrown_javelin.png",
@@ -2979,8 +2984,10 @@ javelin = (function()
 			OnCollision = function(player,bullet,target)
 				local throwDur = 40
 				if bullet.wear+(65535/throwDur) < 65535 then
-					javStack = {name=modname .. ":rw_javelin",wear=(bullet.wear)+(65535/throwDur)}
-					minetest.add_item(bullet.object:get_pos(),javStack) end end,
+					local javStack = {name=modname .. ":rw_javelin",wear=(bullet.wear)+(65535/throwDur)}
+					minetest.add_item(bullet.object:get_pos(),javStack)
+				end
+			end,
 		},
 		on_secondary_use = function(itemstack, user, pointed_thing)
 			rangedweapons_yeet(itemstack, user)
@@ -2992,7 +2999,7 @@ end)()
 --end
 
 --if minetest.settings:get_bool(modname .. "_power_weapons", true) then
-generator = (function()
+local generator = (function()
 	rw.register_node(modname .. ":rw_generator", {
 		description = "" ..core.colorize("#35cdff","Power particle generator\n")..core.colorize("#FFFFFF", "generates 1 power particle every 3 seconds (can hold up to 200). Punch to harvest them"),
 		tiles = {
@@ -3028,7 +3035,7 @@ generator = (function()
 	})
 end)()
 
-laser_blaster = (function()
+local laser_blaster = (function()
 	rw.register_craftitem(modname .. ":rw_blue_ray_visual", {
 		wield_scale = {x=1.75,y=1.75,z=1.75},
 		inventory_image = "blue_ray.png",
@@ -3057,7 +3064,6 @@ laser_blaster = (function()
 			power_dps = 0,
 			power_mob_penetration = 50,
 			power_node_penetration = 0,
-			power_dps = 0,
 			power_consumption = 10,
 			power_entity = modname .. ":rw_shot_bullet",
 			power_visual = "wielditem",
@@ -3074,7 +3080,7 @@ laser_blaster = (function()
 	})
 end)()
 
-laser_rifle = (function()
+local laser_rifle = (function()
 	rw.register_craftitem(modname .. ":rw_red_ray_visual", {
 		wield_scale = {x=1.5,y=1.5,z=2.0},
 		inventory_image = "red_ray.png",
@@ -3102,7 +3108,6 @@ laser_rifle = (function()
 			power_dps = 0,
 			power_mob_penetration = 40,
 			power_node_penetration = 0,
-			power_dps = 0,
 			power_consumption = 8,
 			power_entity = modname .. ":rw_shot_bullet",
 			power_visual = "wielditem",
@@ -3115,7 +3120,7 @@ laser_rifle = (function()
 	})
 end)()
 
-laser_shotgun = (function()
+local laser_shotgun = (function()
 	rw.register_tool(modname .. ":rw_laser_shotgun", {
 		stack_max= 1,
 		wield_scale = {x=2.0,y=2.0,z=1.75},
@@ -3131,7 +3136,6 @@ laser_shotgun = (function()
 			power_velocity = 55,
 			power_accuracy = 40,
 			power_cooldown = 0.5,
-			power_projectiles = 1,
 			power_durability = 2000,
 			power_sound = "laser",
 			power_glass_breaking = 1,
@@ -3139,7 +3143,6 @@ laser_shotgun = (function()
 			power_dps = 0,
 			power_mob_penetration = 40,
 			power_node_penetration = 0,
-			power_dps = 0,
 			power_consumption = 30,
 			power_entity = modname .. ":rw_shot_bullet",
 			power_visual = "sprite",
@@ -3296,7 +3299,7 @@ tec9 = (function()
 	})
 end)()--]]
 
-uzi = (function()
+local uzi = (function()
 	rw.register_tool(modname .. ":rw_uzi_r", {
 		stack_max= 1,
 		wield_scale = {x=1.6,y=1.6,z=1.10},
@@ -3434,7 +3437,7 @@ end)()--]]
 
 --end
 --if minetest.settings:get_bool(modname .. "_shotguns", true) then
-remington = (function()
+local remington = (function()
 	rw.register_tool(modname .. ":rw_remington_rld", {
 		stack_max= 1,
 		range = 0,
@@ -3633,7 +3636,7 @@ end)()
 
 --end
 --if minetest.settings:get_bool(modname .. "_auto_shotguns", true) then
-jackhammer = (function()
+local jackhammer = (function()
 	rw.register_tool(modname .. ":rw_jackhammer_r", {
 		stack_max= 1,
 		wield_scale = {x=2.6,y=2.6,z=1.8},
@@ -3685,7 +3688,6 @@ jackhammer = (function()
 			gun_accuracy = 35,
 			gun_cooldown = 0.25,
 			gun_reload = 1.6/4,
-			gun_projectiles = 1,
 			has_shell = 1,
 			gun_durability = 825,
 			gun_smokeSize = 9,
@@ -3775,7 +3777,7 @@ end)()
 
 --end
 --if minetest.settings:get_bool(modname .. "_smgs", true) then
-mp5 = (function()
+local mp5 = (function()
 	rw.register_tool(modname .. ":rw_mp5_r", {
 		stack_max= 1,
 		wield_scale = {x=1.75,y=1.75,z=1.20},
@@ -4246,7 +4248,7 @@ svd = (function()
 	})
 end)()--]]
 
-m200 = (function()
+local m200 = (function()
 	rw.register_tool(modname .. ":rw_m200_uld", {
 		stack_max= 1,
 		wield_scale = {x=2.1,y=2.1,z=1.2},
@@ -4349,7 +4351,7 @@ end)()
 
 --end
 --if minetest.settings:get_bool(modname .. "_heavy_machineguns", true) then
-m60 = (function()
+local m60 = (function()
 	rw.register_tool(modname .. ":rw_m60_r", {
 		stack_max= 1,
 		wield_scale = {x=2.0,y=2.0,z=1.4},
@@ -4395,11 +4397,10 @@ m60 = (function()
 			return itemstack
 		end,
 	
-		inventory_image = "m60.png",
 	})
 end)()
 
---[[rpk = (function()
+--[[local rpk = (function()
 	rw.register_tool(modname .. ":rw_rpk_r", {
 		stack_max= 1,
 		wield_scale = {x=1.75,y=1.75,z=1.3},
@@ -4473,7 +4474,7 @@ end)()
 	})
 end)()--]]
 
-minigun = (function()
+local minigun = (function()
 	if minetest.settings:get_bool("minigun_aswell") or true then
 	
 		rw.register_tool(modname .. ":rw_minigun_r", {
@@ -4521,7 +4522,6 @@ minigun = (function()
 				return itemstack
 			end,
 	
-			inventory_image = "minigun.png",
 		})
 	
 	end
@@ -4529,7 +4529,7 @@ end)()
 	
 --end
 --if minetest.settings:get_bool(modname .. "_revolvers", true) then
-python = (function()
+local python = (function()
 	--[[rw.register_tool(modname .. ":rw_remington_rld", {
 		stack_max= 1,
 		range = 0,
@@ -4645,7 +4645,7 @@ python = (function()
 	})
 end)()
 
---[[taurus = (function()
+--[[local taurus = (function()
 	rw.register_tool(modname .. ":rw_taurus_rld", {
 		stack_max= 1,
 		range = 0,
@@ -4696,7 +4696,7 @@ end)()--]]
 
 --end
 --if minetest.settings:get_bool(modname .. "_assault_rifles", true) then
---[[m16 = (function()
+--[[local m16 = (function()
 	rw.register_tool(modname .. ":rw_m16_r", {
 		stack_max= 1,
 		wield_scale = {x=1.75,y=1.75,z=1.3},
@@ -4843,7 +4843,7 @@ g36 = (function()
 	})
 end)()--]]
 
-ak47 = (function()
+local ak47 = (function()
 	rw.register_tool(modname .. ":rw_ak47_r", {
 		stack_max= 1,
 		wield_scale = {x=1.75,y=1.75,z=1.3},
@@ -4913,11 +4913,10 @@ ak47 = (function()
 			return itemstack
 		end,
 	
-		inventory_image = "ak47.png",
 	})
 end)()
 
---[[scar = (function()
+--[[local scar = (function()
 	rw.register_tool(modname .. ":rw_scar_r", {
 		stack_max= 1,
 		wield_scale = {x=1.7,y=1.7,z=1.25},
@@ -4992,7 +4991,7 @@ end)()--]]
 --end
 
 --if minetest.settings:get_bool(modname .. "_explosives", true) then
-explosives = (function()
+local explosives = (function()
 	-- mcl_explosions.explode(self.object:get_pos(), 4, {drop_chance=1.0}, self.object)
 	
 	local function he_boom (self)
@@ -5166,7 +5165,7 @@ explosives = (function()
 	})
 end)()
 
---[[m79 = (function()
+--[[local m79 = (function()
 	rw.register_tool(modname .. ":rw_m79_r", {
 		stack_max= 1,
 		wield_scale = {x=2.0,y=2.0,z=2.5},
@@ -5214,7 +5213,7 @@ end)()
 	})
 end)()--]]
 
-milkor = (function()
+local milkor = (function()
 	rw.register_tool(modname .. ":rw_milkor_rld", {
 		stack_max= 1,
 		range = 0,
@@ -5262,7 +5261,7 @@ milkor = (function()
 	})
 end)()
 
-rpg = (function()
+local rpg = (function()
 	rw.register_tool(modname .. ":rw_rpg_rld", {
 		description = "" ..core.colorize("#35cdff","rpg7\n") ..core.colorize("#FFFFFF", "Direct contact damage: 20\n")..core.colorize("#FFFFFF", "Accuracy: 100%\n")  ..core.colorize("#FFFFFF", "direct contact knockback: 35\n") ..core.colorize("#FFFFFF", "Gun crit chance: 10%\n")..core.colorize("#FFFFFF", "Critical efficiency: 3x\n") ..core.colorize("#FFFFFF", "Reload delay: 1.0\n")..core.colorize("#FFFFFF", "Clip size: 1\n") ..core.colorize("#FFFFFF", "Gun gravity: 5\n")..core.colorize("#FFFFFF", "Ammunition: rockets\n")..core.colorize("#FFFFFF", "Gun type: rocket launcher\n") ..core.colorize("#FFFFFF", "Bullet velocity: 25"),
 		range = 0,
@@ -5317,7 +5316,6 @@ rpg = (function()
 			gun_projectiles = 1,
 			gun_smokeSize = 15,
 			gun_durability = 150,
-			gun_unload_sound = "",
 			gun_sound = "rocket",
 			gun_unload_sound = "shell_insert",
 		},
@@ -5332,7 +5330,7 @@ rpg = (function()
 	})
 end)()
 
-adminrpg = (function()
+local superrpg = (function()
 	rw.register_tool(modname .. ":rw_super_rpg_rld", {
 		description = "" ..core.colorize("#35cdff","rpg7\n") ..core.colorize("#FFFFFF", "Direct contact damage: 20\n")..core.colorize("#FFFFFF", "Accuracy: 100%\n")  ..core.colorize("#FFFFFF", "direct contact knockback: 35\n") ..core.colorize("#FFFFFF", "Gun crit chance: 10%\n")..core.colorize("#FFFFFF", "Critical efficiency: 3x\n") ..core.colorize("#FFFFFF", "Reload delay: 1.0\n")..core.colorize("#FFFFFF", "Clip size: 1\n") ..core.colorize("#FFFFFF", "Gun gravity: 5\n")..core.colorize("#FFFFFF", "Ammunition: rockets\n")..core.colorize("#FFFFFF", "Gun type: rocket launcher\n") ..core.colorize("#FFFFFF", "Bullet velocity: 25"),
 		range = 0,
@@ -5398,7 +5396,6 @@ adminrpg = (function()
 			gun_projectiles = 1,
 			gun_smokeSize = 5,
 			gun_durability = 15000,
-			gun_unload_sound = "",
 			gun_sound = "rocket",
 			gun_unload_sound = "shell_insert",
 		},
@@ -5413,7 +5410,7 @@ adminrpg = (function()
 	})
 end)()
 
-hand_grenade = (function()
+local hand_grenade = (function()
 	rw.register_craftitem(modname .. ":rw_pin", {
 		wield_scale = {x=2.5,y=2.5,z=1.0},
 		inventory_image = "pin.png",
