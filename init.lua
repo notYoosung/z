@@ -1,6 +1,6 @@
 local modname = minetest.get_current_modname()
 local modpath = minetest.get_modpath(modname)
-
+--[[
 dofile(modpath .. "/aliases.lua")
 
 dofile(modpath .. "/fov_api/init.lua")
@@ -56,7 +56,7 @@ dofile(modpath .. "/rw.lua")
 dofile(modpath .. "/ctf/init.lua")
 
 --dofile(modpath .. "/goodtorch/init.lua")
-
+--]]
 
 
 

@@ -5,7 +5,7 @@ local monster_spawner = {}
 
 -- Import files
 local modname = minetest.get_current_modname()
-local mod_path = minetest.get_modpath(modname) .. "/zoonami"
+local mod_path = minetest.get_modpath(modname)
 
 local group = dofile(mod_path .. "/lua/group.lua")
 local monsters = dofile(mod_path .. "/lua/monsters.lua")

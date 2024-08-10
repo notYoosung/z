@@ -1,5 +1,5 @@
 local modname = minetest.get_current_modname()
-local modpath = minetest.get_modpath(modname) .. "/ctf/grenades"
+local modpath = minetest.get_modpath(modname)
 
 
 local function remove_flora(pos, radius)

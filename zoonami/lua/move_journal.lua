@@ -5,7 +5,7 @@ local move_journal = {}
 
 -- Import files
 local modname = minetest.get_current_modname()
-local mod_path = minetest.get_modpath(modname) .. "/zoonami"
+local mod_path = minetest.get_modpath(modname)
 
 local move_stats = dofile(mod_path .. "/lua/move_stats.lua")
 local fs = dofile(mod_path .. "/lua/formspec.lua")

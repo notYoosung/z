@@ -1,5 +1,5 @@
 local modname = minetest.get_current_modname()
-local modpath = minetest.get_modpath(modname) .. "/ctf/grenades"
+local modpath = minetest.get_modpath(modname)
 
 grenades = {
 	grenade_deaccel = 8

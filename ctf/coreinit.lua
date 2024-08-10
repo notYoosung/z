@@ -11,7 +11,7 @@ ctf_core = {
 --
 -- Example: local f1, f2 = ctf_core.include_files("file1", "file2")
 function ctf_core.include_files(...)
-	local PATH = minetest.get_modpath(minetest.get_current_modname()) .. "/ctf/"
+	local PATH = minetest.get_modpath(minetest.get_current_modname()) .. "/"
 	local returns = {}
 
 	for _, file in pairs({...}) do

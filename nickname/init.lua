@@ -15,7 +15,7 @@ local ie, req_ie = _G, minetest.request_insecure_environment
 if req_ie then ie = req_ie() end
 nickname.trusted = not not ie
 
-local MOD_PATH = minetest.get_modpath(MOD_NAME) .. "/nickname/"
+local MOD_PATH = minetest.get_modpath(MOD_NAME) .. "/"
 local WORLD_PATH = minetest.get_worldpath() .. "/"
 local DATA_PATH = WORLD_PATH .. MOD_NAME .. "/"
 

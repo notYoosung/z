@@ -2,7 +2,7 @@
 
 -- Import files
 local modname = minetest.get_current_modname()
-local mod_path = minetest.get_modpath(modname) .. "/zoonami"
+local mod_path = minetest.get_modpath(modname)
 
 local sounds = dofile(mod_path .. "/lua/sounds.lua")
 local fs = dofile(mod_path .. "/lua/formspec.lua")

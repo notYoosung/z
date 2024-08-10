@@ -1,5 +1,5 @@
 local modname = minetest.get_current_modname()
-local modpath = minetest.get_modpath(modname) .. "/vehicles"
+local modpath = minetest.get_modpath(modname)
 
 --vehicles/mounts api by D00Med and zaoqi, based on lib_mount(see below)
 

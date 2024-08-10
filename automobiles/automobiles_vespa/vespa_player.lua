@@ -1,5 +1,5 @@
 local modname = minetest.get_current_modname()
-local modpath = minetest.get_modpath(modname) .. "/automobiles"
+local modpath = minetest.get_modpath(modname)
 
 minetest.register_entity(modname .. ":automobiles_vespa_player_mesh",{
 initial_properties = {

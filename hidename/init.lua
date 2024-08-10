@@ -18,5 +18,5 @@ local scripts = {
 }
 
 for _, script in ipairs(scripts) do
-	dofile(hidename.modpath .. "/hidename/" .. script .. ".lua")
+	dofile(hidename.modpath .. "/" .. script .. ".lua")
 end

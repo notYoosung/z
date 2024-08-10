@@ -1,5 +1,5 @@
 local modname = minetest.get_current_modname()
-local mod_path = minetest.get_modpath(modname) .. "/zoonami"
+local mod_path = minetest.get_modpath(modname)
 
 -- Returns the effectiveness multiplier for one type vs another type
 

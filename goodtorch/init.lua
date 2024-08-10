@@ -2,7 +2,7 @@ goodtorch = {} -- Public API
 local modname = minetest.get_current_modname()
 local modpath = minetest.get_modpath(modname)
 
-goodtorch.modpath = modpath .. "/goodtorch"
+goodtorch.modpath = modpath
 
 goodtorch.player_lights = {}
 goodtorch.nodes = { -- Replacement nodes (excluding our own nodes, as they don't change)

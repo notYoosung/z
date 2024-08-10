@@ -1,10 +1,10 @@
 local modname = minetest.get_current_modname()
-local path = minetest.get_modpath(modname) .. "/animalia"
+local path = minetest.get_modpath(modname)
 
 animalia = {}
 
 local modname = minetest.get_current_modname()
-local path = minetest.get_modpath(modname) .. "/animalia"
+local path = minetest.get_modpath(modname)
 
 local storage = dofile(path .. "/api/storage.lua")
 

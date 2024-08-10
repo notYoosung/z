@@ -1,5 +1,5 @@
 local modname = minetest.get_current_modname()
-local mod_path = minetest.get_modpath(modname) .. "/zoonami"
+local mod_path = minetest.get_modpath(modname)
 
 -- Contains all the moves that monsters can use
 

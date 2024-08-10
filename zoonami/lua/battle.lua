@@ -5,7 +5,7 @@ local battle = {}
 
 -- Import functions
 local modname = minetest.get_current_modname()
-local mod_path = minetest.get_modpath(modname) .. "/zoonami"
+local mod_path = minetest.get_modpath(modname)
 
 local types = dofile(mod_path .. "/lua/types.lua")
 local monsters = dofile(mod_path .. "/lua/monsters.lua")

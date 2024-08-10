@@ -1,5 +1,5 @@
 local modname = minetest.get_current_modname()
-local mod_path = minetest.get_modpath(modname) .. "/zoonami"
+local mod_path = minetest.get_modpath(modname)
 
 -- Uses default mod sounds if they are installed otherwise falls back to Zoonami sounds
 

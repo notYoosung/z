@@ -1,5 +1,5 @@
 local modname = minetest.get_current_modname()
-local modpath = minetest.get_modpath(modname) .. "/automobiles"
+local modpath = minetest.get_modpath(modname)
 
 function catrelle.extra_parts(self)
     local pos = self.object:get_pos()

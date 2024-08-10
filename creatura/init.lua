@@ -1,7 +1,7 @@
 creatura = {}
 
 local modname = minetest.get_current_modname()
-local path = minetest.get_modpath(modname) .. "/creatura"
+local path = minetest.get_modpath(modname)
 
 dofile(path.."/api.lua")
 dofile(path.."/pathfinding.lua")

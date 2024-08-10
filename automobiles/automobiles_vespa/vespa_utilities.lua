@@ -1,5 +1,5 @@
 local modname = minetest.get_current_modname()
-local modpath = minetest.get_modpath(modname) .. "/automobiles"
+local modpath = minetest.get_modpath(modname)
 
 --dofile(minetest.get_modpath("automobiles_vespa") .. DIR_DELIM .. "vespa_global_definitions.lua")
 --dofile(minetest.get_modpath("automobiles_vespa") .. DIR_DELIM .. "vespa_hud.lua")

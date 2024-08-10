@@ -1,5 +1,5 @@
 local modname = minetest.get_current_modname()
-local mod_path = minetest.get_modpath(modname) .. "/zoonami"
+local mod_path = minetest.get_modpath(modname)
 
 -- Guide Book
 
@@ -8,7 +8,7 @@ local guide_book = {}
 
 -- Import files
 local modname = minetest.get_current_modname()
-local mod_path = minetest.get_modpath(modname) .. "/zoonami"
+local mod_path = minetest.get_modpath(modname)
 
 local fs = dofile(mod_path .. "/lua/formspec.lua")
 

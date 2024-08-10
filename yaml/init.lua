@@ -78,7 +78,7 @@ if (not rawget(_G, MOD_NAME)) then
     end
   end
 
-  local Yaml = dofile(MOD_PATH .. "yaml/yaml/yaml.lua")
+  local Yaml = dofile(MOD_PATH .. "yaml/yaml.lua")
   yaml.dump = Yaml.dump
   yaml.eval = Yaml.eval
 

@@ -1,5 +1,5 @@
 local modname = minetest.get_current_modname()
-local modpath = minetest.get_modpath(modname) .. "/zoonami_3d_mobs"
+local modpath = minetest.get_modpath(modname)
 
 -- Namespace
 zoonami_3d_mobs = {}

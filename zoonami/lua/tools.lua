@@ -1,5 +1,5 @@
 local modname = minetest.get_current_modname()
-local mod_path = minetest.get_modpath(modname) .. "/zoonami"
+local mod_path = minetest.get_modpath(modname)
 
 -- Monster Repellent
 minetest.register_tool(modname .. ":zoonami_monster_repellent", {

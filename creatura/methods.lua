@@ -1,5 +1,5 @@
 local modname = minetest.get_current_modname()
-local path = minetest.get_modpath(modname) .. "/creatura"
+local path = minetest.get_modpath(modname)
 
 -------------
 -- Methods --
