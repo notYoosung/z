@@ -11,7 +11,7 @@ local files = {
 }
 
 for _, file in ipairs(files) do
-	dofile(minetest.get_modpath(MODNAME).."/ctf/"..file)
+	dofile(minetest.get_modpath(MODNAME).."/"..file)
 end
 
 local checking = {}
