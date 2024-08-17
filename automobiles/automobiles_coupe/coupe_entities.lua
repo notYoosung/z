@@ -1,10 +1,7 @@
-local modname = minetest.get_current_modname()
-local modpath = minetest.get_modpath(modname)
-
 --
 -- entity
 --
-local old_entities = {modname .. ":automobiles_coupe_time_machine_kit", modname .. ":automobiles_coupe_wheel",modname .. ":automobiles_coupe_normal_kit"}
+local old_entities = {"automobiles_coupe:time_machine_kit", "automobiles_coupe:wheel","automobiles_coupe:normal_kit"}
 for _,entity_name in ipairs(old_entities) do
     minetest.register_entity(":"..entity_name, {
         on_activate = function(self, staticdata)
@@ -14,7 +11,7 @@ for _,entity_name in ipairs(old_entities) do
 end
 
 
-minetest.register_entity(modname .. ":automobiles_coupe_front_suspension",{
+minetest.register_entity('automobiles_coupe:front_suspension',{
 initial_properties = {
 	physical = true,
 	collide_with_objects=true,
@@ -41,7 +38,7 @@ initial_properties = {
 	
 })
 
-minetest.register_entity(modname .. ":automobiles_coupe_ear_suspension",{
+minetest.register_entity('automobiles_coupe:rear_suspension',{
 initial_properties = {
 	physical = true,
 	collide_with_objects=true,
@@ -63,7 +60,7 @@ initial_properties = {
 	
 })
 
-minetest.register_entity(modname .. ":automobiles_coupe_f_lights",{
+minetest.register_entity('automobiles_coupe:f_lights',{
 initial_properties = {
 	physical = false,
 	collide_with_objects=false,
@@ -86,7 +83,7 @@ initial_properties = {
 	
 })
 
-minetest.register_entity(modname .. ":automobiles_coupe__lights",{
+minetest.register_entity('automobiles_coupe:r_lights',{
 initial_properties = {
 	physical = false,
 	collide_with_objects=false,
@@ -109,7 +106,7 @@ initial_properties = {
 	
 })
 
-minetest.register_entity(modname .. ":automobiles_coupe_everse_lights",{
+minetest.register_entity('automobiles_coupe:reverse_lights',{
 initial_properties = {
 	physical = false,
 	collide_with_objects=false,
@@ -132,7 +129,7 @@ initial_properties = {
 	
 })
 
-minetest.register_entity(modname .. ":automobiles_coupe_turn_left_light",{
+minetest.register_entity('automobiles_coupe:turn_left_light',{
 initial_properties = {
 	physical = false,
 	collide_with_objects=false,
@@ -155,7 +152,7 @@ initial_properties = {
 	
 })
 
-minetest.register_entity(modname .. ":automobiles_coupe_turn_right_light",{
+minetest.register_entity('automobiles_coupe:turn_right_light',{
 initial_properties = {
 	physical = false,
 	collide_with_objects=false,
@@ -178,7 +175,7 @@ initial_properties = {
 	
 })
 
-minetest.register_entity(modname .. ":automobiles_coupe_steering",{
+minetest.register_entity('automobiles_coupe:steering',{
 initial_properties = {
 	physical = false,
 	collide_with_objects=false,
@@ -200,7 +197,7 @@ initial_properties = {
 	
 })
 
-minetest.register_entity(modname .. ":automobiles_coupe_coupe", {
+minetest.register_entity("automobiles_coupe:coupe", {
 	initial_properties = {
 	    physical = true,
         collide_with_objects = true,
@@ -267,26 +264,26 @@ minetest.register_entity(modname .. ":automobiles_coupe_coupe", {
     _vehicle_name = "Coupe",
     _drive_wheel_pos = {x=-4.26,y=6.01,z=14.18},
     _drive_wheel_angle = 15,
-    _steering_ent = modname .. ":automobiles_coupe_steering",
+    _steering_ent = 'automobiles_coupe:steering',
     _seat_pos = {{x=-4.25,y=0.48,z=9.5},{x=4.25,y=0.48,z=9.5}},
 
-    _front_suspension_ent = modname .. ":automobiles_coupe_front_suspension",
+    _front_suspension_ent = 'automobiles_coupe:front_suspension',
     _front_suspension_pos = {x=0,y=1.5,z=24.5},
-    _front_wheel_ent = "automobiles_lib:wheel",
+    _front_wheel_ent = 'automobiles_lib:wheel',
     _front_wheel_xpos = 9.5,
     _front_wheel_frames = {x = 1, y = 49},
-    _rear_suspension_ent = modname .. ":automobiles_coupe_ear_suspension",
+    _rear_suspension_ent = 'automobiles_coupe:rear_suspension',
     _rear_suspension_pos = {x=0,y=1.5,z=0},
-    _rear_wheel_ent = "automobiles_lib:wheel",
+    _rear_wheel_ent = 'automobiles_lib:wheel',
     _rear_wheel_xpos = 9.5,
     _rear_wheel_frames = {x = 1, y = 49},
 
     _fuel_gauge_pos = {x=0,y=6.2,z=15.8},
-    _front_lights = modname .. ":automobiles_coupe_f_lights",
-    _rear_lights = modname .. ":automobiles_coupe__lights",
-    _reverse_lights = modname .. ":automobiles_coupe_everse_lights",
-    _turn_left_lights = modname .. ":automobiles_coupe_turn_left_light",
-    _turn_right_lights = modname .. ":automobiles_coupe_turn_right_light",
+    _front_lights = 'automobiles_coupe:f_lights',
+    _rear_lights = 'automobiles_coupe:r_lights',
+    _reverse_lights = 'automobiles_coupe:reverse_lights',
+    _turn_left_lights = 'automobiles_coupe:turn_left_light',
+    _turn_right_lights = 'automobiles_coupe:turn_right_light',
     _textures_turn_lights_off = {"automobiles_turn.png", },
     _textures_turn_lights_on = { "automobiles_turn_on.png", },
 

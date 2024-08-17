@@ -1,6 +1,3 @@
-local modname = minetest.get_current_modname()
-local modpath = minetest.get_modpath(modname)
-
 local S = delorean.S
 
 function delorean.set_kit(self)
@@ -8,19 +5,19 @@ function delorean.set_kit(self)
     if self.normal_kit then self.normal_kit:remove() end
     local pos = self.object:get_pos()
     if self._car_type == 0 or self._car_type == nil then
-        normal_kit = minetest.add_entity(pos,modname .. ":automobiles_delorean_normal_kit")
-        normal_kit:set_attach(self.object,"",{x=0,y=0,z=0},{x=0,y=0,z=0})
+        normal_kit = minetest.add_entity(pos,'automobiles_delorean:normal_kit')
+        normal_kit:set_attach(self.object,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
         self.normal_kit = normal_kit
         self.normal_kit:set_properties({is_visible=true})
     elseif self._car_type == 1 then
         --time machine
-        normal_kit = minetest.add_entity(pos,modname .. ":automobiles_delorean_time_machine_kit")
-        normal_kit:set_attach(self.object,"",{x=0,y=0,z=0},{x=0,y=0,z=0})
+        normal_kit = minetest.add_entity(pos,'automobiles_delorean:time_machine_kit')
+        normal_kit:set_attach(self.object,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
         self.normal_kit = normal_kit
         self.normal_kit:set_properties({is_visible=true})
 
-        local instruments = minetest.add_entity(pos,modname .. ":automobiles_delorean_time_machine_kit_instruments")
-        instruments:set_attach(self.object,"",{x=0,y=0,z=0},{x=0,y=0,z=0})
+        local instruments = minetest.add_entity(pos,'automobiles_delorean:time_machine_kit_instruments')
+        instruments:set_attach(self.object,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
         self.instruments = instruments
         self.instruments:set_properties({is_visible=true})
     end
@@ -30,7 +27,7 @@ end
 -- entity
 --
 
-minetest.register_entity(modname .. ":automobiles_delorean_wheel",{
+minetest.register_entity('automobiles_delorean:wheel',{
 initial_properties = {
 	physical = false,
 	collide_with_objects=false,
@@ -53,7 +50,7 @@ initial_properties = {
 
 })
 
-minetest.register_entity(modname .. ":automobiles_delorean_normal_kit",{
+minetest.register_entity('automobiles_delorean:normal_kit',{
 initial_properties = {
 	physical = true,
 	collide_with_objects=true,
@@ -80,7 +77,7 @@ initial_properties = {
 	
 })
 
-minetest.register_entity(modname .. ":automobiles_delorean_time_machine_kit",{
+minetest.register_entity('automobiles_delorean:time_machine_kit',{
 initial_properties = {
 	physical = true,
 	collide_with_objects=true,
@@ -94,9 +91,9 @@ initial_properties = {
         "automobiles_dark_grey.png", --exausts
         "automobiles_black.png", --exausts
         "automobiles_metal.png", --energy base collector
-        modname .. ":automobiles_painting.png^[multiply_#0063b0", --capacitors
+        "automobiles_painting.png^[multiply:#0063b0", --capacitors
         "automobiles_black.png", --arc
-        modname .. ":automobiles_painting.png^[multiply_#07B6BC", --capacitors
+        "automobiles_painting.png^[multiply:#07B6BC", --capacitors
         "automobiles_black.png", --base mr fusion
         "automobiles_painting.png", --mr fusion
         "automobiles_metal.png", --ok
@@ -133,7 +130,7 @@ initial_properties = {
 	
 })
 
-minetest.register_entity(modname .. ":automobiles_delorean_time_machine_kit_instruments",{
+minetest.register_entity('automobiles_delorean:time_machine_kit_instruments',{
     initial_properties = {
 	    physical = true,
 	    collide_with_objects=true,
@@ -170,7 +167,7 @@ minetest.register_entity(modname .. ":automobiles_delorean_time_machine_kit_inst
 })
 
 
-minetest.register_entity(modname .. ":automobiles_delorean_front_suspension",{
+minetest.register_entity('automobiles_delorean:front_suspension',{
 initial_properties = {
 	physical = true,
 	collide_with_objects=true,
@@ -197,7 +194,7 @@ initial_properties = {
 	
 })
 
-minetest.register_entity(modname .. ":automobiles_delorean_rear_suspension",{
+minetest.register_entity('automobiles_delorean:rear_suspension',{
 initial_properties = {
 	physical = true,
 	collide_with_objects=true,
@@ -219,7 +216,7 @@ initial_properties = {
 	
 })
 
-minetest.register_entity(modname .. ":automobiles_delorean_f_lights",{
+minetest.register_entity('automobiles_delorean:f_lights',{
 initial_properties = {
 	physical = false,
 	collide_with_objects=false,
@@ -242,7 +239,7 @@ initial_properties = {
 	
 })
 
-minetest.register_entity(modname .. ":automobiles_delorean_r_lights",{
+minetest.register_entity('automobiles_delorean:r_lights',{
 initial_properties = {
 	physical = false,
 	collide_with_objects=false,
@@ -265,7 +262,7 @@ initial_properties = {
 	
 })
 
-minetest.register_entity(modname .. ":automobiles_delorean_reverse_lights",{
+minetest.register_entity('automobiles_delorean:reverse_lights',{
 initial_properties = {
 	physical = false,
 	collide_with_objects=false,
@@ -288,7 +285,7 @@ initial_properties = {
 	
 })
 
-minetest.register_entity(modname .. ":automobiles_delorean_turn_left_light",{
+minetest.register_entity('automobiles_delorean:turn_left_light',{
 initial_properties = {
 	physical = false,
 	collide_with_objects=false,
@@ -311,7 +308,7 @@ initial_properties = {
 	
 })
 
-minetest.register_entity(modname .. ":automobiles_delorean_turn_right_light",{
+minetest.register_entity('automobiles_delorean:turn_right_light',{
 initial_properties = {
 	physical = false,
 	collide_with_objects=false,
@@ -334,7 +331,7 @@ initial_properties = {
 	
 })
 
-minetest.register_entity(modname .. ":automobiles_delorean_delorean", {
+minetest.register_entity("automobiles_delorean:delorean", {
 	initial_properties = {
 	    physical = true,
         collide_with_objects = true,
@@ -417,23 +414,23 @@ minetest.register_entity(modname .. ":automobiles_delorean_delorean", {
     _drive_wheel_angle = 15,
     _seat_pos = {{x=-4.65,y=0.48,z=9.5},{x=4.65,y=0.48,z=9.5}},
 
-    _front_suspension_ent = modname .. ":automobiles_delorean_front_suspension",
+    _front_suspension_ent = 'automobiles_delorean:front_suspension',
     _front_suspension_pos = {x=0,y=1.5,z=27.7057},
-    _front_wheel_ent = modname .. ":automobiles_delorean_wheel",
+    _front_wheel_ent = 'automobiles_delorean:wheel',
     _front_wheel_xpos = 9.5,
     _front_wheel_frames = {x = 1, y = 49},
-    _rear_suspension_ent = modname .. ":automobiles_delorean_rear_suspension",
+    _rear_suspension_ent = 'automobiles_delorean:rear_suspension',
     _rear_suspension_pos = {x=0,y=1.5,z=0},
-    _rear_wheel_ent = modname .. ":automobiles_delorean_wheel",
+    _rear_wheel_ent = 'automobiles_delorean:wheel',
     _rear_wheel_xpos = 9.5,
     _rear_wheel_frames = {x = 1, y = 49},
 
     _fuel_gauge_pos = {x=-4.66,y=6.2,z=17.9},
-    _front_lights = modname .. ":automobiles_delorean_f_lights",
-    _rear_lights = modname .. ":automobiles_delorean_r_lights",
-    _reverse_lights = modname .. ":automobiles_delorean_reverse_lights",
-    _turn_left_lights = modname .. ":automobiles_delorean_turn_left_light",
-    _turn_right_lights = modname .. ":automobiles_delorean_turn_right_light",
+    _front_lights = 'automobiles_delorean:f_lights',
+    _rear_lights = 'automobiles_delorean:r_lights',
+    _reverse_lights = 'automobiles_delorean:reverse_lights',
+    _turn_left_lights = 'automobiles_delorean:turn_left_light',
+    _turn_right_lights = 'automobiles_delorean:turn_right_light',
     _textures_turn_lights_off = {"automobiles_turn.png", },
     _textures_turn_lights_on = { "automobiles_turn_on.png", },
     _extra_items_function = delorean.set_kit, --uses _car_type do change "skin"

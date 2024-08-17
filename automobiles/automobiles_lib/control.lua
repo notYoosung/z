@@ -10,8 +10,8 @@ function automobiles_lib.check_road_is_ok(obj, max_acc_factor)
     local nodedef = minetest.registered_nodes[node_below]
     if nodedef.liquidtype == "none" then
         local slow_nodes = {
-                            ["default:ice "] = 0.01,
-                            ["default:cave_ice"] = 0.01,
+                            ['default:ice '] = 0.01,
+                            ['default:cave_ice'] = 0.01,
                            }
         local acc = slow_nodes[node_below]
         if acc == nil then acc = max_acc_factor end
@@ -41,7 +41,7 @@ function automobiles_lib.set_yaw_by_mouse(self, dir, steering_limit)
 
     --minetest.chat_send_all("rotation y: "..rot_y.." - dir: "..dir.." - command: "..command)
 
-	return 3*(-command * steering_limit)/90
+	return (-command * steering_limit)/90
 end
 
 function automobiles_lib.control(self, dtime, hull_direction, longit_speed, longit_drag, later_drag, accel, max_acc_factor, max_speed, steering_limit, steering_speed)
@@ -61,10 +61,10 @@ function automobiles_lib.control(self, dtime, hull_direction, longit_speed, long
             if longit_speed < max_speed and ctrl.up then
                 --get acceleration factor
                 acc = automobiles_lib.check_road_is_ok(self.object, max_acc_factor)
-                --minetest.chat_send_all("engineacc: ".. engineacc)
+                --minetest.chat_send_all('engineacc: '.. engineacc)
                 if acc > 1 and acc < max_acc_factor and longit_speed > 0 then
                     --improper road will reduce speed
-                    -- acc = -1
+                    acc = -1
                 end
             end
 
@@ -134,9 +134,9 @@ function automobiles_lib.control(self, dtime, hull_direction, longit_speed, long
         else
 		    -- steering
 		    if ctrl.right then
-			    self._steering_angle = math.max(self._steering_angle-steering_speed*5*dtime,-steering_limit)
+			    self._steering_angle = math.max(self._steering_angle-steering_speed*dtime,-steering_limit)
 		    elseif ctrl.left then
-			    self._steering_angle = math.min(self._steering_angle+steering_speed*5*dtime,steering_limit)
+			    self._steering_angle = math.min(self._steering_angle+steering_speed*dtime,steering_limit)
             else
                 --center steering
                 if longit_speed > 0 then
@@ -150,11 +150,11 @@ function automobiles_lib.control(self, dtime, hull_direction, longit_speed, long
 		    end
         end
 
-        -- local angle_factor = self._steering_angle / 60
-        -- if angle_factor < 0 then angle_factor = angle_factor * -1 end
-        -- local deacc_on_curve = longit_speed * angle_factor
-        -- deacc_on_curve = deacc_on_curve * -1
-        -- if deacc_on_curve then retval_accel=vector.add(retval_accel,vector.multiply(hull_direction,deacc_on_curve)) end
+        local angle_factor = self._steering_angle / 60
+        if angle_factor < 0 then angle_factor = angle_factor * -1 end
+        local deacc_on_curve = longit_speed * angle_factor
+        deacc_on_curve = deacc_on_curve * -1
+        if deacc_on_curve then retval_accel=vector.add(retval_accel,vector.multiply(hull_direction,deacc_on_curve)) end
     
 	end
 

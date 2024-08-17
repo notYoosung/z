@@ -1,7 +1,4 @@
-local modname = minetest.get_current_modname()
-local modpath = minetest.get_modpath(modname)
-
-minetest.register_entity(modname .. ":automobiles_motorcycle_player_mesh",{
+minetest.register_entity('automobiles_motorcycle:player_mesh',{
 initial_properties = {
 	    physical = false,
 	    collide_with_objects=false,
@@ -47,8 +44,8 @@ function motorcycle.attach_driver_stand(self, player)
 
     --create the dummy mesh
     local pos = player:get_pos()
-    local driver_mesh=minetest.add_entity(pos,modname .. ":automobiles_motorcycle_player_mesh")
-    driver_mesh:set_attach(player,"",{x=0.0,y=-0.0,z=0.0},{x=0,y=0,z=0})
+    local driver_mesh=minetest.add_entity(pos,'automobiles_motorcycle:player_mesh')
+    driver_mesh:set_attach(player,'',{x=0.0,y=-0.0,z=0.0},{x=0,y=0,z=0})
     self.driver_mesh = driver_mesh
     self.driver_mesh:set_properties({is_visible=false})
 
@@ -133,8 +130,8 @@ function motorcycle.attach_pax_stand(self, player)
 
         --create the dummy mesh
         local pos = player:get_pos()
-        local pax_mesh=minetest.add_entity(pos,modname .. ":automobiles_motorcycle_player_mesh")
-        pax_mesh:set_attach(player,"",{x=0.0,y=-0.0,z=0.0},{x=0,y=0,z=0})
+        local pax_mesh=minetest.add_entity(pos,'automobiles_motorcycle:player_mesh')
+        pax_mesh:set_attach(player,'',{x=0.0,y=-0.0,z=0.0},{x=0,y=0,z=0})
         self.pax_mesh = pax_mesh
         self.pax_mesh:set_properties({is_visible=false})
 

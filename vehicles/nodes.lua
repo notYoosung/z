@@ -1,10 +1,7 @@
-local modname = minetest.get_current_modname()
-local modpath = minetest.get_modpath(modname)
-
 
 --decorative nodes
 
-local S = minetest.get_translator(modname)
+local S = minetest.get_translator("vehicles")
 
 local stone_sound = {}
 if minetest.global_exists("default") then
@@ -14,7 +11,7 @@ elseif minetest.global_exists("sounds") then
 end
 
 function vehicles.register_simplenode(name, desc, texture, light)
-	minetest.register_node(modname .. ":vehicles_"..name, {
+	minetest.register_node("vehicles:"..name, {
 		description = desc,
 		tiles = {texture},
 		groups = {cracky=1},
@@ -36,7 +33,7 @@ vehicles.register_simplenode("stripe4", S("Road surface (yellow stripes)"), "veh
 vehicles.register_simplenode("window", S("Building glass"), "vehicles_window.png", 0)
 vehicles.register_simplenode("stripes", S("Hazard stipes"), "vehicles_stripes.png", 10)
 
-minetest.register_node(modname .. ":vehicles_lights", {
+minetest.register_node("vehicles:lights", {
 	description = S("Tunnel Lights"),
 	tiles = {"vehicles_lights_top.png", "vehicles_lights_top.png", "vehicles_lights.png", "vehicles_lights.png", "vehicles_lights.png", "vehicles_lights.png"},
 	groups = {cracky=1},
@@ -45,7 +42,7 @@ minetest.register_node(modname .. ":vehicles_lights", {
 })
 
 if minetest.get_modpath("stairs") then
-	stairs.register_stair_and_slab("road_surface", modname .. ":vehicles_road",
+	stairs.register_stair_and_slab("road_surface", "vehicles:road",
 		{cracky = 1},
 		{"vehicles_road.png"},
 		S("Road Surface Stair"),
@@ -53,7 +50,7 @@ if minetest.get_modpath("stairs") then
 		stone_sound)
 end
 
-minetest.register_node(modname .. ":vehicles_neon_arrow", {
+minetest.register_node("vehicles:neon_arrow", {
 	description = S("neon arrows (left)"),
 	drawtype = "signlike",
 	visual_scale = 2.0,
@@ -77,7 +74,7 @@ minetest.register_node(modname .. ":vehicles_neon_arrow", {
 	groups = {cracky=3,dig_immediate=3},
 })
 
-minetest.register_node(modname .. ":vehicles_neon_arrow_flp", {
+minetest.register_node("vehicles:neon_arrow_flp", {
 	description = S("neon arrows (right)"),
 	drawtype = "signlike",
 	visual_scale = 2.0,
@@ -101,7 +98,7 @@ minetest.register_node(modname .. ":vehicles_neon_arrow_flp", {
 	groups = {cracky=3,dig_immediate=3},
 })
 
-minetest.register_node(modname .. ":vehicles_add_arrow", {
+minetest.register_node("vehicles:add_arrow", {
 	description = S("arrows(left)"),
 	drawtype = "signlike",
 	visual_scale = 2.0,
@@ -120,7 +117,7 @@ minetest.register_node(modname .. ":vehicles_add_arrow", {
 	groups = {cracky=3,dig_immediate=3},
 })
 
-minetest.register_node(modname .. ":vehicles_add_arrow_flp", {
+minetest.register_node("vehicles:add_arrow_flp", {
 	description = S("arrows(right)"),
 	drawtype = "signlike",
 	visual_scale = 2.0,
@@ -139,7 +136,7 @@ minetest.register_node(modname .. ":vehicles_add_arrow_flp", {
 	groups = {cracky=3,dig_immediate=3},
 })
 
-minetest.register_node(modname .. ":vehicles_scifi_ad", {
+minetest.register_node("vehicles:scifi_ad", {
 	description = S("scifi_nodes sign"),
 	drawtype = "signlike",
 	visual_scale = 3.0,
@@ -163,7 +160,7 @@ minetest.register_node(modname .. ":vehicles_scifi_ad", {
 	groups = {cracky=3,dig_immediate=3},
 })
 
-minetest.register_node(modname .. ":vehicles_mt_sign", {
+minetest.register_node("vehicles:mt_sign", {
 	description = S("mt sign"),
 	drawtype = "signlike",
 	visual_scale = 3.0,
@@ -183,7 +180,7 @@ minetest.register_node(modname .. ":vehicles_mt_sign", {
 	groups = {cracky=3,dig_immediate=3},
 })
 
-minetest.register_node(modname .. ":vehicles_pacman_sign", {
+minetest.register_node("vehicles:pacman_sign", {
 	description = S("pacman sign"),
 	drawtype = "signlike",
 	visual_scale = 2.0,
@@ -203,7 +200,7 @@ minetest.register_node(modname .. ":vehicles_pacman_sign", {
 	groups = {cracky=3,dig_immediate=3},
 })
 
-minetest.register_node(modname .. ":vehicles_whee_sign", {
+minetest.register_node("vehicles:whee_sign", {
 	description = S("whee sign"),
 	drawtype = "signlike",
 	visual_scale = 3.0,
@@ -223,7 +220,7 @@ minetest.register_node(modname .. ":vehicles_whee_sign", {
 	groups = {cracky=3,dig_immediate=3},
 })
 
-minetest.register_node(modname .. ":vehicles_checker_sign", {
+minetest.register_node("vehicles:checker_sign", {
 	description = S("Checkered sign"),
 	drawtype = "signlike",
 	visual_scale = 3.0,
@@ -243,7 +240,7 @@ minetest.register_node(modname .. ":vehicles_checker_sign", {
 	groups = {cracky=3,dig_immediate=3},
 })
 
-minetest.register_node(modname .. ":vehicles_car_sign", {
+minetest.register_node("vehicles:car_sign", {
 	description = S("Car sign"),
 	drawtype = "signlike",
 	visual_scale = 3.0,
@@ -263,7 +260,7 @@ minetest.register_node(modname .. ":vehicles_car_sign", {
 	groups = {cracky=3,dig_immediate=3},
 })
 
-minetest.register_node(modname .. ":vehicles_nyan_sign", {
+minetest.register_node("vehicles:nyan_sign", {
 	description = S("Nyancat sign"),
 	drawtype = "signlike",
 	visual_scale = 2.0,
@@ -283,7 +280,7 @@ minetest.register_node(modname .. ":vehicles_nyan_sign", {
 	groups = {cracky=3,dig_immediate=3},
 })
 
-minetest.register_node(modname .. ":vehicles_flag", {
+minetest.register_node("vehicles:flag", {
 	description = S("Flag"),
 	drawtype = "torchlike",
 	visual_scale = 3.0,
@@ -304,7 +301,7 @@ minetest.register_node(modname .. ":vehicles_flag", {
 })
 
 
-minetest.register_node(modname .. ":vehicles_tyres", {
+minetest.register_node("vehicles:tyres", {
 	description = S("tyre stack"),
 	tiles = {
 		"vehicles_tyre.png",
@@ -338,7 +335,7 @@ Copyright (C) 2016 Auke Kok <sofar@foo-projects.org>
 Copyright (C) 2014-2016 Various Minetest developers
 ]]
 
-minetest.register_node(modname .. ":vehicles_light_barrier", {
+minetest.register_node("vehicles:light_barrier", {
 	description = S("Light Barrier"),
 	tiles = {
 		"vehicles_lightblock.png^[transformR90",
@@ -357,7 +354,7 @@ minetest.register_node(modname .. ":vehicles_light_barrier", {
 		connect_back = {{-1/32, -1/2, 1/32, 1/32, 1/2, 1/2}},
 		connect_right = {{1/32, -1/2, -1/32, 1/2, 1/2, 1/32}},
 	},
-	connects_to = {modname .. ":vehicles_light_barrier",},
+	connects_to = {"vehicles:light_barrier",},
 	sunlight_propagates = true,
 	walkable = false,
 	light_source = 9,
@@ -371,7 +368,7 @@ minetest.register_node(modname .. ":vehicles_light_barrier", {
 	end,
 })
 
-minetest.register_node(modname .. ":vehicles_light_barrier2", {
+minetest.register_node("vehicles:light_barrier2", {
 	description = S("Light Barrier 2"),
 	tiles = {
 		"vehicles_lightblock2.png^[transformR90",
@@ -390,7 +387,7 @@ minetest.register_node(modname .. ":vehicles_light_barrier2", {
 		connect_back = {{-1/32, -1/2, 1/32, 1/32, 1/2, 1/2}},
 		connect_right = {{1/32, -1/2, -1/32, 1/2, 1/2, 1/32}},
 	},
-	connects_to = {modname .. ":vehicles_light_barrier2",},
+	connects_to = {"vehicles:light_barrier2",},
 	sunlight_propagates = true,
 	walkable = false,
 	light_source = 9,

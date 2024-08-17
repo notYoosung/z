@@ -49,16 +49,16 @@ end
 function delorean.set_wheels_mode(self, angle_factor)
     if not self._is_flying or self._is_flying == 0 then
         --whell turn
-        --[[self.lf_wheel:set_attach(self.front_suspension,"",{x=-self._front_wheel_xpos,y=0,z=0},{x=0,y=-self._steering_angle-angle_factor,z=0})
-        self.rf_wheel:set_attach(self.front_suspension,"",{x=self._front_wheel_xpos,y=0,z=0},{x=0,y=(-self._steering_angle+angle_factor)+180,z=0})
-        self.lr_wheel:set_attach(self.rear_suspension,"",{x=-self._rear_wheel_xpos,y=0,z=0},{x=0,y=0,z=0})
-        self.rr_wheel:set_attach(self.rear_suspension,"",{x=self._rear_wheel_xpos,y=0,z=0},{x=0,y=180,z=0})]]--
+        --[[self.lf_wheel:set_attach(self.front_suspension,'',{x=-self._front_wheel_xpos,y=0,z=0},{x=0,y=-self._steering_angle-angle_factor,z=0})
+        self.rf_wheel:set_attach(self.front_suspension,'',{x=self._front_wheel_xpos,y=0,z=0},{x=0,y=(-self._steering_angle+angle_factor)+180,z=0})
+        self.lr_wheel:set_attach(self.rear_suspension,'',{x=-self._rear_wheel_xpos,y=0,z=0},{x=0,y=0,z=0})
+        self.rr_wheel:set_attach(self.rear_suspension,'',{x=self._rear_wheel_xpos,y=0,z=0},{x=0,y=180,z=0})]]--
     else
         local extra_space = 0.5
-        self.lf_wheel:set_attach(self.front_suspension,"",{x=-self._front_wheel_xpos-extra_space,y=0,z=0},{x=0,y=0,z=90})
-        self.rf_wheel:set_attach(self.front_suspension,"",{x=self._front_wheel_xpos+extra_space,y=0,z=0},{x=0,y=180,z=-90})
-        self.lr_wheel:set_attach(self.rear_suspension,"",{x=-self._rear_wheel_xpos-extra_space,y=0,z=0},{x=0,y=0,z=90})
-        self.rr_wheel:set_attach(self.rear_suspension,"",{x=self._rear_wheel_xpos+extra_space,y=0,z=0},{x=0,y=180,z=-90})
+        self.lf_wheel:set_attach(self.front_suspension,'',{x=-self._front_wheel_xpos-extra_space,y=0,z=0},{x=0,y=0,z=90})
+        self.rf_wheel:set_attach(self.front_suspension,'',{x=self._front_wheel_xpos+extra_space,y=0,z=0},{x=0,y=180,z=-90})
+        self.lr_wheel:set_attach(self.rear_suspension,'',{x=-self._rear_wheel_xpos-extra_space,y=0,z=0},{x=0,y=0,z=90})
+        self.rr_wheel:set_attach(self.rear_suspension,'',{x=self._rear_wheel_xpos+extra_space,y=0,z=0},{x=0,y=180,z=-90})
     end
 end
 
@@ -120,12 +120,12 @@ function delorean.set_mode(self, is_attached, curr_pos, velocity, player, dtime)
 
             --check if is near the ground, so revert the flight mode
             local noded = automobiles_lib.nodeatpos(automobiles_lib.pos_shift(curr_pos,{y=-0.6}))
-            if (noded and noded.drawtype ~= "airlike") then
-                if noded.drawtype ~= "liquid" then
+            if (noded and noded.drawtype ~= 'airlike') then
+                if noded.drawtype ~= 'liquid' then
                     self._is_flying = 0
                 end
                 --avoid liquids
-                if noded.drawtype == "liquid" then
+                if noded.drawtype == 'liquid' then
                     self._car_gravity = 5
                     local fixed_vel = velocity
                     fixed_vel.y = 0.1

@@ -1,12 +1,9 @@
-local modname = minetest.get_current_modname()
-local modpath = minetest.get_modpath(modname)
-
 --
 -- entity
 --
 local S = trans_am.S
 
-minetest.register_entity(modname .. ":automobiles_trans_am_wheel",{
+minetest.register_entity('automobiles_trans_am:wheel',{
 initial_properties = {
 	physical = false,
 	collide_with_objects=false,
@@ -29,7 +26,7 @@ initial_properties = {
 
 })
 
-minetest.register_entity(modname .. ":automobiles_trans_am_front_suspension",{
+minetest.register_entity('automobiles_trans_am:front_suspension',{
 initial_properties = {
 	physical = true,
 	collide_with_objects=true,
@@ -56,7 +53,7 @@ initial_properties = {
 	
 })
 
-minetest.register_entity(modname .. ":automobiles_trans_am_rear_suspension",{
+minetest.register_entity('automobiles_trans_am:rear_suspension',{
 initial_properties = {
 	physical = true,
 	collide_with_objects=true,
@@ -78,7 +75,7 @@ initial_properties = {
 	
 })
 
-minetest.register_entity(modname .. ":automobiles_trans_am_f_lights",{
+minetest.register_entity('automobiles_trans_am:f_lights',{
 initial_properties = {
 	physical = false,
 	collide_with_objects=false,
@@ -101,7 +98,7 @@ initial_properties = {
 	
 })
 
-minetest.register_entity(modname .. ":automobiles_trans_am_r_lights",{
+minetest.register_entity('automobiles_trans_am:r_lights',{
 initial_properties = {
 	physical = false,
 	collide_with_objects=false,
@@ -124,7 +121,7 @@ initial_properties = {
 	
 })
 
-minetest.register_entity(modname .. ":automobiles_trans_am_reverse_lights",{
+minetest.register_entity('automobiles_trans_am:reverse_lights',{
 initial_properties = {
 	physical = false,
 	collide_with_objects=false,
@@ -147,7 +144,7 @@ initial_properties = {
 	
 })
 
-minetest.register_entity(modname .. ":automobiles_trans_am_turn_left_light",{
+minetest.register_entity('automobiles_trans_am:turn_left_light',{
 initial_properties = {
 	physical = false,
 	collide_with_objects=false,
@@ -170,7 +167,7 @@ initial_properties = {
 	
 })
 
-minetest.register_entity(modname .. ":automobiles_trans_am_turn_right_light",{
+minetest.register_entity('automobiles_trans_am:turn_right_light',{
 initial_properties = {
 	physical = false,
 	collide_with_objects=false,
@@ -234,7 +231,7 @@ function trans_am.set_paint(self, puncher, itmstck)
         --painting with dyes
         local split = string.split(item_name, ":")
         local color, indx, _
-        if split[1] then _,indx = split[1]:find("dye") end
+        if split[1] then _,indx = split[1]:find('dye') end
         if indx then
             for clr,_ in pairs(automobiles_lib.colors) do
                 local _,x = split[2]:find(clr)
@@ -243,7 +240,7 @@ function trans_am.set_paint(self, puncher, itmstck)
             --lets paint!!!!
 	        --local color = item_name:sub(indx+1)
 	        local colstr = automobiles_lib.colors[color]
-            --minetest.chat_send_all(color .." ".. dump(colstr))
+            --minetest.chat_send_all(color ..' '.. dump(colstr))
 	        if colstr then
                 self._det_color = colstr
                 trans_am.paint(self, self._color)
@@ -257,7 +254,7 @@ function trans_am.set_paint(self, puncher, itmstck)
     return false
 end
 
-minetest.register_entity(modname .. ":automobiles_trans_am_trans_am", {
+minetest.register_entity("automobiles_trans_am:trans_am", {
 	initial_properties = {
 	    physical = true,
         collide_with_objects = true,
@@ -342,23 +339,23 @@ minetest.register_entity(modname .. ":automobiles_trans_am_trans_am", {
     _drive_wheel_angle = 15,
     _seat_pos = {{x=-4.0,y=0.8,z=9},{x=4.0,y=0.8,z=9}},
 
-    _front_suspension_ent = modname .. ":automobiles_trans_am_front_suspension",
+    _front_suspension_ent = 'automobiles_trans_am:front_suspension',
     _front_suspension_pos = {x=0,y=1.5,z=27.0},
-    _front_wheel_ent = modname .. ":automobiles_trans_am_wheel",
+    _front_wheel_ent = 'automobiles_trans_am:wheel',
     _front_wheel_xpos = 9.5,
     _front_wheel_frames = {x = 1, y = 49},
-    _rear_suspension_ent = modname .. ":automobiles_trans_am_rear_suspension",
+    _rear_suspension_ent = 'automobiles_trans_am:rear_suspension',
     _rear_suspension_pos = {x=0,y=1.5,z=0},
-    _rear_wheel_ent = modname .. ":automobiles_trans_am_wheel",
+    _rear_wheel_ent = 'automobiles_trans_am:wheel',
     _rear_wheel_xpos = 9.5,
     _rear_wheel_frames = {x = 1, y = 49},
 
     _fuel_gauge_pos = {x=-4,y=6.8,z=16.6},
-    _front_lights = modname .. ":automobiles_trans_am_f_lights",
-    _rear_lights = modname .. ":automobiles_trans_am_r_lights",
-    _reverse_lights = modname .. ":automobiles_trans_am_reverse_lights",
-    _turn_left_lights = modname .. ":automobiles_trans_am_turn_left_light",
-    _turn_right_lights = modname .. ":automobiles_trans_am_turn_right_light",
+    _front_lights = 'automobiles_trans_am:f_lights',
+    _rear_lights = 'automobiles_trans_am:r_lights',
+    _reverse_lights = 'automobiles_trans_am:reverse_lights',
+    _turn_left_lights = 'automobiles_trans_am:turn_left_light',
+    _turn_right_lights = 'automobiles_trans_am:turn_right_light',
 
     _LONGIT_DRAG_FACTOR = 0.12*0.12,
     _LATER_DRAG_FACTOR = 6.0,

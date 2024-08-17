@@ -1,6 +1,3 @@
-local modname = minetest.get_current_modname()
-local modpath = minetest.get_modpath(modname)
-
 -- Minetest 5.4.1 : automobiles
 
 automobiles_lib = {
@@ -20,9 +17,9 @@ end
 local S = automobiles_lib.S
 local storage = automobiles_lib.storage
 
-automobiles_lib.fuel = {["biofuel:biofuel"] = 1,["biofuel:bottle_fuel"] = 1,
-                ["biofuel:phial_fuel"] = 0.25, ["biofuel:fuel_can"] = 10,
-                ["airutils:biofuel"] = 1,}
+automobiles_lib.fuel = {['biofuel:biofuel'] = 1,['biofuel:bottle_fuel'] = 1,
+                ['biofuel:phial_fuel'] = 0.25, ['biofuel:fuel_can'] = 10,
+                ['airutils:biofuel'] = 1,}
 
 automobiles_lib.gravity = 9.8
 automobiles_lib.ideal_step = 0.2
@@ -47,21 +44,21 @@ end
 
 --cars colors
 automobiles_lib.colors ={
-    black="#2b2b2b",
-    blue="#0063b0",
-    brown="#8c5922",
-    cyan="#07B6BC",
-    dark_green="#567a42",
-    dark_grey="#6d6d6d",
-    green="#4ee34c",
-    grey="#9f9f9f",
-    magenta="#ff0098",
-    orange="#ff8b0e",
-    pink="#ff62c6",
-    red="#dc1818",
-    violet="#a437ff",
-    white="#FFFFFF",
-    yellow="#ffe400",
+    black='#2b2b2b',
+    blue='#0063b0',
+    brown='#8c5922',
+    cyan='#07B6BC',
+    dark_green='#567a42',
+    dark_grey='#6d6d6d',
+    green='#4ee34c',
+    grey='#9f9f9f',
+    magenta='#ff0098',
+    orange='#ff8b0e',
+    pink='#ff62c6',
+    red='#dc1818',
+    violet='#a437ff',
+    white='#FFFFFF',
+    yellow='#ffe400',
 }
 
 --
@@ -154,11 +151,11 @@ function automobiles_lib.seats_create(self)
         if self._seat_pos then 
             local max_seats = table.getn(self._seat_pos)
             for i=1, max_seats do
-                self._passengers_base[i] = minetest.add_entity(pos,modname .. ":automobiles_lib_pivot_mesh")
+                self._passengers_base[i] = minetest.add_entity(pos,'automobiles_lib:pivot_mesh')
                 if not self._seats_rot then
-                    self._passengers_base[i]:set_attach(self.object,"",self._seat_pos[i],{x=0,y=0,z=0})
+                    self._passengers_base[i]:set_attach(self.object,'',self._seat_pos[i],{x=0,y=0,z=0})
                 else
-                    self._passengers_base[i]:set_attach(self.object,"",self._seat_pos[i],{x=0,y=self._seats_rot[i],z=0})
+                    self._passengers_base[i]:set_attach(self.object,'',self._seat_pos[i],{x=0,y=self._seats_rot[i],z=0})
                 end
             end
 
@@ -404,13 +401,13 @@ function automobiles_lib.swap_node(self, pos)
     end
 
     if have_air then
-        minetest.set_node(target_pos, {name=modname .. ":automobiles_lib_light"})
+        minetest.set_node(target_pos, {name='automobiles_lib:light'})
         automobiles_lib.remove_light(self)
         self._light_old_pos = target_pos
         --remove after one second
         --[[minetest.after(1,function(target_pos)
             local node = minetest.get_node_or_nil(target_pos)
-            if node and node.name == modname .. ":automobiles_lib_light" then
+            if node and node.name == "automobiles_lib:light" then
                 minetest.swap_node(target_pos, {name="air"})
             end
         end, target_pos)]]--
@@ -441,7 +438,7 @@ function automobiles_lib.put_light(self)
     end
     if was_set == false then
         local n = minetest.get_node_or_nil(light_pos)
-        if n and n.name == "air" then
+        if n and n.name == 'air' then
             automobiles_lib.swap_node(self, light_pos)
         end
     end
@@ -449,13 +446,13 @@ function automobiles_lib.put_light(self)
 
     --[[local n = minetest.get_node_or_nil(light_pos)
     --minetest.chat_send_player(name, n.name)
-    if n and n.name == "air" then
-        minetest.set_node(pos, {name=modname .. ":automobiles_lib_light"})
+    if n and n.name == 'air' then
+        minetest.set_node(pos, {name='automobiles_lib:light'})
         --local timer = minetest.get_node_timer(pos)
         --timer:set(10, 0)
         minetest.after(0.3,function(pos)
             local node = minetest.get_node_or_nil(pos)
-            if node and node.name == modname .. ":automobiles_lib_light" then
+            if node and node.name == "automobiles_lib:light" then
                 minetest.swap_node(pos, {name="air"})
             end
         end, pos)
@@ -522,11 +519,11 @@ function automobiles_lib.destroy(self, puncher)
     pos.y=pos.y+2
 
     if automobiles_lib.can_collect_car == false then
-        minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},modname .. ":automobiles_lib_engine")
-        minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},modname .. ":automobiles_lib_wheel")
-        minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},modname .. ":automobiles_lib_wheel")
-        minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},modname .. ":automobiles_lib_wheel")
-        minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},modname .. ":automobiles_lib_wheel")
+        minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_lib:engine')
+        minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_lib:wheel')
+        minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_lib:wheel')
+        minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_lib:wheel')
+        minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_lib:wheel')
     else
         local lua_ent = self.object:get_luaentity()
         local staticdata = lua_ent:get_staticdata(self)
@@ -555,10 +552,10 @@ function automobiles_lib.destroy(self, puncher)
 end
 
 function automobiles_lib.engine_set_sound_and_animation(self, _longit_speed)
-    --minetest.chat_send_all("test1 " .. dump(self._engine_running) )
+    --minetest.chat_send_all('test1 ' .. dump(self._engine_running) )
     if self.sound_handle then
         if (math.abs(self._longit_speed) > math.abs(_longit_speed) + 0.03) or (math.abs(self._longit_speed) + 0.03 < math.abs(_longit_speed)) then
-            --minetest.chat_send_all("test2")
+            --minetest.chat_send_all('test2')
             automobiles_lib.engineSoundPlay(self)
         end
     end
@@ -584,7 +581,7 @@ function automobiles_lib.engineSoundPlay(self)
     end
 end
 
-minetest.register_node(modname .. ":automobiles_lib_light", {
+minetest.register_node("automobiles_lib:light", {
 	drawtype = "airlike",
 	--tile_images = {"automobiles_light.png"},
 	inventory_image = minetest.inventorycube("automobiles_light.png"),
@@ -620,7 +617,7 @@ function automobiles_lib.set_paint(self, puncher, itmstck)
         --painting with dyes
         local split = string.split(item_name, ":")
         local color, indx, _
-        if split[1] then _,indx = split[1]:find("dye") end
+        if split[1] then _,indx = split[1]:find('dye') end
         if indx then
             --[[for clr,_ in pairs(automobiles_lib.colors) do
                 local _,x = split[2]:find(clr)
@@ -629,7 +626,7 @@ function automobiles_lib.set_paint(self, puncher, itmstck)
             --lets paint!!!!
 	        local color = (item_name:sub(indx+1)):gsub(":", "")
 	        local colstr = automobiles_lib.colors[color]
-            --minetest.chat_send_all(color .." ".. dump(colstr))
+            --minetest.chat_send_all(color ..' '.. dump(colstr))
 	        if colstr then
                 automobiles_lib.paint(self, colstr)
 		        itmstck:set_count(itmstck:get_count()-1)
@@ -690,47 +687,47 @@ function automobiles_lib.get_transmission_state(curr_speed, max_speed)
     return retVal
 end
 
-dofile(modpath .. "/automobiles_lib" .. DIR_DELIM .. "physics_lib.lua")
-dofile(modpath .. "/automobiles_lib" .. DIR_DELIM .. "custom_physics.lua")
-dofile(modpath .. "/automobiles_lib" .. DIR_DELIM .. "control.lua")
-dofile(modpath .. "/automobiles_lib" .. DIR_DELIM .. "fuel_management.lua")
-dofile(modpath .. "/automobiles_lib" .. DIR_DELIM .. "ground_detection.lua")
-dofile(modpath .. "/automobiles_lib" .. DIR_DELIM .. "painter.lua")
-dofile(modpath .. "/automobiles_lib" .. DIR_DELIM .. "inventory_management.lua")
-dofile(modpath .. "/automobiles_lib" .. DIR_DELIM .. "formspecs.lua")
-dofile(modpath .. "/automobiles_lib" .. DIR_DELIM .. "entities.lua")
+dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "physics_lib.lua")
+dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "custom_physics.lua")
+dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "control.lua")
+dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "fuel_management.lua")
+dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "ground_detection.lua")
+dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "painter.lua")
+dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "inventory_management.lua")
+dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "formspecs.lua")
+dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "entities.lua")
 
 -- engine
-minetest.register_craftitem(modname .. ":automobiles_lib_engine",{
+minetest.register_craftitem("automobiles_lib:engine",{
 	description = S("Car Engine"),
 	inventory_image = "automobiles_engine.png",
 })
 
 -- engine
-minetest.register_craftitem(modname .. ":automobiles_lib_wheel",{
+minetest.register_craftitem("automobiles_lib:wheel",{
 	description = S("Car Wheel"),
 	inventory_image = "automobiles_wheel_icon.png",
 })
 
--- if minetest.get_modpath("default") then
+if minetest.get_modpath("default") then
     minetest.register_craft({
-		output = modname .. ":automobiles_lib_engine",
+		output = "automobiles_lib:engine",
 		recipe = {
 			{"default:steel_ingot","default:steel_ingot","default:steel_ingot"},
 			{"default:steelblock","default:mese_block", "default:steelblock"},
 		}
 	})
 	minetest.register_craft({
-		output = modname .. ":automobiles_lib_wheel",
+		output = "automobiles_lib:wheel",
 		recipe = {
 			{"default:tin_ingot", "default:steel_ingot", "default:tin_ingot"},
 			{"default:steel_ingot","default:steelblock",  "default:steel_ingot"},
             {"default:tin_ingot", "default:steel_ingot", "default:tin_ingot"},
 		}
 	})
--- end
+end
 
-minetest.register_entity(modname .. ":automobiles_lib_wheel",{
+minetest.register_entity('automobiles_lib:wheel',{
 initial_properties = {
 	physical = false,
 	collide_with_objects=false,
@@ -775,18 +772,18 @@ minetest.register_chatcommand("transfer_vehicle", {
                     if entity then
                         if entity.owner == name or minetest.check_player_privs(name, {protection_bypass=true}) then
                             entity.owner = param
-                            minetest.chat_send_player(name,core.colorize("#00ff00", S(" >>> This vehicle now is property of: ")..param))
+                            minetest.chat_send_player(name,core.colorize('#00ff00', S(" >>> This vehicle now is property of: ")..param))
                             automobiles_lib.setText(entity, "vehicle")
                         else
-                            minetest.chat_send_player(name,core.colorize("#ff0000", S(" >>> only the owner or moderators can transfer this vehicle")))
+                            minetest.chat_send_player(name,core.colorize('#ff0000', S(" >>> only the owner or moderators can transfer this vehicle")))
                         end
                     end
                 end
             else
-                minetest.chat_send_player(name,core.colorize("#ff0000", S(" >>> the target player must be logged in")))
+                minetest.chat_send_player(name,core.colorize('#ff0000', S(" >>> the target player must be logged in")))
             end
 		else
-			minetest.chat_send_player(name,core.colorize("#ff0000", S(" >>> you are not inside a vehicle to perform the command")))
+			minetest.chat_send_player(name,core.colorize('#ff0000', S(" >>> you are not inside a vehicle to perform the command")))
 		end
 	end
 })
@@ -817,37 +814,37 @@ minetest.register_chatcommand("transfer_vehicle", {
 if automobiles_lib.is_drift_game == true then
     minetest.register_on_joinplayer(function(player)
 	    local inv = player:get_inventory()
-        local car = modname .. ":automobiles_beetle_beetle"
+        local car = "automobiles_beetle:beetle"
         if not inv:contains_item("main", car) then inv:add_item("main", car) end
-        car = modname .. ":automobiles_buggy_buggy"
+        car = "automobiles_buggy:buggy"
         if not inv:contains_item("main", car) then inv:add_item("main", car) end
-        car = modname .. ":automobiles_catrelle_catrelle_4f"
+        car = "automobiles_catrelle:catrelle_4f"
         if not inv:contains_item("main", car) then inv:add_item("main", car) end
-        car = modname .. ":automobiles_coupe_coupe"
+        car = "automobiles_coupe:coupe"
         if not inv:contains_item("main", car) then inv:add_item("main", car) end
-        car = modname .. ":automobiles_delorean_delorean"
+        car = "automobiles_delorean:delorean"
         if not inv:contains_item("main", car) then inv:add_item("main", car) end
-        car = modname .. ":automobiles_delorean_time_machine"
+        car = "automobiles_delorean:time_machine"
         if not inv:contains_item("main", car) then inv:add_item("main", car) end
-        car = modname .. ":automobiles_trans_am_trans_am"
+        car = "automobiles_trans_am:trans_am"
         if not inv:contains_item("main", car) then inv:add_item("main", car) end
     end)
 end
 
 local old_entities = {
-    modname .. ":automobiles_buggy_pivot_mesh",
-    modname .. ":automobiles_buggy_pointer",
-    modname .. ":automobiles_catrelle_pivot_mesh",
-    modname .. ":automobiles_catrelle_pointer",
-    modname .. ":automobiles_catrelle_catrelle_tl",
-    modname .. ":automobiles_coupe_pivot_mesh",
-    modname .. ":automobiles_coupe_pointer",
-    modname .. ":automobiles_delorean_pivot_mesh",
-    modname .. ":automobiles_delorean_pointer",
-    modname .. ":automobiles_roadster_pivot_mesh",
-    modname .. ":automobiles_trans_am_pivot_mesh",
-    modname .. ":automobiles_trans_am_pointer",
-    modname .. ":automobiles_buggy_steering",
+    "automobiles_buggy:pivot_mesh",
+    "automobiles_buggy:pointer",
+    "automobiles_catrelle:pivot_mesh",
+    "automobiles_catrelle:pointer",
+    "automobiles_catrelle:catrelle_tl",
+    "automobiles_coupe:pivot_mesh",
+    "automobiles_coupe:pointer",
+    "automobiles_delorean:pivot_mesh",
+    "automobiles_delorean:pointer",
+    "automobiles_roadster:pivot_mesh",
+    "automobiles_trans_am:pivot_mesh",
+    "automobiles_trans_am:pointer",
+    "automobiles_buggy:steering",
 }
 for _,entity_name in ipairs(old_entities) do
     minetest.register_entity(":"..entity_name, {

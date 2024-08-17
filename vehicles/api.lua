@@ -1,6 +1,3 @@
-local modname = minetest.get_current_modname()
-local modpath = minetest.get_modpath(modname)
-
 --vehicles/mounts api by D00Med and zaoqi, based on lib_mount(see below)
 
 --License of lib_mount:
@@ -336,8 +333,8 @@ function vehicles.object_drive(entity, dtime, def)
 			is_watercraft_and_in_water()
 		elseif is_watercraft and not entity.on_water then
 			is_watercraft_and_not_on_water()
-		-- elseif entity.on_water and not is_watercraft then
-		-- 	not_watercraft_and_on_or_in_water()
+		elseif entity.on_water and not is_watercraft then
+			not_watercraft_and_on_or_in_water()
 
 			--brakes
 		elseif ctrl.jump and brakes and not ctrl.up then

@@ -1,6 +1,3 @@
-local modname = minetest.get_current_modname()
-local modpath = minetest.get_modpath(modname)
-
 --[[
 Copyright (C) 2022 Alexsandro Percy
 Copyright (C) 2018 Hume2
@@ -49,7 +46,7 @@ end
 -- Painter formspec
 local function painter_form(player, rgb)
     local color = rgb_to_hex(rgb)
-    minetest.show_formspec(player:get_player_name(), modname .. ":automobiles_lib_painter",
+    minetest.show_formspec(player:get_player_name(), "automobiles_lib:painter",
         -- Init formspec
         "formspec_version[3]" .. -- Minetest 5.2+
         "size[5.6,5.2;true]" ..
@@ -95,7 +92,7 @@ local automobiles_being_painted = {}
 local formspec_timers = {}
 
 minetest.register_on_player_receive_fields(function(player, formname, fields)
-    if formname == modname .. ":automobiles_lib_painter" then
+    if formname == "automobiles_lib:painter" then
         if formspec_timers[player] then
             formspec_timers[player]:cancel()
             formspec_timers[player] = nil
@@ -148,7 +145,7 @@ end)
 
 
 -- Make the actual thingy
-minetest.register_tool(modname .. ":automobiles_lib_painter", {
+minetest.register_tool("automobiles_lib:painter", {
     description = S("Automobiles Painter"),
     inventory_image = "automobiles_painter.png",
     wield_scale = {x = 2, y = 2, z = 1},
@@ -175,7 +172,7 @@ minetest.register_on_leaveplayer(function(player, timed_out)
 end)
 
 minetest.register_craft({
-    output = modname .. ":automobiles_lib_painter",
+    output = "automobiles_lib:painter",
     recipe = {
         {"", "default:steel_ingot", ""},
         {"dye:red", "dye:green", "dye:blue"},

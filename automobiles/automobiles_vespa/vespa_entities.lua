@@ -1,12 +1,9 @@
-local modname = minetest.get_current_modname()
-local modpath = minetest.get_modpath(modname)
-
 --
 -- entity
 --
 local S = vespa.S
 
-minetest.register_entity(modname .. ":automobiles_vespa_lights",{
+minetest.register_entity('automobiles_vespa:lights',{
 initial_properties = {
 	physical = false,
 	collide_with_objects=false,
@@ -29,7 +26,7 @@ initial_properties = {
 	
 })
 
-minetest.register_entity(modname .. ":automobiles_vespa_r_lights",{
+minetest.register_entity('automobiles_vespa:r_lights',{
 initial_properties = {
 	physical = false,
 	collide_with_objects=false,
@@ -52,7 +49,7 @@ initial_properties = {
 	
 })
 
-minetest.register_entity(modname .. ":automobiles_vespa_pivot_mesh",{
+minetest.register_entity('automobiles_vespa:pivot_mesh',{
 initial_properties = {
 	physical = false,
 	collide_with_objects=false,
@@ -74,7 +71,7 @@ initial_properties = {
 	
 })
 
-minetest.register_entity(modname .. ":automobiles_vespa_pointer",{
+minetest.register_entity('automobiles_vespa:pointer',{
 initial_properties = {
 	physical = false,
 	collide_with_objects=false,
@@ -96,7 +93,7 @@ initial_properties = {
     end,
 })
 
-minetest.register_entity(modname .. ":automobiles_vespa_vespa", {
+minetest.register_entity("automobiles_vespa:vespa", {
 	initial_properties = {
 	    physical = true,
         collide_with_objects = true,
@@ -211,22 +208,22 @@ minetest.register_entity(modname .. ":automobiles_vespa_vespa", {
         automobiles_lib.paint(self, self._color)
         local pos = self.object:get_pos()
 
-        local lights = minetest.add_entity(pos,modname .. ":automobiles_vespa_lights")
-	    lights:set_attach(self.object,"",{x=0,y=0,z=0},{x=0,y=0,z=0})
+        local lights = minetest.add_entity(pos,'automobiles_vespa:lights')
+	    lights:set_attach(self.object,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
 	    self.lights = lights
         self.lights:set_properties({is_visible=true})
 
-        local rlights = minetest.add_entity(pos,modname .. ":automobiles_vespa_r_lights")
-	    rlights:set_attach(self.object,"",{x=0,y=0,z=0},{x=0,y=0,z=0})
+        local rlights = minetest.add_entity(pos,'automobiles_vespa:r_lights')
+	    rlights:set_attach(self.object,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
 	    self.rlights = rlights
         self.rlights:set_properties({is_visible=true})
 
-	    local driver_seat=minetest.add_entity(pos,modname .. ":automobiles_vespa_pivot_mesh")
-        driver_seat:set_attach(self.object,"",{x=0.0,y=-1.1,z=5.5},{x=0,y=0,z=0})
+	    local driver_seat=minetest.add_entity(pos,'automobiles_vespa:pivot_mesh')
+        driver_seat:set_attach(self.object,'',{x=0.0,y=-1.1,z=5.5},{x=0,y=0,z=0})
 	    self.driver_seat = driver_seat
 
-	    local passenger_seat=minetest.add_entity(pos,modname .. ":automobiles_vespa_pivot_mesh")
-        passenger_seat:set_attach(self.object,"",{x=0.0,y=1,z=0.09},{x=0,y=0,z=0})
+	    local passenger_seat=minetest.add_entity(pos,'automobiles_vespa:pivot_mesh')
+        passenger_seat:set_attach(self.object,'',{x=0.0,y=1,z=0.09},{x=0,y=0,z=0})
 	    self.passenger_seat = passenger_seat
 
 		self.object:set_armor_groups({immortal=1})

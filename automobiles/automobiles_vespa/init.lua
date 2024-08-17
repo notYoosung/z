@@ -1,6 +1,3 @@
-local modname = minetest.get_current_modname()
-local modpath = minetest.get_modpath(modname)
-
 --
 -- constants
 --
@@ -26,14 +23,14 @@ end
 
 local S = vespa.S
 
-dofile(modpath .. "/automobiles_lib" .. DIR_DELIM .. "custom_physics.lua")
-dofile(modpath .. "/automobiles_lib" .. DIR_DELIM .. "control.lua")
-dofile(modpath .. "/automobiles_lib" .. DIR_DELIM .. "fuel_management.lua")
-dofile(modpath .. "/automobiles_lib" .. DIR_DELIM .. "ground_detection.lua")
-dofile(modpath .. "/automobiles_vespa" .. DIR_DELIM .. "vespa_forms.lua")
-dofile(modpath .. "/automobiles_vespa" .. DIR_DELIM .. "vespa_player.lua")
-dofile(modpath .. "/automobiles_vespa" .. DIR_DELIM .. "vespa_utilities.lua")
-dofile(modpath .. "/automobiles_vespa" .. DIR_DELIM .. "vespa_entities.lua")
-dofile(modpath .. "/automobiles_vespa" .. DIR_DELIM .. "vespa_crafts.lua")
+dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "custom_physics.lua")
+dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "control.lua")
+dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "fuel_management.lua")
+dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "ground_detection.lua")
+dofile(minetest.get_modpath("automobiles_vespa") .. DIR_DELIM .. "vespa_forms.lua")
+dofile(minetest.get_modpath("automobiles_vespa") .. DIR_DELIM .. "vespa_player.lua")
+dofile(minetest.get_modpath("automobiles_vespa") .. DIR_DELIM .. "vespa_utilities.lua")
+dofile(minetest.get_modpath("automobiles_vespa") .. DIR_DELIM .. "vespa_entities.lua")
+dofile(minetest.get_modpath("automobiles_vespa") .. DIR_DELIM .. "vespa_crafts.lua")
 
 

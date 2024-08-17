@@ -6,7 +6,7 @@ function automobiles_lib.physics(self)
 	local vel=self.object:get_velocity()
 		-- dumb friction
 	if self.isonground and not self.isinliquid then
-        --minetest.chat_send_all("okay")
+        --minetest.chat_send_all('okay')
 		self.object:add_velocity({x=vel.x*friction-vel.x,
 					  y=0,
 					  z=vel.z*friction-vel.z})
@@ -17,7 +17,7 @@ function automobiles_lib.physics(self)
 		local vnew = vector.new(vel)
 		
 		if not self.collided then						-- ugly workaround for inconsistent collisions
-			for _,k in ipairs({"y","z","x"}) do
+			for _,k in ipairs({'y','z','x'}) do
 				if vel[k]==0 and abs(self.lastvelocity[k])> 0.1 then
 					vnew[k]=-self.lastvelocity[k]*self.springiness
 				end
@@ -44,7 +44,7 @@ function automobiles_lib.physics(self)
 	-- get surface height
 	local snodepos = automobiles_lib.get_node_pos(spos)
 	local surfnode = automobiles_lib.nodeatpos(spos)
-	while surfnode and (surfnode.drawtype == "liquid" or surfnode.drawtype == "flowingliquid") do
+	while surfnode and (surfnode.drawtype == 'liquid' or surfnode.drawtype == 'flowingliquid') do
 		surfnodename = surfnode.name
 		surface = snodepos.y +0.5
 		if surface > spos.y+self.height then break end

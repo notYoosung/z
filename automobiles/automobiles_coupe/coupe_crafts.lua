@@ -1,6 +1,3 @@
-local modname = minetest.get_current_modname()
-local modpath = minetest.get_modpath(modname)
-
 local S = coupe.S
 
 --
@@ -8,13 +5,13 @@ local S = coupe.S
 --
 
 -- body
-minetest.register_craftitem(modname .. ":automobiles_coupe_coupe_body",{
+minetest.register_craftitem("automobiles_coupe:coupe_body",{
 	description = S("Coupe Body"),
 	inventory_image = "automobiles_coupe_body.png",
 })
 
 -- coupe
-minetest.register_tool(modname .. ":automobiles_coupe_coupe", {
+minetest.register_tool("automobiles_coupe:coupe", {
 	description = S("Coupe"),
 	inventory_image = "automobiles_coupe.png",
     liquids_pointable = false,
@@ -30,7 +27,7 @@ minetest.register_tool(modname .. ":automobiles_coupe_coupe", {
 
         local pointed_pos = pointed_thing.above
 		--pointed_pos.y=pointed_pos.y+0.2
-		local car = minetest.add_entity(pointed_pos, modname .. ":automobiles_coupe_coupe", staticdata)
+		local car = minetest.add_entity(pointed_pos, "automobiles_coupe:coupe", staticdata)
 		if car and placer then
             local ent = car:get_luaentity()
             local owner = placer:get_player_name()
@@ -53,20 +50,20 @@ minetest.register_tool(modname .. ":automobiles_coupe_coupe", {
 --
 -- crafting
 --
--- if minetest.get_modpath("default") then
+if minetest.get_modpath("default") then
 	minetest.register_craft({
-		output = modname .. ":automobiles_coupe_coupe",
+		output = "automobiles_coupe:coupe",
 		recipe = {
-			{modname .. ":automobiles_lib_wheel", modname .. ":automobiles_lib_engine", modname .. ":automobiles_lib_wheel"},
-			{modname .. ":automobiles_lib_wheel",modname .. ":automobiles_coupe_coupe_body",  modname .. ":automobiles_lib_wheel"},
+			{"automobiles_lib:wheel", "automobiles_lib:engine", "automobiles_lib:wheel"},
+			{"automobiles_lib:wheel","automobiles_coupe:coupe_body",  "automobiles_lib:wheel"},
 		}
 	})
 	minetest.register_craft({
-		output = modname .. ":automobiles_coupe_coupe_body",
+		output = "automobiles_coupe:coupe_body",
 		recipe = {
             {"default:glass" ,"default:glass","default:steel_ingot"},
 			{"default:steel_ingot","","default:steel_ingot"},
 			{"default:steelblock","default:steelblock", "default:steelblock"},
 		}
 	})
--- end
+end

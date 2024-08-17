@@ -1,6 +1,3 @@
-local modname = minetest.get_current_modname()
-local modpath = minetest.get_modpath(modname)
-
 local S = roadster.S
 
 --
@@ -8,18 +5,18 @@ local S = roadster.S
 --
 
 -- body
-minetest.register_craftitem(modname .. ":automobiles_roadster_roadster_body",{
+minetest.register_craftitem("automobiles_roadster:roadster_body",{
 	description = S("Roadster Body"),
 	inventory_image = "roadster_body.png",
 })
 -- wheel
-minetest.register_craftitem(modname .. ":automobiles_roadster_wheel",{
+minetest.register_craftitem("automobiles_roadster:wheel",{
 	description = S("Roadster Wheel"),
 	inventory_image = "roadster_wheel.png",
 })
 
 -- roadster
-minetest.register_tool(modname .. ":automobiles_roadster_roadster", {
+minetest.register_tool("automobiles_roadster:roadster", {
 	description = S("Roadster"),
 	inventory_image = "automobiles_roadster.png",
     liquids_pointable = false,
@@ -35,7 +32,7 @@ minetest.register_tool(modname .. ":automobiles_roadster_roadster", {
 
         local pointed_pos = pointed_thing.above
 		--pointed_pos.y=pointed_pos.y+0.2
-		local car = minetest.add_entity(pointed_pos, modname .. ":automobiles_roadster_roadster", staticdata)
+		local car = minetest.add_entity(pointed_pos, "automobiles_roadster:roadster", staticdata)
 		if car and placer then
             local ent = car:get_luaentity()
             local owner = placer:get_player_name()
@@ -59,14 +56,14 @@ minetest.register_tool(modname .. ":automobiles_roadster_roadster", {
 --
 if minetest.get_modpath("default") then
 	minetest.register_craft({
-		output = modname .. ":automobiles_roadster_roadster",
+		output = "automobiles_roadster:roadster",
 		recipe = {
-			{modname .. ":automobiles_roadster_wheel", modname .. ":automobiles_lib_engine", modname .. ":automobiles_roadster_wheel"},
-			{modname .. ":automobiles_roadster_wheel",modname .. ":automobiles_roadster_roadster_body",  modname .. ":automobiles_roadster_wheel"},
+			{"automobiles_roadster:wheel", "automobiles_lib:engine", "automobiles_roadster:wheel"},
+			{"automobiles_roadster:wheel","automobiles_roadster:roadster_body",  "automobiles_roadster:wheel"},
 		}
 	})
 	minetest.register_craft({
-		output = modname .. ":automobiles_roadster_roadster_body",
+		output = "automobiles_roadster:roadster_body",
 		recipe = {
             {"default:glass" ,"","default:steel_ingot"},
 			{"default:steel_ingot","default:steelblock","default:steel_ingot"},
@@ -74,7 +71,7 @@ if minetest.get_modpath("default") then
 		}
 	})
 	minetest.register_craft({
-		output = modname .. ":automobiles_roadster_wheel",
+		output = "automobiles_roadster:wheel",
 		recipe = {
 			{"group:wood", "default:stick", "group:wood"},
 			{"default:stick","group:wood",  "default:stick"},

@@ -1,6 +1,3 @@
-local modname = minetest.get_current_modname()
-local modpath = minetest.get_modpath(modname)
-
 local S = vespa.S
 
 --
@@ -8,18 +5,18 @@ local S = vespa.S
 --
 
 -- body
-minetest.register_craftitem(modname .. ":automobiles_vespa_body",{
+minetest.register_craftitem("automobiles_vespa:body",{
 	description = S("Vespa Body"),
 	inventory_image = "automobiles_vespa_body.png",
 })
 -- wheel
-minetest.register_craftitem(modname .. ":automobiles_vespa_wheel",{
+minetest.register_craftitem("automobiles_vespa:wheel",{
 	description = S("Vespa Wheel"),
 	inventory_image = "automobiles_vespa_wheel_icon.png",
 })
 
 -- vespa
-minetest.register_tool(modname .. ":automobiles_vespa_vespa", {
+minetest.register_tool("automobiles_vespa:vespa", {
 	description = S("Vespa"),
 	inventory_image = "automobiles_vespa.png",
     liquids_pointable = false,
@@ -35,7 +32,7 @@ minetest.register_tool(modname .. ":automobiles_vespa_vespa", {
 
         local pointed_pos = pointed_thing.above
 		--pointed_pos.y=pointed_pos.y+0.2
-		local car = minetest.add_entity(pointed_pos, modname .. ":automobiles_vespa_vespa", staticdata)
+		local car = minetest.add_entity(pointed_pos, "automobiles_vespa:vespa", staticdata)
 		if car and placer then
             local ent = car:get_luaentity()
             local owner = placer:get_player_name()
@@ -59,21 +56,21 @@ minetest.register_tool(modname .. ":automobiles_vespa_vespa", {
 --
 if minetest.get_modpath("default") then
 	minetest.register_craft({
-		output = modname .. ":automobiles_vespa_vespa",
+		output = "automobiles_vespa:vespa",
 		recipe = {
-			{modname .. ":automobiles_vespa_wheel", modname .. ":automobiles_vespa_body", modname .. ":automobiles_vespa_wheel"},
+			{"automobiles_vespa:wheel", "automobiles_vespa:body", "automobiles_vespa:wheel"},
 		}
 	})
 	minetest.register_craft({
-		output = modname .. ":automobiles_vespa_body",
+		output = "automobiles_vespa:body",
 		recipe = {
             {"default:tin_ingot","",""},
 			{"default:tin_ingot","","default:tin_ingot"},
-			{"default:tin_ingot",modname .. ":automobiles_lib_engine", "default:tin_ingot"},
+			{"default:tin_ingot","automobiles_lib:engine", "default:tin_ingot"},
 		}
 	})
 	minetest.register_craft({
-		output = modname .. ":automobiles_vespa_wheel",
+		output = "automobiles_vespa:wheel",
 		recipe = {
 			{"default:tin_ingot", "", "default:tin_ingot"},
 			{"","default:steelblock",  ""},
