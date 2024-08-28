@@ -1,10 +1,6 @@
-local modname = minetest.get_current_modname()
-local path = minetest.get_modpath(modname)
-
 animalia = {}
 
-local modname = minetest.get_current_modname()
-local path = minetest.get_modpath(modname)
+local path = minetest.get_modpath("animalia")
 
 local storage = dofile(path .. "/api/storage.lua")
 
@@ -113,24 +109,24 @@ dofile(path.."/api/lasso.lua")
 dofile(path.."/craftitems.lua")
 
 animalia.animals = {
-	modname .. ":animalia_bat",
-	modname .. ":animalia_song_bird",
-	modname .. ":animalia_cat",
-	modname .. ":animalia_chicken",
-	modname .. ":animalia_cow",
-	modname .. ":animalia_fox",
-	modname .. ":animalia_frog",
-	modname .. ":animalia_grizzly_bear",
-	modname .. ":animalia_horse",
-	modname .. ":animalia_opossum",
-	modname .. ":animalia_owl",
-	modname .. ":animalia_pig",
-	modname .. ":animalia_rat",
-	modname .. ":animalia_reindeer",
-	modname .. ":animalia_sheep",
-	modname .. ":animalia_turkey",
-	modname .. ":animalia_tropical_fish",
-	modname .. ":animalia_wolf",
+	"animalia:bat",
+	"animalia:song_bird",
+	"animalia:cat",
+	"animalia:chicken",
+	"animalia:cow",
+	"animalia:fox",
+	"animalia:frog",
+	"animalia:grizzly_bear",
+	"animalia:horse",
+	"animalia:opossum",
+	"animalia:owl",
+	"animalia:pig",
+	"animalia:rat",
+	"animalia:reindeer",
+	"animalia:sheep",
+	"animalia:turkey",
+	"animalia:tropical_fish",
+	"animalia:wolf",
 }
 
 dofile(path.."/api/api.lua")
@@ -193,14 +189,14 @@ end)
 local convert_mobs_redo = minetest.settings:get_bool("convert_redo_items", false)
 
 if convert_mobs_redo then
-	minetest.register_alias_force("mobs:leather", modname .. ":animalia_leather")
-	minetest.register_alias_force("mobs:meat_raw", modname .. ":animalia_beef_raw")
-	minetest.register_alias_force("mobs:meat", modname .. ":animalia_beef_cooked")
-	minetest.register_alias_force("mobs:lasso", modname .. ":animalia_lasso")
-	minetest.register_alias_force("mobs:net", modname .. ":animalia_net")
-	minetest.register_alias_force("mobs:shears", modname .. ":animalia_shears")
-	minetest.register_alias_force("mobs:saddles", modname .. ":animalia_saddles")
-	minetest.register_alias_force("mobs:nametag", modname .. ":animalia_nametag")
+	minetest.register_alias_force("mobs:leather", "animalia:leather")
+	minetest.register_alias_force("mobs:meat_raw", "animalia:beef_raw")
+	minetest.register_alias_force("mobs:meat", "animalia:beef_cooked")
+	minetest.register_alias_force("mobs:lasso", "animalia:lasso")
+	minetest.register_alias_force("mobs:net", "animalia:net")
+	minetest.register_alias_force("mobs:shears", "animalia:shears")
+	minetest.register_alias_force("mobs:saddles", "animalia:saddles")
+	minetest.register_alias_force("mobs:nametag", "animalia:nametag")
 end
 
 minetest.log("action", "[MOD] Animalia [0.6] loaded")

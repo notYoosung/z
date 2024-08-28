@@ -4,8 +4,7 @@
 
 local libri = {}
 
-local modname = minetest.get_current_modname()
-local path = minetest.get_modpath(modname)
+local path = minetest.get_modpath(minetest.get_current_modname())
 
 local color = minetest.colorize
 
@@ -31,46 +30,46 @@ end
 local pages = {}
 
 local generate_mobs = {
-	[modname .. ":animalia_bat"] = "Bat",
-	[modname .. ":animalia_cat"] = "Cat",
-	[modname .. ":animalia_chicken"] = "Chicken",
-	[modname .. ":animalia_cow"] = "Cow",
-	[modname .. ":animalia_opossum"] = "Opossum",
-	[modname .. ":animalia_owl"] = "Owl",
-	[modname .. ":animalia_tropical_fish"] = "Tropical Fish",
-	[modname .. ":animalia_fox"] = "Fox",
-	[modname .. ":animalia_frog"] = "Frog",
-	[modname .. ":animalia_grizzly_bear"] = "Grizzly Bear",
-	[modname .. ":animalia_horse"] = "Horse",
-	[modname .. ":animalia_pig"] = "Pig",
-	[modname .. ":animalia_rat"] = "Rat",
-	[modname .. ":animalia_reindeer"] = "Reindeer",
-	[modname .. ":animalia_sheep"] = "Sheep",
-	[modname .. ":animalia_song_bird"] = "Song Bird",
-	[modname .. ":animalia_turkey"] = "Turkey",
-	[modname .. ":animalia_wolf"] = "Wolf",
+	["animalia:bat"] = "Bat",
+	["animalia:cat"] = "Cat",
+	["animalia:chicken"] = "Chicken",
+	["animalia:cow"] = "Cow",
+	["animalia:opossum"] = "Opossum",
+	["animalia:owl"] = "Owl",
+	["animalia:tropical_fish"] = "Tropical Fish",
+	["animalia:fox"] = "Fox",
+	["animalia:frog"] = "Frog",
+	["animalia:grizzly_bear"] = "Grizzly Bear",
+	["animalia:horse"] = "Horse",
+	["animalia:pig"] = "Pig",
+	["animalia:rat"] = "Rat",
+	["animalia:reindeer"] = "Reindeer",
+	["animalia:sheep"] = "Sheep",
+	["animalia:song_bird"] = "Song Bird",
+	["animalia:turkey"] = "Turkey",
+	["animalia:wolf"] = "Wolf",
 }
 
 
 local spawn_biomes = {
-	[modname .. ":animalia_bat"] = "cave",
-	[modname .. ":animalia_cat"] = "urban",
-	[modname .. ":animalia_chicken"] = "tropical",
-	[modname .. ":animalia_cow"] = "grassland",
-	[modname .. ":animalia_opossum"] = "temperate",
-	[modname .. ":animalia_owl"] = "temperate",
-	[modname .. ":animalia_tropical_fish"] = "ocean",
-	[modname .. ":animalia_fox"] = "boreal",
-	[modname .. ":animalia_frog"] = "swamp",
-	[modname .. ":animalia_grizzly_bear"] = "boreal",
-	[modname .. ":animalia_horse"] = "grassland",
-	[modname .. ":animalia_pig"] = "temperate",
-	[modname .. ":animalia_rat"] = "urban",
-	[modname .. ":animalia_reindeer"] = "boreal",
-	[modname .. ":animalia_sheep"] = "grassland",
-	[modname .. ":animalia_song_bird"] = "temperate",
-	[modname .. ":animalia_turkey"] = "boreal",
-	[modname .. ":animalia_wolf"] = "boreal",
+	["animalia:bat"] = "cave",
+	["animalia:cat"] = "urban",
+	["animalia:chicken"] = "tropical",
+	["animalia:cow"] = "grassland",
+	["animalia:opossum"] = "temperate",
+	["animalia:owl"] = "temperate",
+	["animalia:tropical_fish"] = "ocean",
+	["animalia:fox"] = "boreal",
+	["animalia:frog"] = "swamp",
+	["animalia:grizzly_bear"] = "boreal",
+	["animalia:horse"] = "grassland",
+	["animalia:pig"] = "temperate",
+	["animalia:rat"] = "urban",
+	["animalia:reindeer"] = "boreal",
+	["animalia:sheep"] = "grassland",
+	["animalia:song_bird"] = "temperate",
+	["animalia:turkey"] = "boreal",
+	["animalia:wolf"] = "boreal",
 }
 
 -----------
@@ -160,7 +159,7 @@ local function generate_page(mob)
 			element_type = "item_image",
 			offset = {x = 4.25, y = 8.15},
 			size = {x = 1, y = 1},
-			text = modname .. ":animalia_lasso"
+			text = "animalia:lasso"
 		}),
 		libri.render_element({ -- Lasso Indication Icon
 			element_type = "image",
@@ -172,7 +171,7 @@ local function generate_page(mob)
 			element_type = "item_image",
 			offset = {x = 6, y = 8.15},
 			size = {x = 1, y = 1},
-			text = modname .. ":animalia_net"
+			text = "animalia:net"
 		}),
 		libri.render_element({ -- Net Indication Icon
 			element_type = "image",
@@ -439,7 +438,7 @@ local function iterate_libri_images()
 		if player
 		and spawn_biomes[page] then
 			local meta = player:get_wielded_item():get_meta()
-			minetest.show_formspec(name, modname .. ":animalia_libri_" .. page:split(":")[2], get_page(page, meta, name))
+			minetest.show_formspec(name, "animalia:libri_" .. page:split(":")[2], get_page(page, meta, name))
 		end
 	end
 	minetest.after(2, iterate_libri_images)
@@ -449,7 +448,7 @@ iterate_libri_images()
 
 -- Craftitem
 
-minetest.register_craftitem(modname .. ":animalia_libri_animalia", {
+minetest.register_craftitem("animalia:libri_animalia", {
 	description = "Libri Animalia",
 	inventory_image = "animalia_libri_animalia.png",
 	stack_max = 1,
@@ -459,7 +458,7 @@ minetest.register_craftitem(modname .. ":animalia_libri_animalia", {
 		local meta = itemstack:get_meta()
 		if meta:get_string("pages") ~= "" then meta:set_string("pages", "") end
 		local name = player:get_player_name()
-		minetest.show_formspec(name, modname .. ":animalia_libri_home_1", get_page("home_1", meta, name))
+		minetest.show_formspec(name, "animalia:libri_home_1", get_page("home_1", meta, name))
 		libri_players[name] = "home_1"
 	end,
 	on_secondary_use = function(itemstack, player, pointed)
@@ -479,7 +478,7 @@ minetest.register_craftitem(modname .. ":animalia_libri_animalia", {
 			return itemstack
 		end
 		local name = player:get_player_name()
-		minetest.show_formspec(name, modname .. ":animalia_libri_home_1", get_page("home_1", meta, name))
+		minetest.show_formspec(name, "animalia:libri_home_1", get_page("home_1", meta, name))
 		libri_players[name] = "home_1"
 	end
 })
@@ -488,12 +487,12 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 	local plyr_name = player:get_player_name()
 	local wielded_item = player:get_wielded_item()
 	local meta = wielded_item:get_meta()
-	if formname:match(modname .. ":animalia_libri_") then
+	if formname:match("animalia:libri_") then
 		for page in pairs(pages) do
 			if not page:match("^home") then
 				local name = page:split(":")[2]
 				if fields["btn_" .. name] then
-					minetest.show_formspec(plyr_name, modname .. ":animalia_libri_" .. name, get_page(page, meta, plyr_name))
+					minetest.show_formspec(plyr_name, "animalia:libri_" .. name, get_page(page, meta, plyr_name))
 					libri_players[plyr_name] = page
 					return true
 				end
@@ -503,7 +502,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 			local current_no = tonumber(formname:sub(-1))
 			local page = "home_" .. current_no + 1
 			if pages[page] then
-				minetest.show_formspec(plyr_name, modname .. ":animalia_libri_" .. page, get_page(page, meta, plyr_name))
+				minetest.show_formspec(plyr_name, "animalia:libri_" .. page, get_page(page, meta, plyr_name))
 				libri_players[plyr_name] = page
 				return true
 			end
@@ -512,7 +511,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 			local current_no = tonumber(formname:sub(-1))
 			local page = "home_" .. current_no - 1
 			if pages[page] then
-				minetest.show_formspec(plyr_name, modname .. ":animalia_libri_" .. page, get_page(page, meta, plyr_name))
+				minetest.show_formspec(plyr_name, "animalia:libri_" .. page, get_page(page, meta, plyr_name))
 				libri_players[plyr_name] = page
 				return true
 			end
@@ -521,7 +520,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 			animalia.libri_font_size[plyr_name] = fields.drp_font_scale
 			local page = libri_players[plyr_name]
 			if not page then return end
-			minetest.show_formspec(plyr_name, modname .. ":animalia_libri_" .. page, get_page(page, meta, plyr_name))
+			minetest.show_formspec(plyr_name, "animalia:libri_" .. page, get_page(page, meta, plyr_name))
 		end
 		if fields.quit or fields.key_enter then
 			libri_players[plyr_name] = nil

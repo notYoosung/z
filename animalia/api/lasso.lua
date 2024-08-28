@@ -1,6 +1,3 @@
-local modname = minetest.get_current_modname()
-local path = minetest.get_modpath(modname)
-
 -----------
 -- Lasso --
 -----------
@@ -14,7 +11,7 @@ local dir2rot = vector.dir_to_rotation
 
 local using_lasso = {}
 
-minetest.register_entity(modname .. ":animalia_lasso_entity", {
+minetest.register_entity("animalia:lasso_entity", {
 	visual = "mesh",
 	mesh = "animalia_lasso_entity.b3d",
 	textures = {"animalia_lasso_entity.png"},
@@ -79,14 +76,14 @@ local function remove_from_fence(self)
 	for i = 1, 6 do
 		local i_pos = vec_add(pos, dirs[i])
 		if not creatura.get_node_def(i_pos).walkable then
-			minetest.add_item(i_pos, modname .. ":animalia_lasso")
+			minetest.add_item(i_pos, "animalia:lasso")
 			break
 		end
 	end
 	self.object:remove()
 end
 
-minetest.register_entity(modname .. ":animalia_tied_lasso_entity", {
+minetest.register_entity("animalia:tied_lasso_entity", {
 	collisionbox = {-0.25,-0.25,-0.25, 0.25,0.25,0.25},
 	visual = "cube",
 	visual_size = {x = 0.3, y = 0.3},
@@ -115,7 +112,7 @@ minetest.register_entity(modname .. ":animalia_tied_lasso_entity", {
 local function add_lasso(self, origin)
 	local pos = self.object:get_pos()
 	if not pos then return end
-	local object = minetest.add_entity(pos, modname .. ":animalia_lasso_entity")
+	local object = minetest.add_entity(pos, "animalia:lasso_entity")
 	local ent = object and object:get_luaentity()
 	if not ent then return end
 	-- Attachment point of entity
@@ -144,7 +141,7 @@ function animalia.initialize_lasso(self)
 		local origin = self._lassod_to
 		if type(origin) == "table"
 		and minetest.get_item_group(minetest.get_node(origin).name, "fence") > 0 then
-			local object = minetest.add_entity(origin, modname .. ":animalia_tied_lasso_entity")
+			local object = minetest.add_entity(origin, "animalia:tied_lasso_entity")
 			object:get_luaentity()._mob = self.object
 			self._lasso_ent = add_lasso(self, origin)
 		elseif type(origin) == "string" then
@@ -167,7 +164,7 @@ function animalia.update_lasso_effects(self)
 			local name = lasso
 			lasso = minetest.get_player_by_name(lasso)
 			if lasso then
-				if lasso:get_wielded_item():get_name() ~= modname .. ":animalia_lasso" then
+				if lasso:get_wielded_item():get_name() ~= "animalia:lasso" then
 					using_lasso[name] = nil
 					self._lasso_ent:remove()
 					self._lasso_ent = nil
@@ -204,7 +201,7 @@ end
 
 -- Item
 
-minetest.register_craftitem(modname .. ":animalia_lasso", {
+minetest.register_craftitem("animalia:lasso", {
 	description = "Lasso",
 	inventory_image = "animalia_lasso.png",
 	on_secondary_use = function(_, placer, pointed)
@@ -242,7 +239,7 @@ minetest.register_craftitem(modname .. ":animalia_lasso", {
 					ent._lasso_ent:get_luaentity()._attached = pos
 					ent._lassod_to = pos
 					ent:memorize("_lassod_to", pos)
-					local fence_obj = minetest.add_entity(pos, modname .. ":animalia_tied_lasso_entity")
+					local fence_obj = minetest.add_entity(pos, "animalia:tied_lasso_entity")
 					fence_obj:get_luaentity()._mob = ent.object
 					fence_obj:get_luaentity()._lasso_obj = ent._lasso_ent
 					itemstack:take_item(1)

@@ -1,13 +1,10 @@
-local modname = minetest.get_current_modname()
-local path = minetest.get_modpath(modname)
-
 ---------------
 -- Song Bird --
 ---------------
 
 local random = math.random
 
-creatura.register_mob(modname .. ":animalia_song_bird", {
+creatura.register_mob("animalia:song_bird", {
 	-- Engine Props
 	visual_size = {x = 10, y = 10},
 	mesh = "animalia_bird.b3d",
@@ -54,7 +51,7 @@ creatura.register_mob(modname .. ":animalia_song_bird", {
 	},
 	--follow = {},
 	drops = {
-		{name = modname .. ":animalia_feather", min = 1, max = 1, chance = 2}
+		{name = "animalia:feather", min = 1, max = 1, chance = 2}
 	},
 
 	-- Behavior Parameters
@@ -119,12 +116,12 @@ creatura.register_mob(modname .. ":animalia_song_bird", {
 	on_punch = animalia.punch
 })
 
-creatura.register_spawn_item(modname .. ":animalia_song_bird", {
+creatura.register_spawn_item("animalia:song_bird", {
 	col1 = "ae2f2f",
 	col2 = "f3ac1c"
 })
 
-minetest.register_entity(modname .. ":animalia_bird", {
+minetest.register_entity("animalia:bird", {
 	static_save = false,
 	on_activate = function(self)
 		self.object:remove()
@@ -132,8 +129,8 @@ minetest.register_entity(modname .. ":animalia_bird", {
 })
 
 minetest.register_abm({
-	label = modname .. ":animalia_nest_cleanup",
-	nodenames = modname .. ":animalia_nest_song_bird",
+	label = "animalia:nest_cleanup",
+	nodenames = "animalia:nest_song_bird",
 	interval = 900,
 	action = function(pos)
 		minetest.remove_node(pos)

@@ -1,22 +1,19 @@
-local modname = minetest.get_current_modname()
-local path = minetest.get_modpath(modname)
-
 ---------
 -- Cat --
 ---------
 
 local follow = {
-	modname .. ":animalia_poultry_raw"
+	"animalia:poultry_raw"
 }
 
 if minetest.registered_items["ethereal:fish_raw"] then
 	follow = {
 		"ethereal:fish_raw",
-		modname .. ":animalia_poultry_raw"
+		"animalia:poultry_raw"
 	}
 end
 
-creatura.register_mob(modname .. ":animalia_cat", {
+creatura.register_mob("animalia:cat", {
 	-- Engine Props
 	visual_size = {x = 10, y = 10},
 	mesh = "animalia_cat.b3d",
@@ -157,7 +154,7 @@ creatura.register_mob(modname .. ":animalia_cat", {
 
 	on_rightclick = function(self, clicker)
 		local item_name = clicker:get_wielded_item():get_name()
-		if item_name == modname .. ":animalia_net" then return end
+		if item_name == "animalia:net" then return end
 		local trust = self.trust[clicker:get_player_name()] or 0
 		local pos = self.object:get_pos()
 		if not pos then return end
@@ -198,12 +195,12 @@ creatura.register_mob(modname .. ":animalia_cat", {
 			if order == "wander" then
 				minetest.chat_send_player(clicker:get_player_name(), "Cat is following")
 				self.order = "follow"
-				self:initiate_utility(modname .. ":animalia_follow_player", self, clicker, true)
+				self:initiate_utility("animalia:follow_player", self, clicker, true)
 				self:set_utility_score(0.7)
 			elseif order == "follow" then
 				minetest.chat_send_player(clicker:get_player_name(), "Cat is sitting")
 				self.order = "sit"
-				self:initiate_utility(modname .. ":animalia_stay", self)
+				self:initiate_utility("animalia:stay", self)
 				self:set_utility_score(0.5)
 			else
 				minetest.chat_send_player(clicker:get_player_name(), "Cat is wandering")
@@ -216,7 +213,7 @@ creatura.register_mob(modname .. ":animalia_cat", {
 
 	on_punch = function(self, puncher, time_from_last_punch, tool_capabilities, direction, damage)
 		creatura.basic_punch_func(self, puncher, time_from_last_punch, tool_capabilities, direction, damage)
-		self:initiate_utility(modname .. ":animalia_flee_from_player", self, puncher)
+		self:initiate_utility("animalia:flee_from_player", self, puncher)
 		self:set_utility_score(1)
 		animalia.add_trust(self, puncher, -1)
 		local pos = self.object:get_pos()
@@ -224,7 +221,7 @@ creatura.register_mob(modname .. ":animalia_cat", {
 	end
 })
 
-creatura.register_spawn_item(modname .. ":animalia_cat", {
+creatura.register_spawn_item("animalia:cat", {
 	col1 = "db9764",
 	col2 = "cf8d5a"
 })

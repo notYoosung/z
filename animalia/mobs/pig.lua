@@ -1,11 +1,8 @@
-local modname = minetest.get_current_modname()
-local path = minetest.get_modpath(modname)
-
 ---------
 -- Pig --
 ---------
 
-creatura.register_mob(modname .. ":animalia_pig", {
+creatura.register_mob("animalia:pig", {
 	-- Engine Props
 	visual_size = {x = 10, y = 10},
 	mesh = "animalia_pig.b3d",
@@ -61,7 +58,7 @@ creatura.register_mob(modname .. ":animalia_pig", {
 	},
 	follow = animalia.food_crops,
 	drops = {
-		{name = modname .. ":animalia_porkchop_raw", min = 1, max = 3, chance = 1}
+		{name = "animalia:porkchop_raw", min = 1, max = 3, chance = 1}
 	},
 
 	-- Behavior Parameters
@@ -116,7 +113,7 @@ creatura.register_mob(modname .. ":animalia_pig", {
 	on_punch = animalia.punch
 })
 
-creatura.register_spawn_item(modname .. ":animalia_pig", {
+creatura.register_spawn_item("animalia:pig", {
 	col1 = "e0b1a7",
 	col2 = "cc9485"
 })

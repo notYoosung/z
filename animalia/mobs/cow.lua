@@ -1,11 +1,8 @@
-local modname = minetest.get_current_modname()
-local path = minetest.get_modpath(modname)
-
 ---------
 -- Cow --
 ---------
 
-creatura.register_mob(modname .. ":animalia_cow", {
+creatura.register_mob("animalia:cow", {
 	-- Engine Props
 	visual_size = {x = 10, y = 10},
 	mesh = "animalia_cow.b3d",
@@ -70,8 +67,8 @@ creatura.register_mob(modname .. ":animalia_cow", {
 	},
 	follow = animalia.food_wheat,
 	drops = {
-		{name = modname .. ":animalia_beef_raw", min = 1, max = 3, chance = 1},
-		{name = modname .. ":animalia_leather", min = 1, max = 3, chance = 2}
+		{name = "animalia:beef_raw", min = 1, max = 3, chance = 1},
+		{name = "animalia:leather", min = 1, max = 3, chance = 2}
 	},
 	fancy_collide = false,
 
@@ -119,8 +116,8 @@ creatura.register_mob(modname .. ":animalia_cow", {
 	end,
 
 	death_func = function(self)
-		if self:get_utility() ~= modname .. ":animalia_die" then
-			self:initiate_utility(modname .. ":animalia_die", self)
+		if self:get_utility() ~= "animalia:die" then
+			self:initiate_utility("animalia:die", self)
 		end
 	end,
 
@@ -149,12 +146,12 @@ creatura.register_mob(modname .. ":animalia_cow", {
 			tool:take_item()
 			clicker:set_wielded_item(tool)
 
-			if inv:room_for_item("main", {name = modname .. ":animalia_bucket_milk"}) then
-				clicker:get_inventory():add_item("main", modname .. ":animalia_bucket_milk")
+			if inv:room_for_item("main", {name = "animalia:bucket_milk"}) then
+				clicker:get_inventory():add_item("main", "animalia:bucket_milk")
 			else
 				local pos = self.object:get_pos()
 				pos.y = pos.y + 0.5
-				minetest.add_item(pos, {name = modname .. ":animalia_bucket_milk"})
+				minetest.add_item(pos, {name = "animalia:bucket_milk"})
 			end
 
 			self.collected = self:memorize("collected", true)
@@ -165,7 +162,7 @@ creatura.register_mob(modname .. ":animalia_cow", {
 	on_punch = animalia.punch
 })
 
-creatura.register_spawn_item(modname .. ":animalia_cow", {
+creatura.register_spawn_item("animalia:cow", {
 	col1 = "cac3a1",
 	col2 = "464438"
 })

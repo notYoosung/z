@@ -1,6 +1,3 @@
-local modname = minetest.get_current_modname()
-local path = minetest.get_modpath(modname)
-
 -----------
 -- Horse --
 -----------
@@ -13,7 +10,7 @@ local form_obj = {}
 
 local function create_horse_inventory(self)
 	if not self.owner then return end
-	local inv_name = modname .. ":animalia_horse_" .. self.owner
+	local inv_name = "animalia:horse_" .. self.owner
 	local inv = minetest.create_detached_inventory(inv_name, {
 		allow_move = function(_, _, _, _, _, count)
 			return count
@@ -32,7 +29,7 @@ end
 
 local function serialize_horse_inventory(self)
 	if not self.owner then return end
-	local inv_name = modname .. ":animalia_horse_" .. self.owner
+	local inv_name = "animalia:horse_" .. self.owner
 	local inv = minetest.get_inventory({type = "detached", name = inv_name})
 	if not inv then return end
 	local list = inv:get_list("main")
@@ -74,7 +71,7 @@ local function close_form(player)
 
 	if form_obj[name] then
 		form_obj[name] = nil
-		minetest.remove_detached_inventory(modname .. ":animalia_horse_" .. name)
+		minetest.remove_detached_inventory("animalia:horse_" .. name)
 	end
 end
 
@@ -84,7 +81,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		return
 	end
 	local obj = form_obj[name]
-	if formname == modname .. ":animalia_horse_forms" then
+	if formname == "animalia:horse_forms" then
 		local ent = obj and obj:get_luaentity()
 		if not ent then return end
 
@@ -95,14 +92,14 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		end
 	end
 
-	if formname == modname .. ":animalia_horse_inv" then
+	if formname == "animalia:horse_inv" then
 		local ent = obj and obj:get_luaentity()
 		if not ent then return end
 
 		if fields.quit or fields.key_enter then
 			form_obj[name] = nil
 			serialize_horse_inventory(ent)
-			minetest.remove_detached_inventory(modname .. ":animalia_horse_" .. name)
+			minetest.remove_detached_inventory("animalia:horse_" .. name)
 		end
 	end
 end)
@@ -164,7 +161,7 @@ end
 
 -- Definition
 
-creatura.register_mob(modname .. ":animalia_horse", {
+creatura.register_mob("animalia:horse", {
 	-- Engine Props
 	visual_size = {x = 10, y = 10},
 	mesh = "animalia_horse.b3d",
@@ -219,7 +216,7 @@ creatura.register_mob(modname .. ":animalia_horse", {
 	},
 	follow = animalia.food_wheat,
 	drops = {
-		{name = modname .. ":animalia_leather", min = 1, max = 4, chance = 2}
+		{name = "animalia:leather", min = 1, max = 4, chance = 2}
 	},
 	fancy_collide = false,
 
@@ -248,7 +245,7 @@ creatura.register_mob(modname .. ":animalia_horse", {
 		animalia.mob_ai.basic_breed,
 		animalia.mob_ai.basic_flee,
 		{
-			utility = modname .. ":animalia_horse_tame",
+			utility = "animalia:horse_tame",
 			get_score = function(self)
 				local rider = not self.owner and self.rider
 				if rider
@@ -259,7 +256,7 @@ creatura.register_mob(modname .. ":animalia_horse", {
 			end
 		},
 		{
-			utility = modname .. ":animalia_horse_ride",
+			utility = "animalia:horse_ride",
 			get_score = function(self)
 				if not self.owner then return 0 end
 				local owner = self.owner and minetest.get_player_by_name(self.owner)
@@ -282,8 +279,8 @@ creatura.register_mob(modname .. ":animalia_horse", {
 				textures = {texture .. "^animalia_horse_saddle.png"}
 			})
 			self.drops = {
-				{name = modname .. ":animalia_leather", chance = 2, min = 1, max = 4},
-				{name = modname .. ":animalia_saddle", chance = 1, min = 1, max = 1}
+				{name = "animalia:leather", chance = 2, min = 1, max = 4},
+				{name = "animalia:saddle", chance = 1, min = 1, max = 1}
 			}
 		else
 			local pos = self.object:get_pos()
@@ -291,9 +288,9 @@ creatura.register_mob(modname .. ":animalia_horse", {
 			self.saddled = self:memorize("saddled", false)
 			set_pattern(self)
 			self.drops = {
-				{name = modname .. ":animalia_leather", chance = 2, min = 1, max = 4}
+				{name = "animalia:leather", chance = 2, min = 1, max = 4}
 			}
-			minetest.add_item(pos, modname .. ":animalia_saddle")
+			minetest.add_item(pos, "animalia:saddle")
 		end
 	end,
 
@@ -362,8 +359,8 @@ creatura.register_mob(modname .. ":animalia_horse", {
 		if self.rider then
 			animalia.mount(self, self.rider)
 		end
-		if self:get_utility() ~= modname .. ":animalia_die" then
-			self:initiate_utility(modname .. ":animalia_die", self)
+		if self:get_utility() ~= "animalia:die" then
+			self:initiate_utility("animalia:die", self)
 		end
 	end,
 
@@ -382,19 +379,19 @@ creatura.register_mob(modname .. ":animalia_horse", {
 
 		local wielded_name = clicker:get_wielded_item():get_name()
 
-		if wielded_name == modname .. ":animalia_saddle" then
+		if wielded_name == "animalia:saddle" then
 			self:set_saddle(true)
 			return
 		end
 
 		if clicker:get_player_control().sneak
 		and owner then
-			minetest.show_formspec(name, modname .. ":animalia_horse_forms", get_form(self, name))
+			minetest.show_formspec(name, "animalia:horse_forms", get_form(self, name))
 			form_obj[name] = self.object
 		elseif wielded_name == "" then
 			animalia.mount(self, clicker, {rot = {x = -65, y = 180, z = 0}, pos = {x = 0, y = 0.75, z = 0.6}})
 			if self.saddled then
-				self:initiate_utility(modname .. ":animalia_mount", self, clicker)
+				self:initiate_utility("animalia:mount", self, clicker)
 			end
 		end
 	end,
@@ -422,7 +419,7 @@ creatura.register_mob(modname .. ":animalia_horse", {
 	end
 })
 
-creatura.register_spawn_item(modname .. ":animalia_horse", {
+creatura.register_spawn_item("animalia:horse", {
 	col1 = "ebdfd8",
 	col2 = "653818"
 })

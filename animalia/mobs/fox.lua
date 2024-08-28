@@ -1,11 +1,8 @@
-local modname = minetest.get_current_modname()
-local path = minetest.get_modpath(modname)
-
 ---------
 -- Fox --
 ---------
 
-creatura.register_mob(modname .. ":animalia_fox", {
+creatura.register_mob("animalia:fox", {
 	-- Engine Props
 	visual_size = {x = 10, y = 10},
 	mesh = "animalia_fox.b3d",
@@ -34,18 +31,18 @@ creatura.register_mob(modname .. ":animalia_fox", {
 		run = {range = {x = 41, y = 59}, speed = 45, frame_blend = 0.3, loop = true},
 	},
 	follow = {
-		modname .. ":animalia_rat_raw",
-		modname .. ":animalia_mutton_raw",
-		modname .. ":animalia_beef_raw",
-		modname .. ":animalia_porkchop_raw",
-		modname .. ":animalia_poultry_raw"
+		"animalia:rat_raw",
+		"animalia:mutton_raw",
+		"animalia:beef_raw",
+		"animalia:porkchop_raw",
+		"animalia:poultry_raw"
 	},
 
 	-- Behavior Parameters
 	is_skittish_mob = true,
 	attack_list = {
-		modname .. ":animalia_chicken",
-		modname .. ":animalia_rat"
+		"animalia:chicken",
+		"animalia:rat"
 	},
 
 	-- Animalia Props
@@ -100,7 +97,7 @@ creatura.register_mob(modname .. ":animalia_fox", {
 	on_punch = animalia.punch
 })
 
-creatura.register_spawn_item(modname .. ":animalia_fox", {
+creatura.register_spawn_item("animalia:fox", {
 	col1 = "d0602d",
 	col2 = "c9c9c9"
 })

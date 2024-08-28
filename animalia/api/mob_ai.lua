@@ -1,6 +1,3 @@
-local modname = minetest.get_current_modname()
-local path = minetest.get_modpath(modname)
-
 ------------
 -- Mob AI --
 ------------
@@ -177,7 +174,7 @@ end
 
 -- Methods
 
-creatura.register_movement_method(modname .. ":animalia_fly_wide", function(self)
+creatura.register_movement_method("animalia:fly_wide", function(self)
 	local steer_to
 	local steer_int = 0
 	self:set_gravity(0)
@@ -210,7 +207,7 @@ end)
 
 -- Steering Methods
 
-creatura.register_movement_method(modname .. ":animalia_steer", function(self)
+creatura.register_movement_method("animalia:steer", function(self)
 	local steer_to
 	local steer_int = 0
 
@@ -242,7 +239,7 @@ creatura.register_movement_method(modname .. ":animalia_steer", function(self)
 	return func
 end)
 
-creatura.register_movement_method(modname .. ":animalia_steer_no_gravity", function(self)
+creatura.register_movement_method("animalia:steer_no_gravity", function(self)
 	local steer_to
 	local steer_int = 0
 
@@ -277,7 +274,7 @@ end)
 
 -- Simple Methods
 
-creatura.register_movement_method(modname .. ":animalia_move", function(self)
+creatura.register_movement_method("animalia:move", function(self)
 	local radius = 2 -- Arrival Radius
 
 	self:set_gravity(-9.8)
@@ -302,7 +299,7 @@ creatura.register_movement_method(modname .. ":animalia_move", function(self)
 	return func
 end)
 
-creatura.register_movement_method(modname .. ":animalia_move_no_gravity", function(self)
+creatura.register_movement_method("animalia:move_no_gravity", function(self)
 	local radius = 2 -- Arrival Radius
 
 	self:set_gravity(0)
@@ -357,7 +354,7 @@ function animalia.action_walk(self, time, speed, animation, pos2)
 
 		if timeout <= 0
 		or not safe
-		or mob:move_to(goal, modname .. ":animalia_steer", speed_factor) then
+		or mob:move_to(goal, "animalia:steer", speed_factor) then
 			mob:halt()
 			return true
 		end
@@ -413,7 +410,7 @@ function animalia.action_swim(self, time, speed, animation, pos2)
 		local goal = vec_add(pos, vec_multi(steer_direction, mob.width + 2))
 
 		if timeout <= 0
-		or mob:move_to(goal, modname .. ":animalia_steer_no_gravity", speed_factor) then
+		or mob:move_to(goal, "animalia:steer_no_gravity", speed_factor) then
 			mob:halt()
 			return true
 		end
@@ -468,7 +465,7 @@ function animalia.action_fly(self, time, speed, animation, pos2, turn)
 		local goal = vec_add(pos, vec_multi(steer_direction, mob.width + 2))
 
 		if timeout <= 0
-		or mob:move_to(goal, modname .. ":animalia_steer_no_gravity", speed_factor) then
+		or mob:move_to(goal, "animalia:steer_no_gravity", speed_factor) then
 			mob:halt()
 			return true
 		end
@@ -695,9 +692,9 @@ function animalia.action_dive_attack(self, target, timeout)
 		end
 
 		if dist > width + 1 then
-			local method = modname .. ":animalia_move_no_gravity"
+			local method = "animalia:move_no_gravity"
 			if dist > 4 then
-				method = modname .. ":animalia_steer_no_gravity"
+				method = "animalia:steer_no_gravity"
 			end
 			_self:move_to(tgt_pos, method, 1)
 		elseif not punch_init then
@@ -710,7 +707,7 @@ end
 
 -- Behaviors
 
-creatura.register_utility(modname .. ":animalia_die", function(self)
+creatura.register_utility("animalia:die", function(self)
 	local timer = 1.5
 	local init = false
 	local function func(_self)
@@ -754,7 +751,7 @@ end)
 
 -- Basic --
 
-creatura.register_utility(modname .. ":animalia_basic_idle", function(self, timeout, anim)
+creatura.register_utility("animalia:basic_idle", function(self, timeout, anim)
 	local timer = timeout or 1
 	local init = false
 	local function func(mob)
@@ -769,7 +766,7 @@ creatura.register_utility(modname .. ":animalia_basic_idle", function(self, time
 	self:set_utility(func)
 end)
 
-creatura.register_utility(modname .. ":animalia_basic_wander", function(self)
+creatura.register_utility("animalia:basic_wander", function(self)
 	local idle_max = 4
 	local move_chance = 3
 	local graze_chance = 16
@@ -834,7 +831,7 @@ creatura.register_utility(modname .. ":animalia_basic_wander", function(self)
 	self:set_utility(func)
 end)
 
-creatura.register_utility(modname .. ":animalia_basic_seek_pos", function(self, pos2, timeout)
+creatura.register_utility("animalia:basic_seek_pos", function(self, pos2, timeout)
 	timeout = timeout or 3
 	local function func(mob)
 		local pos = mob.object:get_pos()
@@ -853,7 +850,7 @@ creatura.register_utility(modname .. ":animalia_basic_seek_pos", function(self, 
 	self:set_utility(func)
 end)
 
-creatura.register_utility(modname .. ":animalia_basic_seek_food", function(self)
+creatura.register_utility("animalia:basic_seek_food", function(self)
 	local timeout = 3
 
 	local food = animalia.get_dropped_food(self)
@@ -887,7 +884,7 @@ creatura.register_utility(modname .. ":animalia_basic_seek_food", function(self)
 	self:set_utility(func)
 end)
 
-creatura.register_utility(modname .. ":animalia_basic_seek_crop", function(self)
+creatura.register_utility("animalia:basic_seek_crop", function(self)
 	local timeout = 12
 
 	local crop = animalia.find_crop(self)
@@ -919,7 +916,7 @@ creatura.register_utility(modname .. ":animalia_basic_seek_crop", function(self)
 	self:set_utility(func)
 end)
 
-creatura.register_utility(modname .. ":animalia_basic_flee", function(self, target)
+creatura.register_utility("animalia:basic_flee", function(self, target)
 	local function func(mob)
 		local pos, target_pos = mob.object:get_pos(), target:get_pos()
 		if not pos or not target_pos then return true end
@@ -931,7 +928,7 @@ creatura.register_utility(modname .. ":animalia_basic_flee", function(self, targ
 	self:set_utility(func)
 end)
 
-creatura.register_utility(modname .. ":animalia_basic_attack", function(self, target)
+creatura.register_utility("animalia:basic_attack", function(self, target)
 	local has_attacked = false
 	local has_warned = not self.warn_before_attack
 	local function func(mob)
@@ -970,7 +967,7 @@ creatura.register_utility(modname .. ":animalia_basic_attack", function(self, ta
 	self:set_utility(func)
 end)
 
-creatura.register_utility(modname .. ":animalia_basic_breed", function(self)
+creatura.register_utility("animalia:basic_breed", function(self)
 	local mate = animalia.get_nearby_mate(self, self.name)
 
 	local timer = 0
@@ -1016,7 +1013,7 @@ end)
 
 -- Swim --
 
-creatura.register_utility(modname .. ":animalia_swim_wander", function(self)
+creatura.register_utility("animalia:swim_wander", function(self)
 	local move_chance = 2
 	local idle_max = 4
 
@@ -1038,7 +1035,7 @@ creatura.register_utility(modname .. ":animalia_swim_wander", function(self)
 	self:set_utility(func)
 end)
 
-creatura.register_utility(modname .. ":animalia_swim_seek_land", function(self)
+creatura.register_utility("animalia:swim_seek_land", function(self)
 	local land_pos
 
 	self:set_gravity(-9.8)
@@ -1080,7 +1077,7 @@ end)
 
 -- Fly --
 
-creatura.register_utility(modname .. ":animalia_fly_wander", function(self, turn_rate)
+creatura.register_utility("animalia:fly_wander", function(self, turn_rate)
 	local move_chance = 2
 	local idle_max = 4
 
@@ -1097,7 +1094,7 @@ creatura.register_utility(modname .. ":animalia_fly_wander", function(self, turn
 	self:set_utility(func)
 end)
 
-creatura.register_utility(modname .. ":animalia_fly_seek_home", function(self)
+creatura.register_utility("animalia:fly_seek_home", function(self)
 	local home = self.home_position
 	local roost = self.roost_action or creatura.action_idle
 	local is_home = self.is_roost or function(pos, home_pos)
@@ -1117,13 +1114,13 @@ creatura.register_utility(modname .. ":animalia_fly_seek_home", function(self)
 				roost(mob, 1)
 				return
 			end
-			creatura.action_move(mob, home, 3, modname .. ":animalia_steer_no_gravity", 1, "fly")
+			creatura.action_move(mob, home, 3, "animalia:steer_no_gravity", 1, "fly")
 		end
 	end
 	self:set_utility(func)
 end)
 
-creatura.register_utility(modname .. ":animalia_fly_seek_land", function(self)
+creatura.register_utility("animalia:fly_seek_land", function(self)
 	local landed = false
 	local function func(_self)
 		if not _self:get_action() then
@@ -1136,7 +1133,7 @@ creatura.register_utility(modname .. ":animalia_fly_seek_land", function(self)
 				if pos2 then
 					local dist2floor = creatura.sensor_floor(_self, 10, true)
 					pos2.y = pos2.y - dist2floor
-					creatura.action_move(_self, pos2, 3, modname .. ":animalia_move_no_gravity", 0.6, "fly")
+					creatura.action_move(_self, pos2, 3, "animalia:move_no_gravity", 0.6, "fly")
 				end
 			end
 		end
@@ -1144,7 +1141,7 @@ creatura.register_utility(modname .. ":animalia_fly_seek_land", function(self)
 	self:set_utility(func)
 end)
 
-creatura.register_utility(modname .. ":animalia_fly_seek_food", function(self)
+creatura.register_utility("animalia:fly_seek_food", function(self)
 	local timeout = 3
 
 	local food = animalia.get_dropped_food(self)
@@ -1179,7 +1176,7 @@ end)
 
 -- Horse --
 
-creatura.register_utility(modname .. ":animalia_horse_tame", function(self)
+creatura.register_utility("animalia:horse_tame", function(self)
 	local trust = 5
 	local player = self.rider
 	local player_props = player and player:get_properties()
@@ -1235,7 +1232,7 @@ creatura.register_utility(modname .. ":animalia_horse_tame", function(self)
 	self:set_utility(func)
 end)
 
-creatura.register_utility(modname .. ":animalia_horse_ride", function(self, player)
+creatura.register_utility("animalia:horse_ride", function(self, player)
 	local player_props = player and player:get_properties()
 	if not player_props then return end
 	local player_size = player_props.visual_size
@@ -1327,7 +1324,7 @@ end)
 
 -- Eagle --
 
-creatura.register_utility(modname .. ":animalia_eagle_attack", function(self, target)
+creatura.register_utility("animalia:eagle_attack", function(self, target)
 	local function func(mob)
 		local pos = mob.object:get_pos()
 		local _, is_visible, target_pos = mob:get_target(target)
@@ -1356,7 +1353,7 @@ end)
 
 -- Cat --
 
-creatura.register_utility(modname .. ":animalia_cat_seek_vessel", function(self)
+creatura.register_utility("animalia:cat_seek_vessel", function(self)
 	local timeout = 12
 
 	local vessel
@@ -1401,7 +1398,7 @@ creatura.register_utility(modname .. ":animalia_cat_seek_vessel", function(self)
 	self:set_utility(func)
 end)
 
-creatura.register_utility(modname .. ":animalia_cat_follow_owner", function(self, player)
+creatura.register_utility("animalia:cat_follow_owner", function(self, player)
 	local timeout = 6
 	local attack_chance = 6
 
@@ -1434,7 +1431,7 @@ creatura.register_utility(modname .. ":animalia_cat_follow_owner", function(self
 	self:set_utility(func)
 end)
 
-creatura.register_utility(modname .. ":animalia_cat_play_with_owner", function(self)
+creatura.register_utility("animalia:cat_play_with_owner", function(self)
 	local timeout = 6
 	--local attack_chance = 6
 
@@ -1447,7 +1444,7 @@ creatura.register_utility(modname .. ":animalia_cat_play_with_owner", function(s
 		local item = owner:get_wielded_item()
 		local item_name = item and item:get_name()
 
-		if item_name ~= modname .. ":animalia_cat_toy" then return true, 5 end
+		if item_name ~= "animalia:cat_toy" then return true, 5 end
 
 		local pos, target_pos = mob.object:get_pos(), owner:get_pos()
 		if not pos or not target_pos then return true end
@@ -1487,7 +1484,7 @@ local function get_bug_pos(self)
 	return #food > 0 and food[1]
 end
 
-creatura.register_utility(modname .. ":animalia_frog_seek_bug", function(self)
+creatura.register_utility("animalia:frog_seek_bug", function(self)
 	local timeout = 12
 
 	local bug = get_bug_pos(self)
@@ -1538,7 +1535,7 @@ local function grow_crop(crop)
 	end
 end
 
-creatura.register_utility(modname .. ":animalia_opossum_seek_crop", function(self)
+creatura.register_utility("animalia:opossum_seek_crop", function(self)
 	local timeout = 12
 
 	local crop = animalia.find_crop(self)
@@ -1609,7 +1606,7 @@ local function take_food_from_chest(self, pos)
 	end
 end
 
-creatura.register_utility(modname .. ":animalia_rat_seek_chest", function(self)
+creatura.register_utility("animalia:rat_seek_chest", function(self)
 	local timeout = 12
 
 	local chest = find_chest(self)
@@ -1642,7 +1639,7 @@ end)
 
 -- Tamed --
 
-creatura.register_utility(modname .. ":animalia_tamed_idle", function(self)
+creatura.register_utility("animalia:tamed_idle", function(self)
 	local function func(mob)
 		if not mob.owner or mob.order ~= "stay" then return true end
 
@@ -1653,7 +1650,7 @@ creatura.register_utility(modname .. ":animalia_tamed_idle", function(self)
 	self:set_utility(func)
 end)
 
-creatura.register_utility(modname .. ":animalia_tamed_follow_owner", function(self, player)
+creatura.register_utility("animalia:tamed_follow_owner", function(self, player)
 	local function func(mob)
 		local owner = player or (mob.owner and minetest.get_player_by_name(mob.owner))
 		if not owner then return true end
@@ -1681,7 +1678,7 @@ end)
 animalia.mob_ai = {}
 
 animalia.mob_ai.basic_wander = {
-	utility = modname .. ":animalia_basic_wander",
+	utility = "animalia:basic_wander",
 	step_delay = 0.25,
 	get_score = function(self)
 		return 0.1, {self}
@@ -1689,7 +1686,7 @@ animalia.mob_ai.basic_wander = {
 }
 
 animalia.mob_ai.basic_flee = {
-	utility = modname .. ":animalia_basic_flee",
+	utility = "animalia:basic_flee",
 	get_score = function(self)
 		local puncher = self._puncher
 		if puncher
@@ -1702,7 +1699,7 @@ animalia.mob_ai.basic_flee = {
 }
 
 animalia.mob_ai.basic_breed = {
-	utility = modname .. ":animalia_basic_breed",
+	utility = "animalia:basic_breed",
 	get_score = function(self)
 		if self.breeding
 		and animalia.get_nearby_mate(self, self.name) then
@@ -1713,14 +1710,14 @@ animalia.mob_ai.basic_breed = {
 }
 
 animalia.mob_ai.basic_attack = {
-	utility = modname .. ":animalia_basic_attack",
+	utility = "animalia:basic_attack",
 	get_score = function(self)
 		return animalia.get_attack_score(self, self.attack_list)
 	end
 }
 
 animalia.mob_ai.basic_seek_crop = {
-	utility = modname .. ":animalia_basic_seek_crop",
+	utility = "animalia:basic_seek_crop",
 	step_delay = 0.25,
 	get_score = function(self)
 		if random(8) < 2 then
@@ -1731,7 +1728,7 @@ animalia.mob_ai.basic_seek_crop = {
 }
 
 animalia.mob_ai.basic_seek_food = {
-	utility = modname .. ":animalia_basic_seek_food",
+	utility = "animalia:basic_seek_food",
 	get_score = function(self)
 		if random(1) < 8 then
 			return 0.3, {self}
@@ -1743,7 +1740,7 @@ animalia.mob_ai.basic_seek_food = {
 -- Fly
 
 animalia.mob_ai.fly_wander = {
-	utility = modname .. ":animalia_fly_wander",
+	utility = "animalia:fly_wander",
 	step_delay = 0.25,
 	get_score = function(self)
 		return 0.1, {self}
@@ -1751,7 +1748,7 @@ animalia.mob_ai.fly_wander = {
 }
 
 animalia.mob_ai.fly_landing_wander = {
-	utility = modname .. ":animalia_fly_wander",
+	utility = "animalia:fly_wander",
 	get_score = function(self)
 		if self.is_landed then
 			local player = creatura.get_nearby_player(self)
@@ -1768,7 +1765,7 @@ animalia.mob_ai.fly_landing_wander = {
 }
 
 animalia.mob_ai.fly_seek_food = {
-	utility = modname .. ":animalia_fly_seek_food",
+	utility = "animalia:fly_seek_food",
 	get_score = function(self)
 		if random(8) < 2 then
 			return 0.3, {self}
@@ -1778,7 +1775,7 @@ animalia.mob_ai.fly_seek_food = {
 }
 
 animalia.mob_ai.fly_seek_land = {
-	utility = modname .. ":animalia_fly_seek_land",
+	utility = "animalia:fly_seek_land",
 	get_score = function(self)
 		if self.is_landed
 		and not self.touching_ground
@@ -1793,7 +1790,7 @@ animalia.mob_ai.fly_seek_land = {
 -- Swim
 
 animalia.mob_ai.swim_seek_land = {
-	utility = modname .. ":animalia_swim_seek_land",
+	utility = "animalia:swim_seek_land",
 	step_delay = 0.25,
 	get_score = function(self)
 		if self.in_liquid then
@@ -1804,7 +1801,7 @@ animalia.mob_ai.swim_seek_land = {
 }
 
 animalia.mob_ai.swim_wander = {
-	utility = modname .. ":animalia_swim_wander",
+	utility = "animalia:swim_wander",
 	step_delay = 0.25,
 	get_score = function(self)
 		return 0.1, {self}
@@ -1814,7 +1811,7 @@ animalia.mob_ai.swim_wander = {
 -- Tamed
 
 animalia.mob_ai.tamed_follow_owner = {
-	utility = modname .. ":animalia_tamed_follow_owner",
+	utility = "animalia:tamed_follow_owner",
 	get_score = function(self)
 		if self.owner
 		and self.order == "follow" then
@@ -1833,7 +1830,7 @@ animalia.mob_ai.tamed_follow_owner = {
 }
 
 animalia.mob_ai.tamed_stay = {
-	utility = modname .. ":animalia_basic_idle",
+	utility = "animalia:basic_idle",
 	step_delay = 0.25,
 	get_score = function(self)
 		local order = self.order or "wander"
@@ -1847,7 +1844,7 @@ animalia.mob_ai.tamed_stay = {
 -- Bat
 
 animalia.mob_ai.bat_seek_home = {
-	utility = modname .. ":animalia_fly_seek_home",
+	utility = "animalia:fly_seek_home",
 	get_score = function(self)
 		local pos = self.object:get_pos()
 		if not pos then return end
@@ -1865,7 +1862,7 @@ animalia.mob_ai.bat_seek_home = {
 -- Cat
 
 animalia.mob_ai.cat_seek_vessel = {
-	utility = modname .. ":animalia_cat_seek_vessel",
+	utility = "animalia:cat_seek_vessel",
 	step_delay = 0.25,
 	get_score = function(self)
 		if random(8) < 2 then
@@ -1876,7 +1873,7 @@ animalia.mob_ai.cat_seek_vessel = {
 }
 
 animalia.mob_ai.cat_follow_owner = {
-	utility = modname .. ":animalia_cat_follow_owner",
+	utility = "animalia:cat_follow_owner",
 	get_score = function(self)
 		local trust = (self.owner and self.trust[self.owner]) or 0
 
@@ -1896,7 +1893,7 @@ animalia.mob_ai.cat_follow_owner = {
 }
 
 animalia.mob_ai.cat_stay = {
-	utility = modname .. ":animalia_basic_idle",
+	utility = "animalia:basic_idle",
 	step_delay = 0.25,
 	get_score = function(self)
 		local trust = (self.owner and self.trust[self.owner]) or 0
@@ -1911,7 +1908,7 @@ animalia.mob_ai.cat_stay = {
 }
 
 animalia.mob_ai.cat_play_with_owner = {
-	utility = modname .. ":animalia_cat_play_with_owner",
+	utility = "animalia:cat_play_with_owner",
 	get_score = function(self)
 		local trust = (self.owner and self.trust[self.owner]) or 0
 
@@ -1927,14 +1924,14 @@ animalia.mob_ai.cat_play_with_owner = {
 -- Eagle
 
 animalia.mob_ai.eagle_attack = {
-	utility = modname .. ":animalia_eagle_attack",
+	utility = "animalia:eagle_attack",
 	get_score = function(self)
 		if random(12) > 1
-		and (self:get_utility() or "") ~= modname .. ":animalia_eagle_attack" then
+		and (self:get_utility() or "") ~= "animalia:eagle_attack" then
 			return 0
 		end
 
-		local target = self._target or creatura.get_nearby_object(self, {modname .. ":animalia_rat", modname .. ":animalia_song_bird"})
+		local target = self._target or creatura.get_nearby_object(self, {"animalia:rat", "animalia:song_bird"})
 		local tgt_pos = target and target:get_pos()
 		if tgt_pos then
 			return 0.4, {self, target}
@@ -1946,7 +1943,7 @@ animalia.mob_ai.eagle_attack = {
 -- Fox
 
 animalia.mob_ai.fox_flee = {
-	utility = modname .. ":animalia_basic_flee",
+	utility = "animalia:basic_flee",
 	get_score = function(self)
 		local target = self._puncher or creatura.get_nearby_player(self)
 		local pos, target_pos = self.object:get_pos(), target and target:get_pos()
@@ -1965,7 +1962,7 @@ animalia.mob_ai.fox_flee = {
 -- Frog
 
 animalia.mob_ai.frog_breed = {
-	utility = modname .. ":animalia_basic_breed",
+	utility = "animalia:basic_breed",
 	step_delay = 0.25,
 	get_score = function(self)
 		if self.breeding
@@ -1978,7 +1975,7 @@ animalia.mob_ai.frog_breed = {
 }
 
 animalia.mob_ai.frog_flop = {
-	utility = modname .. ":animalia_basic_idle",
+	utility = "animalia:basic_idle",
 	step_delay = 0.25,
 	get_score = function(self)
 		if not self.in_liquid
@@ -1990,7 +1987,7 @@ animalia.mob_ai.frog_flop = {
 }
 
 animalia.mob_ai.frog_seek_water = {
-	utility = modname .. ":animalia_basic_seek_pos",
+	utility = "animalia:basic_seek_pos",
 	get_score = function(self)
 		if self.in_liquid then return 0 end
 
@@ -2013,7 +2010,7 @@ animalia.mob_ai.frog_seek_water = {
 }
 
 animalia.mob_ai.frog_seek_bug = {
-	utility = modname .. ":animalia_frog_seek_bug",
+	utility = "animalia:frog_seek_bug",
 	get_score = function(self)
 		if random(8) < 2 then
 			return 0.3, {self}
@@ -2025,7 +2022,7 @@ animalia.mob_ai.frog_seek_bug = {
 -- Opossum
 
 animalia.mob_ai.opossum_feint = {
-	utility = modname .. ":animalia_basic_idle",
+	utility = "animalia:basic_idle",
 	get_score = function(self)
 		local target = self._puncher or creatura.get_nearby_player(self)
 		local pos, tgt_pos = self.object:get_pos(), target and target:get_pos()
@@ -2044,7 +2041,7 @@ animalia.mob_ai.opossum_feint = {
 }
 
 animalia.mob_ai.opossum_seek_crop = {
-	utility = modname .. ":animalia_opossum_seek_crop",
+	utility = "animalia:opossum_seek_crop",
 	step_delay = 0.25,
 	get_score = function(self)
 		if random(8) < 2 then
@@ -2057,7 +2054,7 @@ animalia.mob_ai.opossum_seek_crop = {
 -- Rat
 
 animalia.mob_ai.rat_seek_chest = {
-	utility = modname .. ":animalia_rat_seek_chest",
+	utility = "animalia:rat_seek_chest",
 	step_delay = 0.25,
 	get_score = function(self)
 		if random(8) < 2 then

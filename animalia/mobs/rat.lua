@@ -1,11 +1,8 @@
-local modname = minetest.get_current_modname()
-local path = minetest.get_modpath(modname)
-
 ----------
 -- Mice --
 ----------
 
-creatura.register_mob(modname .. ":animalia_rat", {
+creatura.register_mob("animalia:rat", {
 	-- Engine Props
 	visual_size = {x = 10, y = 10},
 	mesh = "animalia_rat.b3d",
@@ -34,7 +31,7 @@ creatura.register_mob(modname .. ":animalia_rat", {
 		eat = {range = {x = 111, y = 119}, speed = 20, frame_blend = 0.1, loop = false}
 	},
 	drops = {
-		{name = modname .. ":animalia_rat_raw", min = 1, max = 1, chance = 1}
+		{name = "animalia:rat_raw", min = 1, max = 1, chance = 1}
 	},
 
 	-- Behavior Parameters
@@ -65,8 +62,8 @@ creatura.register_mob(modname .. ":animalia_rat", {
 	end,
 
 	death_func = function(self)
-		if self:get_utility() ~= modname .. ":animalia_die" then
-			self:initiate_utility(modname .. ":animalia_die", self)
+		if self:get_utility() ~= "animalia:die" then
+			self:initiate_utility("animalia:die", self)
 		end
 	end,
 
@@ -79,7 +76,7 @@ creatura.register_mob(modname .. ":animalia_rat", {
 	on_punch = animalia.punch
 })
 
-creatura.register_spawn_item(modname .. ":animalia_rat", {
+creatura.register_spawn_item("animalia:rat", {
 	col1 = "605a55",
 	col2 = "ff936f"
 })

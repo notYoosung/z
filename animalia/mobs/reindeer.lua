@@ -1,11 +1,8 @@
-local modname = minetest.get_current_modname()
-local path = minetest.get_modpath(modname)
-
 --------------
 -- Reindeer --
 --------------
 
-creatura.register_mob(modname .. ":animalia_reindeer", {
+creatura.register_mob("animalia:reindeer", {
 	-- Engine Props
 	visual_size = {x = 10, y = 10},
 	mesh = "animalia_reindeer.b3d",
@@ -50,8 +47,8 @@ creatura.register_mob(modname .. ":animalia_reindeer", {
 	},
 	follow = animalia.food_wheat,
 	drops = {
-		{name = modname .. ":animalia_venison_raw", min = 1, max = 3, chance = 1},
-		{name = modname .. ":animalia_leather", min = 1, max = 3, chance = 2}
+		{name = "animalia:venison_raw", min = 1, max = 3, chance = 1},
+		{name = "animalia:leather", min = 1, max = 3, chance = 2}
 	},
 
 	-- Behavior Parameters
@@ -115,7 +112,7 @@ creatura.register_mob(modname .. ":animalia_reindeer", {
 	on_punch = animalia.punch
 })
 
-creatura.register_spawn_item(modname .. ":animalia_reindeer", {
+creatura.register_spawn_item("animalia:reindeer", {
 	col1 = "413022",
 	col2 = "d5c0a3"
 })

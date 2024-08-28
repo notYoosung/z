@@ -1,11 +1,8 @@
-local modname = minetest.get_current_modname()
-local path = minetest.get_modpath(modname)
-
 ----------
 -- Fish --
 ----------
 
-creatura.register_mob(modname .. ":animalia_tropical_fish", {
+creatura.register_mob("animalia:tropical_fish", {
 	-- Engine Props
 	visual_size = {x = 10, y = 10},
 	meshes = {
@@ -70,8 +67,8 @@ creatura.register_mob(modname .. ":animalia_tropical_fish", {
 	end,
 
 	death_func = function(self)
-		if self:get_utility() ~= modname .. ":animalia_die" then
-			self:initiate_utility(modname .. ":animalia_die", self)
+		if self:get_utility() ~= "animalia:die" then
+			self:initiate_utility("animalia:die", self)
 		end
 	end,
 
@@ -84,11 +81,11 @@ creatura.register_mob(modname .. ":animalia_tropical_fish", {
 	on_punch = animalia.punch
 })
 
-creatura.register_spawn_item(modname .. ":animalia_tropical_fish", {
+creatura.register_spawn_item("animalia:tropical_fish", {
 	col1 = "e28821",
 	col2 = "f6e5d2"
 })
 
-animalia.alias_mob(modname .. ":animalia_clownfish", modname .. ":animalia_tropical_fish")
-animalia.alias_mob(modname .. ":animalia_blue_tang", modname .. ":animalia_tropical_fish")
-animalia.alias_mob(modname .. ":animalia_angelfish", modname .. ":animalia_tropical_fish")
+animalia.alias_mob("animalia:clownfish", "animalia:tropical_fish")
+animalia.alias_mob("animalia:blue_tang", "animalia:tropical_fish")
+animalia.alias_mob("animalia:angelfish", "animalia:tropical_fish")

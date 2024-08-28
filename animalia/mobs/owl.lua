@@ -1,6 +1,3 @@
-local modname = minetest.get_current_modname()
-local path = minetest.get_modpath(modname)
-
 ---------
 -- Owl --
 ---------
@@ -33,7 +30,7 @@ local function get_home_pos(self)
 	end
 end
 
-creatura.register_mob(modname .. ":animalia_owl", {
+creatura.register_mob("animalia:owl", {
 	-- Engine Props
 	visual_size = {x = 10, y = 10},
 	mesh = "animalia_owl.b3d",
@@ -62,9 +59,9 @@ creatura.register_mob(modname .. ":animalia_owl", {
 		fly_punch = {range = {x = 131, y = 149}, speed = 20, frame_blend = 0.1, loop = false},
 		eat = {range = {x = 161, y = 179}, speed = 20, frame_blend = 0.1, loop = false}
 	},
-	follow = {modname .. ":animalia_rat_raw"},
+	follow = {"animalia:rat_raw"},
 	drops = {
-		{name = modname .. ":animalia_feather", min = 1, max = 2, chance = 1}
+		{name = "animalia:feather", min = 1, max = 2, chance = 1}
 	},
 
 	-- Animalia Props
@@ -136,14 +133,14 @@ creatura.register_mob(modname .. ":animalia_owl", {
 	end,
 
 	death_func = function(self)
-		if self:get_utility() ~= modname .. ":animalia_die" then
-			self:initiate_utility(modname .. ":animalia_die", self)
+		if self:get_utility() ~= "animalia:die" then
+			self:initiate_utility("animalia:die", self)
 		end
 	end,
 
 	deactivate_func = function(self)
 		if self:get_utility()
-		and self:get_utility() == modname .. ":animalia_fly_to_roost" then
+		and self:get_utility() == "animalia:fly_to_roost" then
 			local pos = self.home_position
 			local node = minetest.get_node_or_nil(pos)
 			if node
@@ -166,7 +163,7 @@ creatura.register_mob(modname .. ":animalia_owl", {
 	on_punch = animalia.punch
 })
 
-creatura.register_spawn_item(modname .. ":animalia_owl", {
+creatura.register_spawn_item("animalia:owl", {
 	col1 = "412918",
 	col2 = "735b46"
 })

@@ -1,6 +1,3 @@
-local modname = minetest.get_current_modname()
-local path = minetest.get_modpath(modname)
-
 ---------
 -- Bat --
 ---------
@@ -33,7 +30,7 @@ local function get_home_pos(self)
 	end
 end
 
-creatura.register_mob(modname .. ":animalia_bat", {
+creatura.register_mob("animalia:bat", {
 	-- Engine Props
 	visual_size = {x = 10, y = 10},
 	mesh = "animalia_bat.b3d",
@@ -149,7 +146,7 @@ creatura.register_mob(modname .. ":animalia_bat", {
 					local under = {x = center.x, y = center.y - 1, z = center.z}
 					if creatura.get_node_def(under).walkable
 					and not minetest.is_protected(center, "") then
-						minetest.set_node(center, {name = modname .. ":animalia_guano"})
+						minetest.set_node(center, {name = "animalia:guano"})
 					end
 				end
 			end
@@ -157,8 +154,8 @@ creatura.register_mob(modname .. ":animalia_bat", {
 	end,
 
 	death_func = function(self)
-		if self:get_utility() ~= modname .. ":animalia_die" then
-			self:initiate_utility(modname .. ":animalia_die", self)
+		if self:get_utility() ~= "animalia:die" then
+			self:initiate_utility("animalia:die", self)
 		end
 	end,
 
@@ -175,7 +172,7 @@ creatura.register_mob(modname .. ":animalia_bat", {
 	on_punch = animalia.punch
 })
 
-creatura.register_spawn_item(modname .. ":animalia_bat", {
+creatura.register_spawn_item("animalia:bat", {
 	col1 = "392517",
 	col2 = "321b0b"
 })

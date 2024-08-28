@@ -1,6 +1,3 @@
-local modname = minetest.get_current_modname()
-local path = minetest.get_modpath(modname)
-
 ----------
 -- Wolf --
 ----------
@@ -8,19 +5,19 @@ local path = minetest.get_modpath(modname)
 
 
 local follow = {
-	modname .. ":animalia_mutton_raw",
-	modname .. ":animalia_beef_raw",
-	modname .. ":animalia_porkchop_raw",
-	modname .. ":animalia_poultry_raw"
+	"animalia:mutton_raw",
+	"animalia:beef_raw",
+	"animalia:porkchop_raw",
+	"animalia:poultry_raw"
 }
 
 if minetest.registered_items["bonemeal:bone"] then
 	follow = {
 		"bonemeal:bone",
-		modname .. ":animalia_beef_raw",
-		modname .. ":animalia_porkchop_raw",
-		modname .. ":animalia_mutton_raw",
-		modname .. ":animalia_poultry_raw"
+		"animalia:beef_raw",
+		"animalia:porkchop_raw",
+		"animalia:mutton_raw",
+		"animalia:poultry_raw"
 	}
 end
 
@@ -33,7 +30,7 @@ local function is_value_in_table(tbl, val)
 	return false
 end
 
-creatura.register_mob(modname .. ":animalia_wolf", {
+creatura.register_mob("animalia:wolf", {
 	-- Engine Props
 	visual_size = {x = 10, y = 10},
 	mesh = "animalia_wolf.b3d",
@@ -114,8 +111,8 @@ creatura.register_mob(modname .. ":animalia_wolf", {
 	end,
 
 	death_func = function(self)
-		if self:get_utility() ~= modname .. ":animalia_die" then
-			self:initiate_utility(modname .. ":animalia_die", self)
+		if self:get_utility() ~= "animalia:die" then
+			self:initiate_utility("animalia:die", self)
 		end
 	end,
 
@@ -153,12 +150,12 @@ creatura.register_mob(modname .. ":animalia_wolf", {
 			if order == "wander" then
 				minetest.chat_send_player(name, "Wolf is following")
 				self.order = "follow"
-				self:initiate_utility(modname .. ":animalia_follow_player", self, clicker, true)
+				self:initiate_utility("animalia:follow_player", self, clicker, true)
 				self:set_utility_score(0.7)
 			elseif order == "follow" then
 				minetest.chat_send_player(name, "Wolf is sitting")
 				self.order = "sit"
-				self:initiate_utility(modname .. ":animalia_stay", self)
+				self:initiate_utility("animalia:stay", self)
 				self:set_utility_score(0.5)
 			else
 				minetest.chat_send_player(name, "Wolf is wandering")
@@ -192,7 +189,7 @@ creatura.register_mob(modname .. ":animalia_wolf", {
 	end,
 })
 
-creatura.register_spawn_item(modname .. ":animalia_wolf", {
+creatura.register_spawn_item("animalia:wolf", {
 	col1 = "a19678",
 	col2 = "231b13"
 })

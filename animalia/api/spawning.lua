@@ -1,6 +1,3 @@
-local modname = minetest.get_current_modname()
-local path = minetest.get_modpath(modname)
-
 --------------
 -- Spawning --
 --------------
@@ -47,7 +44,7 @@ minetest.register_on_mods_loaded(function()
 	insert_all(frog_biomes, animalia.registered_biome_groups["tropical"].biomes)
 end)
 
-creatura.register_abm_spawn(modname .. ":animalia_grizzly_bear", {
+creatura.register_abm_spawn("animalia:grizzly_bear", {
 	chance = predator_spawn_chance,
 	min_height = -1,
 	max_height = 1024,
@@ -57,7 +54,7 @@ creatura.register_abm_spawn(modname .. ":animalia_grizzly_bear", {
 	nodes = {"group:sand"},
 })
 
-creatura.register_abm_spawn(modname .. ":animalia_chicken", {
+creatura.register_abm_spawn("animalia:chicken", {
 	chance = common_spawn_chance,
 	spawn_active = true,
 	min_height = 0,
@@ -69,7 +66,7 @@ creatura.register_abm_spawn(modname .. ":animalia_chicken", {
 	nodes = {"group:soil"},
 })
 
-creatura.register_abm_spawn(modname .. ":animalia_cat", {
+creatura.register_abm_spawn("animalia:cat", {
 	chance = common_spawn_chance,
 	min_height = 0,
 	max_height = 1024,
@@ -79,7 +76,7 @@ creatura.register_abm_spawn(modname .. ":animalia_cat", {
 	neighbors = {"group:wood"}
 })
 
-creatura.register_abm_spawn(modname .. ":animalia_cow", {
+creatura.register_abm_spawn("animalia:cow", {
 	chance = common_spawn_chance,
 	spawn_active = true,
 	min_height = 0,
@@ -92,7 +89,7 @@ creatura.register_abm_spawn(modname .. ":animalia_cow", {
 	neighbors = {"air", "group:grass", "group:flora"}
 })
 
-creatura.register_abm_spawn(modname .. ":animalia_fox", {
+creatura.register_abm_spawn("animalia:fox", {
 	chance = predator_spawn_chance,
 	min_height = 0,
 	max_height = 1024,
@@ -102,7 +99,7 @@ creatura.register_abm_spawn(modname .. ":animalia_fox", {
 	nodes = {"group:soil"},
 })
 
-creatura.register_abm_spawn(modname .. ":animalia_horse", {
+creatura.register_abm_spawn("animalia:horse", {
 	chance = common_spawn_chance,
 	spawn_active = true,
 	min_height = 0,
@@ -115,7 +112,7 @@ creatura.register_abm_spawn(modname .. ":animalia_horse", {
 	neighbors = {"air", "group:grass", "group:flora"}
 })
 
-creatura.register_abm_spawn(modname .. ":animalia_rat", {
+creatura.register_abm_spawn("animalia:rat", {
 	chance = pest_spawn_chance,
 	interval = 60,
 	min_height = -1,
@@ -126,7 +123,7 @@ creatura.register_abm_spawn(modname .. ":animalia_rat", {
 	nodes = {"group:crop"}
 })
 
-creatura.register_abm_spawn(modname .. ":animalia_owl", {
+creatura.register_abm_spawn("animalia:owl", {
 	chance = predator_spawn_chance,
 	interval = 60,
 	min_height = 3,
@@ -137,7 +134,7 @@ creatura.register_abm_spawn(modname .. ":animalia_owl", {
 	nodes = {"group:leaves"}
 })
 
-creatura.register_abm_spawn(modname .. ":animalia_opossum", {
+creatura.register_abm_spawn("animalia:opossum", {
 	chance = predator_spawn_chance,
 	interval = 60,
 	min_height = -1,
@@ -148,7 +145,7 @@ creatura.register_abm_spawn(modname .. ":animalia_opossum", {
 	nodes = {"group:soil", "group:leaves"}
 })
 
-creatura.register_abm_spawn(modname .. ":animalia_pig", {
+creatura.register_abm_spawn("animalia:pig", {
 	chance = common_spawn_chance,
 	spawn_active = true,
 	min_height = 0,
@@ -160,7 +157,7 @@ creatura.register_abm_spawn(modname .. ":animalia_pig", {
 	nodes = {"group:soil"},
 })
 
-creatura.register_abm_spawn(modname .. ":animalia_reindeer", {
+creatura.register_abm_spawn("animalia:reindeer", {
 	chance = common_spawn_chance,
 	spawn_active = true,
 	min_height = 0,
@@ -172,7 +169,7 @@ creatura.register_abm_spawn(modname .. ":animalia_reindeer", {
 	nodes = {"group:soil"},
 })
 
-creatura.register_abm_spawn(modname .. ":animalia_sheep", {
+creatura.register_abm_spawn("animalia:sheep", {
 	chance = common_spawn_chance,
 	spawn_active = true,
 	min_height = 0,
@@ -185,7 +182,7 @@ creatura.register_abm_spawn(modname .. ":animalia_sheep", {
 	neighbors = {"air", "group:grass", "group:flora"}
 })
 
-creatura.register_abm_spawn(modname .. ":animalia_turkey", {
+creatura.register_abm_spawn("animalia:turkey", {
 	chance = common_spawn_chance,
 	spawn_active = true,
 	min_height = 0,
@@ -197,7 +194,7 @@ creatura.register_abm_spawn(modname .. ":animalia_turkey", {
 	nodes = {"group:soil"},
 })
 
-creatura.register_abm_spawn(modname .. ":animalia_wolf", {
+creatura.register_abm_spawn("animalia:wolf", {
 	chance = predator_spawn_chance,
 	min_height = 0,
 	max_height = 1024,
@@ -209,7 +206,7 @@ creatura.register_abm_spawn(modname .. ":animalia_wolf", {
 
 -- Ambient Spawning
 
-creatura.register_abm_spawn(modname .. ":animalia_bat", {
+creatura.register_abm_spawn("animalia:bat", {
 	chance = ambient_spawn_chance,
 	interval = 30,
 	min_light = 0,
@@ -221,7 +218,7 @@ creatura.register_abm_spawn(modname .. ":animalia_bat", {
 	nodes = {"group:stone"}
 })
 
-creatura.register_abm_spawn(modname .. ":animalia_song_bird", {
+creatura.register_abm_spawn("animalia:song_bird", {
 	chance = ambient_spawn_chance,
 	interval = 60,
 	min_light = 0,
@@ -230,20 +227,20 @@ creatura.register_abm_spawn(modname .. ":animalia_song_bird", {
 	min_group = 6,
 	max_group = 12,
 	spawn_cap = 6,
-	nodes = {"group:leaves", modname .. ":animalia_nest_song_bird"},
+	nodes = {"group:leaves", "animalia:nest_song_bird"},
 	neighbors = {"group:leaves"}
 })
 
-creatura.register_on_spawn(modname .. ":animalia_song_bird", function(self, pos)
+creatura.register_on_spawn("animalia:song_bird", function(self, pos)
 	local nests = minetest.find_nodes_in_area_under_air(
 		{x = pos.x - 16, y = pos.y - 16, z = pos.z - 16},
 		{x = pos.x + 16, y = pos.y + 16, z = pos.z + 16},
-		modname .. ":animalia_nest_song_bird"
+		"animalia:nest_song_bird"
 	)
 	if nests[1] then return end
 	local node = minetest.get_node(pos)
 	if node.name == "air" then
-		minetest.set_node(pos, {name = modname .. ":animalia_nest_song_bird"})
+		minetest.set_node(pos, {name = "animalia:nest_song_bird"})
 	else
 		local nodes = minetest.find_nodes_in_area_under_air(
 			{x = pos.x - 3, y = pos.y - 3, z = pos.z - 3},
@@ -252,12 +249,12 @@ creatura.register_on_spawn(modname .. ":animalia_song_bird", function(self, pos)
 		)
 		if nodes[1] then
 			pos = nodes[1]
-			minetest.set_node({x = pos.x, y = pos.y + 1, z = pos.z}, {name = modname .. ":animalia_nest_song_bird"})
+			minetest.set_node({x = pos.x, y = pos.y + 1, z = pos.z}, {name = "animalia:nest_song_bird"})
 		end
 	end
 end)
 
-creatura.register_abm_spawn(modname .. ":animalia_frog", {
+creatura.register_abm_spawn("animalia:frog", {
 	chance = ambient_spawn_chance * 0.75,
 	interval = 60,
 	min_light = 0,
@@ -269,7 +266,7 @@ creatura.register_abm_spawn(modname .. ":animalia_frog", {
 	nodes = {"group:soil"}
 })
 
-creatura.register_on_spawn(modname .. ":animalia_frog", function(self, pos)
+creatura.register_on_spawn("animalia:frog", function(self, pos)
 	local biome_data = minetest.get_biome_data(pos)
 	local biome_name = minetest.get_biome_name(biome_data.biome)
 
@@ -289,7 +286,7 @@ creatura.register_on_spawn(modname .. ":animalia_frog", function(self, pos)
 	activate(self)
 end)
 
-creatura.register_abm_spawn(modname .. ":animalia_tropical_fish", {
+creatura.register_abm_spawn("animalia:tropical_fish", {
 	chance = ambient_spawn_chance,
 	min_height = -128,
 	max_height = 1,
@@ -301,7 +298,7 @@ creatura.register_abm_spawn(modname .. ":animalia_tropical_fish", {
 
 -- World Gen Spawning
 
-minetest.register_node(modname .. ":animalia_spawner", {
+minetest.register_node("animalia:spawner", {
 	description = "???",
 	drawtype = "airlike",
 	walkable = false,
@@ -311,12 +308,12 @@ minetest.register_node(modname .. ":animalia_spawner", {
 })
 
 minetest.register_decoration({
-	name = modname .. ":animalia_world_gen_spawning",
+	name = "animalia:world_gen_spawning",
 	deco_type = "simple",
 	place_on = {"group:stone", "group:sand", "group:soil"},
 	sidelen = 1,
 	fill_ratio = 0.0001, -- One node per chunk
-	decoration = modname .. ":animalia_spawner"
+	decoration = "animalia:spawner"
 })
 
 local function do_on_spawn(pos, obj)
@@ -331,10 +328,10 @@ local function do_on_spawn(pos, obj)
 		end
 	end
 end
-
+--[[
 minetest.register_abm({
 	label = "[animalia] World Gen Spawning",
-	nodenames = {modname .. ":animalia_spawner"},
+	nodenames = {"animalia:spawner"},
 	interval = 10, -- TODO: Set this to 1 if world is singleplayer and just started
 	chance = 16,
 
@@ -389,3 +386,4 @@ minetest.register_abm({
 		end
 	end
 })
+]]

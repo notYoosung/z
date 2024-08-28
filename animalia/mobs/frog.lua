@@ -1,6 +1,3 @@
-local modname = minetest.get_current_modname()
-local path = minetest.get_modpath(modname)
-
 ----------
 -- Frog --
 ----------
@@ -103,12 +100,12 @@ local follow = {
 		"butterflies:butterfly_red"
 	},
 	{
-		modname .. ":animalia_rat_raw"
+		"animalia:rat_raw"
 	},
 	{}
 }
 
-creatura.register_mob(modname .. ":animalia_frog", {
+creatura.register_mob("animalia:frog", {
 	-- Engine Props
 	visual_size = {x = 10, y = 10},
 	meshes = {
@@ -225,8 +222,8 @@ creatura.register_mob(modname .. ":animalia_frog", {
 	end,
 
 	death_func = function(self)
-		if self:get_utility() ~= modname .. ":animalia_die" then
-			self:initiate_utility(modname .. ":animalia_die", self)
+		if self:get_utility() ~= "animalia:die" then
+			self:initiate_utility("animalia:die", self)
 		end
 	end,
 
@@ -254,7 +251,7 @@ creatura.register_mob(modname .. ":animalia_frog", {
 	end
 })
 
-creatura.register_spawn_item(modname .. ":animalia_frog", {
+creatura.register_spawn_item("animalia:frog", {
 	col1 = "67942e",
 	col2 = "294811"
 })

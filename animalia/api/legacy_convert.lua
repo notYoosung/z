@@ -1,6 +1,3 @@
-local modname = minetest.get_current_modname()
-local path = minetest.get_modpath(modname)
-
 --------------------------------------
 -- Convert Better Fauna to Animalia --
 --------------------------------------
@@ -12,7 +9,7 @@ for i = 1, #animalia.mobs do
         on_activate = mob_core.on_activate
     })
     minetest.register_alias_force("better_fauna:spawn_" .. new_mob:split(":")[2],
-		modname .. ":animalia_spawn_" .. new_mob:split(":")[2])
+		"animalia:spawn_" .. new_mob:split(":")[2])
 end
 
 minetest.register_globalstep(function(dtime)
@@ -24,12 +21,12 @@ minetest.register_globalstep(function(dtime)
 			if not pos then return end
             if mob.name:find("lasso_fence_ent") then
                 if pos then
-                    minetest.add_entity(pos, modname .. ":animalia_lasso_fence_ent")
+                    minetest.add_entity(pos, "animalia:lasso_fence_ent")
                 end
                 mob.object:remove()
             elseif mob.name:find("lasso_visual") then
                 if pos then
-                    minetest.add_entity(pos, modname .. ":animalia_lasso_visual")
+                    minetest.add_entity(pos, "animalia:lasso_visual")
                 end
                 mob.object:remove()
             end
@@ -61,25 +58,25 @@ end)
 
 -- Tools
 
-minetest.register_alias_force("better_fauna:net", modname .. ":animalia_net")
-minetest.register_alias_force("better_fauna:lasso", modname .. ":animalia_lasso")
-minetest.register_alias_force("better_fauna:cat_toy", modname .. ":animalia_cat_toy")
-minetest.register_alias_force("better_fauna:saddle", modname .. ":animalia_saddle")
-minetest.register_alias_force("better_fauna:shears", modname .. ":animalia_shears")
+minetest.register_alias_force("better_fauna:net", "animalia:net")
+minetest.register_alias_force("better_fauna:lasso", "animalia:lasso")
+minetest.register_alias_force("better_fauna:cat_toy", "animalia:cat_toy")
+minetest.register_alias_force("better_fauna:saddle", "animalia:saddle")
+minetest.register_alias_force("better_fauna:shears", "animalia:shears")
 
 -- Drops
 
-minetest.register_alias_force("better_fauna:beef_raw", modname .. ":animalia_beef_raw")
-minetest.register_alias_force("better_fauna:beef_cooked", modname .. ":animalia_beef_cooked")
-minetest.register_alias_force("better_fauna:bucket_milk", modname .. ":animalia_bucket_milk")
-minetest.register_alias_force("better_fauna:leather", modname .. ":animalia_leather")
-minetest.register_alias_force("better_fauna:chicken_egg", modname .. ":animalia_chicken_egg")
-minetest.register_alias_force("better_fauna:chicken_raw", modname .. ":animalia_poultry_raw")
-minetest.register_alias_force("better_fauna:chicken_cooked", modname .. ":animalia_poultry_cooked")
-minetest.register_alias_force("better_fauna:feather", modname .. ":animalia_feather")
-minetest.register_alias_force("better_fauna:mutton_raw", modname .. ":animalia_mutton_raw")
-minetest.register_alias_force("better_fauna:mutton_cooked", modname .. ":animalia_mutton_cooked")
-minetest.register_alias_force("better_fauna:porkchop_raw", modname .. ":animalia_porkchop_raw")
-minetest.register_alias_force("better_fauna:porkchop_cooked", modname .. ":animalia_porkchop_cooked")
-minetest.register_alias_force("better_fauna:turkey_raw", modname .. ":animalia_poultry_raw")
-minetest.register_alias_force("better_fauna:turkey_cooked", modname .. ":animalia_poultry_cooked")
+minetest.register_alias_force("better_fauna:beef_raw", "animalia:beef_raw")
+minetest.register_alias_force("better_fauna:beef_cooked", "animalia:beef_cooked")
+minetest.register_alias_force("better_fauna:bucket_milk", "animalia:bucket_milk")
+minetest.register_alias_force("better_fauna:leather", "animalia:leather")
+minetest.register_alias_force("better_fauna:chicken_egg", "animalia:chicken_egg")
+minetest.register_alias_force("better_fauna:chicken_raw", "animalia:poultry_raw")
+minetest.register_alias_force("better_fauna:chicken_cooked", "animalia:poultry_cooked")
+minetest.register_alias_force("better_fauna:feather", "animalia:feather")
+minetest.register_alias_force("better_fauna:mutton_raw", "animalia:mutton_raw")
+minetest.register_alias_force("better_fauna:mutton_cooked", "animalia:mutton_cooked")
+minetest.register_alias_force("better_fauna:porkchop_raw", "animalia:porkchop_raw")
+minetest.register_alias_force("better_fauna:porkchop_cooked", "animalia:porkchop_cooked")
+minetest.register_alias_force("better_fauna:turkey_raw", "animalia:poultry_raw")
+minetest.register_alias_force("better_fauna:turkey_cooked", "animalia:poultry_cooked")

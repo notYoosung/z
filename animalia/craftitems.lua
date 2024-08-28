@@ -1,6 +1,3 @@
-local modname = minetest.get_current_modname()
-local path = minetest.get_modpath(modname)
-
 ----------------
 -- Craftitems --
 ----------------
@@ -159,19 +156,19 @@ end
 -- Drops --
 -----------
 
-minetest.register_craftitem(modname .. ":animalia_leather", {
+minetest.register_craftitem("animalia:leather", {
 	description = "Leather",
 	inventory_image = "animalia_leather.png",
 	groups = {flammable = 2, leather = 1},
 })
 
-minetest.register_craftitem(modname .. ":animalia_feather", {
+minetest.register_craftitem("animalia:feather", {
 	description = "Feather",
 	inventory_image = "animalia_feather.png",
 	groups = {flammable = 2, feather = 1},
 })
 
-minetest.register_craftitem(modname .. ":animalia_pelt_bear", {
+minetest.register_craftitem("animalia:pelt_bear", {
 	description = "Bear Pelt",
 	inventory_image = "animalia_pelt_bear.png",
 	groups = {flammable = 2, pelt = 1},
@@ -179,14 +176,14 @@ minetest.register_craftitem(modname .. ":animalia_pelt_bear", {
 
 -- Meat --
 
-minetest.register_craftitem(modname .. ":animalia_beef_raw", {
+minetest.register_craftitem("animalia:beef_raw", {
 	description = "Raw Beef",
 	inventory_image = "animalia_beef_raw.png",
 	on_use = minetest.item_eat(1),
 	groups = {flammable = 2, meat = 1, food_meat = 1},
 })
 
-minetest.register_craftitem(modname .. ":animalia_beef_cooked", {
+minetest.register_craftitem("animalia:beef_cooked", {
 	description = "Steak",
 	inventory_image = "animalia_beef_cooked.png",
 	on_use = minetest.item_eat(8),
@@ -195,18 +192,18 @@ minetest.register_craftitem(modname .. ":animalia_beef_cooked", {
 
 minetest.register_craft({
 	type  =  "cooking",
-	recipe  = modname .. ":animalia_beef_raw",
-	output = modname .. ":animalia_beef_cooked",
+	recipe  = "animalia:beef_raw",
+	output = "animalia:beef_cooked",
 })
 
-minetest.register_craftitem(modname .. ":animalia_mutton_raw", {
+minetest.register_craftitem("animalia:mutton_raw", {
 	description = "Raw Mutton",
 	inventory_image = "animalia_mutton_raw.png",
 	on_use = minetest.item_eat(1),
 	groups = {flammable = 2, meat = 1, food_meat = 1},
 })
 
-minetest.register_craftitem(modname .. ":animalia_mutton_cooked", {
+minetest.register_craftitem("animalia:mutton_cooked", {
 	description = "Cooked Mutton",
 	inventory_image = "animalia_mutton_cooked.png",
 	on_use = minetest.item_eat(6),
@@ -215,18 +212,18 @@ minetest.register_craftitem(modname .. ":animalia_mutton_cooked", {
 
 minetest.register_craft({
 	type  =  "cooking",
-	recipe  = modname .. ":animalia_mutton_raw",
-	output = modname .. ":animalia_mutton_cooked",
+	recipe  = "animalia:mutton_raw",
+	output = "animalia:mutton_cooked",
 })
 
-minetest.register_craftitem(modname .. ":animalia_rat_raw", {
+minetest.register_craftitem("animalia:rat_raw", {
 	description = "Raw Rat",
 	inventory_image = "animalia_rat_raw.png",
 	on_use = minetest.item_eat(1),
 	groups = {flammable = 2, meat = 1, food_meat = 1},
 })
 
-minetest.register_craftitem(modname .. ":animalia_rat_cooked", {
+minetest.register_craftitem("animalia:rat_cooked", {
 	description = "Cooked Rat",
 	inventory_image = "animalia_rat_cooked.png",
 	on_use = minetest.item_eat(2),
@@ -235,18 +232,18 @@ minetest.register_craftitem(modname .. ":animalia_rat_cooked", {
 
 minetest.register_craft({
 	type  =  "cooking",
-	recipe  = modname .. ":animalia_rat_raw",
-	output = modname .. ":animalia_rat_cooked",
+	recipe  = "animalia:rat_raw",
+	output = "animalia:rat_cooked",
 })
 
-minetest.register_craftitem(modname .. ":animalia_porkchop_raw", {
+minetest.register_craftitem("animalia:porkchop_raw", {
 	description = "Raw Porkchop",
 	inventory_image = "animalia_porkchop_raw.png",
 	on_use = minetest.item_eat(1),
 	groups = {flammable = 2, meat = 1, food_meat = 1},
 })
 
-minetest.register_craftitem(modname .. ":animalia_porkchop_cooked", {
+minetest.register_craftitem("animalia:porkchop_cooked", {
 	description = "Cooked Porkchop",
 	inventory_image = "animalia_porkchop_cooked.png",
 	on_use = minetest.item_eat(7),
@@ -255,18 +252,18 @@ minetest.register_craftitem(modname .. ":animalia_porkchop_cooked", {
 
 minetest.register_craft({
 	type  =  "cooking",
-	recipe  = modname .. ":animalia_porkchop_raw",
-	output = modname .. ":animalia_porkchop_cooked",
+	recipe  = "animalia:porkchop_raw",
+	output = "animalia:porkchop_cooked",
 })
 
-minetest.register_craftitem(modname .. ":animalia_poultry_raw", {
+minetest.register_craftitem("animalia:poultry_raw", {
 	description = "Raw Poultry",
 	inventory_image = "animalia_poultry_raw.png",
 	on_use = minetest.item_eat(1),
 	groups = {flammable = 2, meat = 1, food_meat = 1},
 })
 
-minetest.register_craftitem(modname .. ":animalia_poultry_cooked", {
+minetest.register_craftitem("animalia:poultry_cooked", {
 	description = "Cooked Poultry",
 	inventory_image = "animalia_poultry_cooked.png",
 	on_use = minetest.item_eat(6),
@@ -275,18 +272,18 @@ minetest.register_craftitem(modname .. ":animalia_poultry_cooked", {
 
 minetest.register_craft({
 	type  =  "cooking",
-	recipe  = modname .. ":animalia_poultry_raw",
-	output = modname .. ":animalia_poultry_cooked",
+	recipe  = "animalia:poultry_raw",
+	output = "animalia:poultry_cooked",
 })
 
-minetest.register_craftitem(modname .. ":animalia_venison_raw", {
+minetest.register_craftitem("animalia:venison_raw", {
 	description = "Raw Venison",
 	inventory_image = "animalia_venison_raw.png",
 	on_use = minetest.item_eat(1),
 	groups = {flammable = 2, meat = 1, food_meat = 1},
 })
 
-minetest.register_craftitem(modname .. ":animalia_venison_cooked", {
+minetest.register_craftitem("animalia:venison_cooked", {
 	description = "Venison Steak",
 	inventory_image = "animalia_venison_cooked.png",
 	on_use = minetest.item_eat(10),
@@ -295,33 +292,33 @@ minetest.register_craftitem(modname .. ":animalia_venison_cooked", {
 
 minetest.register_craft({
 	type  =  "cooking",
-	recipe  = modname .. ":animalia_venison_raw",
-	output = modname .. ":animalia_venison_cooked",
+	recipe  = "animalia:venison_raw",
+	output = "animalia:venison_cooked",
 })
 
-register_egg(modname .. ":animalia_chicken_egg", {
+register_egg("animalia:chicken_egg", {
 	description = "Chicken Egg",
 	inventory_image = "animalia_egg",
-	mob = modname .. ":animalia_chicken"
+	mob = "animalia:chicken"
 })
 
-register_egg(modname .. ":animalia_turkey_egg", {
+register_egg("animalia:turkey_egg", {
 	description = "Turkey Egg",
 	inventory_image = "animalia_egg",
-	mob = modname .. ":animalia_turkey"
+	mob = "animalia:turkey"
 })
 
-register_egg(modname .. ":animalia_song_bird_egg", {
+register_egg("animalia:song_bird_egg", {
 	description = "Song Bird Egg",
 	inventory_image = "animalia_song_bird_egg",
-	mob = modname .. ":animalia_bird"
+	mob = "animalia:bird"
 })
 
 ----------
 -- Misc --
 ----------
 
-minetest.register_craftitem(modname .. ":animalia_bucket_milk", {
+minetest.register_craftitem("animalia:bucket_milk", {
 	description = "Bucket of Milk",
 	inventory_image = "animalia_milk_bucket.png",
 	stack_max = 1,
@@ -329,7 +326,7 @@ minetest.register_craftitem(modname .. ":animalia_bucket_milk", {
 	groups = {food_milk = 1, flammable = 3},
 })
 
-minetest.register_craftitem(modname .. ":animalia_bucket_guano", {
+minetest.register_craftitem("animalia:bucket_guano", {
 	description = "Bucket of Guano",
 	inventory_image = "animalia_guano_bucket.png",
 	stack_max = 1,
@@ -361,7 +358,7 @@ minetest.register_craftitem(modname .. ":animalia_bucket_guano", {
 				crops_grown = crops_grown + 1
 			end
 		end
-		if crops_grown < 1 then minetest.set_node(pointed.above, {name = modname .. ":animalia_guano"}) end
+		if crops_grown < 1 then minetest.set_node(pointed.above, {name = "animalia:guano"}) end
 		local meta = itemstack:get_meta()
 		local og_item = meta:get_string("original_item")
 		if og_item == "" then og_item = "bucket:bucket_empty" end
@@ -370,7 +367,7 @@ minetest.register_craftitem(modname .. ":animalia_bucket_guano", {
 	end
 })
 
-minetest.register_node(modname .. ":animalia_nest_song_bird", {
+minetest.register_node("animalia:nest_song_bird", {
 	description = "Song Bird Nest",
 	paramtype = "light",
 	drawtype = "mesh",
@@ -391,11 +388,11 @@ minetest.register_node(modname .. ":animalia_nest_song_bird", {
 	drop = {
 		items = {
 			{
-				items = {modname .. ":animalia_song_bird_egg"},
+				items = {"animalia:song_bird_egg"},
 				rarity = 2,
 			},
 			{
-				items = {modname .. ":animalia_song_bird_egg 2"},
+				items = {"animalia:song_bird_egg 2"},
 				rarity = 4,
 			},
 			{
@@ -409,7 +406,7 @@ minetest.register_node(modname .. ":animalia_nest_song_bird", {
 -- Tools --
 -----------
 
-minetest.register_craftitem(modname .. ":animalia_cat_toy", {
+minetest.register_craftitem("animalia:cat_toy", {
 	description = "Cat Toy",
 	inventory_image = "animalia_cat_toy.png",
 	wield_image = "animalia_cat_toy.png^[transformFYR90",
@@ -429,7 +426,7 @@ local function get_rename_formspec(meta)
 end
 
 minetest.register_on_player_receive_fields(function(player, formname, fields)
-	if formname == modname .. ":animalia_set_name" and fields.name then
+	if formname == "animalia:set_name" and fields.name then
 		local name = player:get_player_name()
 		if not nametag[name] then
 			return
@@ -456,28 +453,28 @@ local function nametag_rightclick(itemstack, player, pointed_thing)
 	local name = player:get_player_name()
 	nametag[name] = itemstack
 	local meta = itemstack:get_meta()
-	minetest.show_formspec(name, modname .. ":animalia_set_name", get_rename_formspec(meta))
+	minetest.show_formspec(name, "animalia:set_name", get_rename_formspec(meta))
 end
 
-minetest.register_craftitem(modname .. ":animalia_nametag", {
+minetest.register_craftitem("animalia:nametag", {
 	description = "Nametag",
 	inventory_image = "animalia_nametag.png",
 	on_rightclick = nametag_rightclick,
 	on_secondary_use = nametag_rightclick
 })
 
-minetest.register_craftitem(modname .. ":animalia_saddle", {
+minetest.register_craftitem("animalia:saddle", {
 	description = "Saddle",
 	inventory_image = "animalia_saddle.png",
 })
 
-minetest.register_tool(modname .. ":animalia_shears", {
+minetest.register_tool("animalia:shears", {
 	description = "Shears",
 	inventory_image = "animalia_shears.png",
 	groups = {flammable = 2}
 })
 
-minetest.register_craftitem(modname .. ":animalia_net", {
+minetest.register_craftitem("animalia:net", {
 	description = "Animal Net",
 	inventory_image = "animalia_net.png",
 	stack_max = 1,
@@ -542,7 +539,7 @@ if minetest.get_modpath("3d_armor") then
 		end)
 	end
 
-	armor:register_armor(modname .. ":animalia_coat_bear_pelt", {
+	armor:register_armor("animalia:coat_bear_pelt", {
 		description = "Bear Pelt Coat",
 		inventory_image = "animalia_inv_coat_bear_pelt.png",
 		groups = {armor_torso = 1, armor_heal = 0, armor_heavy_pelt = 1, armor_use = 1000},
@@ -552,11 +549,11 @@ if minetest.get_modpath("3d_armor") then
 
 
 	minetest.register_craft({
-		output = modname .. ":animalia_coat_bear_pelt",
+		output = "animalia:coat_bear_pelt",
 		recipe = {
-			{modname .. ":animalia_pelt_bear", "", modname .. ":animalia_pelt_bear"},
-			{modname .. ":animalia_pelt_bear", modname .. ":animalia_pelt_bear", modname .. ":animalia_pelt_bear"},
-			{modname .. ":animalia_pelt_bear", modname .. ":animalia_pelt_bear", modname .. ":animalia_pelt_bear"}
+			{"animalia:pelt_bear", "", "animalia:pelt_bear"},
+			{"animalia:pelt_bear", "animalia:pelt_bear", "animalia:pelt_bear"},
+			{"animalia:pelt_bear", "animalia:pelt_bear", "animalia:pelt_bear"}
 		}
 	})
 end
@@ -565,7 +562,7 @@ end
 -- Nodes --
 -----------
 
-minetest.register_node(modname .. ":animalia_guano", {
+minetest.register_node("animalia:guano", {
 	description = "Guano",
 	tiles = {"animalia_guano.png"},
 	paramtype = "light",
@@ -582,7 +579,7 @@ minetest.register_node(modname .. ":animalia_guano", {
 	groups = {crumbly = 3, falling_node = 1, not_in_creative_inventory = 1},
 	on_punch = function(pos, _, player)
 		local inv = player:get_inventory()
-		local stack = ItemStack(modname .. ":animalia_bucket_guano")
+		local stack = ItemStack("animalia:bucket_guano")
 		if not inv:room_for_item("main", stack) then return end
 		local item = player:get_wielded_item()
 		local item_name = item:get_name()
@@ -596,7 +593,7 @@ minetest.register_node(modname .. ":animalia_guano", {
 	end
 })
 
-minetest.register_node(modname .. ":animalia_crate", {
+minetest.register_node("animalia:crate", {
 	description = "Animal Crate",
 	tiles = {"animalia_crate.png", "animalia_crate.png", "animalia_crate_side.png"},
 	groups = {choppy = 2},
@@ -604,7 +601,7 @@ minetest.register_node(modname .. ":animalia_crate", {
 	on_secondary_use = mob_storage_use,
 	preserve_metadata = function(_, _, oldmeta, drops)
 		for _, stack in pairs(drops) do
-			if stack:get_name() == modname .. ":animalia_crate" then
+			if stack:get_name() == "animalia:crate" then
 				local meta = stack:get_meta()
 				meta:set_string("mob", oldmeta["mob"])
 				meta:set_string("staticdata", oldmeta["staticdata"])
@@ -669,7 +666,7 @@ minetest.register_on_mods_loaded(function()
 end)
 
 minetest.register_craft({
-	output = modname .. ":animalia_cat_toy",
+	output = "animalia:cat_toy",
 	recipe = {
 		{"", "", "group:thread"},
 		{"", "group:stick", "group:thread"},
@@ -678,7 +675,7 @@ minetest.register_craft({
 })
 
 minetest.register_craft({
-	output = modname .. ":animalia_cat_toy",
+	output = "animalia:cat_toy",
 	recipe = {
 		{"", "", "farming:string"},
 		{"", "group:stick", "farming:string"},
@@ -687,7 +684,7 @@ minetest.register_craft({
 })
 
 minetest.register_craft({
-	output = modname .. ":animalia_lasso",
+	output = "animalia:lasso",
 	recipe = {
 		{"", "group:thread", "group:thread"},
 		{"", "group:leather", "group:thread"},
@@ -696,7 +693,7 @@ minetest.register_craft({
 })
 
 minetest.register_craft({
-	output = modname .. ":animalia_lasso",
+	output = "animalia:lasso",
 	recipe = {
 		{"", "farming:string", "farming:string"},
 		{"", "group:leather", "farming:string"},
@@ -705,7 +702,7 @@ minetest.register_craft({
 })
 
 minetest.register_craft({
-	output = modname .. ":animalia_net",
+	output = "animalia:net",
 	recipe = {
 		{"group:thread", "", "group:thread"},
 		{"group:thread", "", "group:thread"},
@@ -714,7 +711,7 @@ minetest.register_craft({
 })
 
 minetest.register_craft({
-	output = modname .. ":animalia_net",
+	output = "animalia:net",
 	recipe = {
 		{"farming:string", "", "farming:string"},
 		{"farming:string", "", "farming:string"},
@@ -723,16 +720,16 @@ minetest.register_craft({
 })
 
 minetest.register_craft({
-	output = modname .. ":animalia_crate",
+	output = "animalia:crate",
 	recipe = {
 		{"group:wood", "group:wood", "group:wood"},
-		{"group:wood", modname .. ":animalia_net", "group:wood"},
+		{"group:wood", "animalia:net", "group:wood"},
 		{"group:wood", "group:wood", "group:wood"}
 	}
 })
 
 minetest.register_craft({
-	output = modname .. ":animalia_saddle",
+	output = "animalia:saddle",
 	recipe = {
 		{"group:leather", "group:leather", "group:leather"},
 		{"group:leather", steel_ingot, "group:leather"},
@@ -741,7 +738,7 @@ minetest.register_craft({
 })
 
 minetest.register_craft({
-	output = modname .. ":animalia_saddle",
+	output = "animalia:saddle",
 	recipe = {
 		{"group:leather", "group:leather", "group:leather"},
 		{"group:leather", steel_ingot, "group:leather"},
@@ -751,7 +748,7 @@ minetest.register_craft({
 
 
 minetest.register_craft({
-	output = modname .. ":animalia_shears",
+	output = "animalia:shears",
 	recipe = {
 		{"", steel_ingot, ""},
 		{"", "group:leather", steel_ingot}
@@ -759,34 +756,34 @@ minetest.register_craft({
 })
 
 minetest.register_craft({
-	output = modname .. ":animalia_libri_animalia",
+	output = "animalia:libri_animalia",
 	recipe = {
 		{"", "", ""},
-		{modname .. ":animalia_feather", "", ""},
+		{"animalia:feather", "", ""},
 		{"group:book", "group:color_green", ""}
 	}
 })
 
 minetest.register_craft({
-	output = modname .. ":animalia_libri_animalia",
+	output = "animalia:libri_animalia",
 	recipe = {
 		{"", "", ""},
-		{modname .. ":animalia_feather", "", ""},
+		{"animalia:feather", "", ""},
 		{"group:book", "group:unicolor_green", ""}
 	}
 })
 
 minetest.register_craft({
-	output = modname .. ":animalia_libri_animalia 2",
+	output = "animalia:libri_animalia 2",
 	recipe = {
 		{"", "", ""},
-		{modname .. ":animalia_libri_animalia", "group:book", ""},
+		{"animalia:libri_animalia", "group:book", ""},
 		{"", "", ""}
 	}
 })
 
 minetest.register_on_craft(function(itemstack, _, old_craft_grid)
-	if itemstack:get_name() == modname .. ":animalia_libri_animalia"
+	if itemstack:get_name() == "animalia:libri_animalia"
 	and itemstack:get_count() > 1 then
 		for _, old_libri in pairs(old_craft_grid) do
 			if old_libri:get_meta():get_string("chapters") then

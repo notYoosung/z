@@ -1,6 +1,3 @@
-local modname = minetest.get_current_modname()
-local path = minetest.get_modpath(modname)
-
 ---------
 -- API --
 ---------
@@ -403,8 +400,8 @@ end
 ----------
 
 function animalia.death_func(self)
-	if self:get_utility() ~= modname .. ":animalia_die" then
-		self:initiate_utility(modname .. ":animalia_die", self)
+	if self:get_utility() ~= "animalia:die" then
+		self:initiate_utility("animalia:die", self)
 	end
 end
 
@@ -477,7 +474,7 @@ function animalia.set_nametag(self, clicker)
 	if not plyr_name then return end
 	local item = clicker:get_wielded_item()
 	if item
-	and item:get_name() ~= modname .. ":animalia_nametag" then
+	and item:get_name() ~= "animalia:nametag" then
 		return
 	end
 	local name = item:get_meta():get_string("name")
@@ -723,7 +720,7 @@ function animalia.punch(self, puncher, ...)
 	creatura.basic_punch_func(self, puncher, ...)
 	self._puncher = puncher
 	if self.flee_puncher
-	and (self:get_utility() or "") ~= modname .. ":animalia_flee_from_target" then
+	and (self:get_utility() or "") ~= "animalia:flee_from_target" then
 		self:clear_utility()
 	end
 end

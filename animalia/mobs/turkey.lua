@@ -1,11 +1,8 @@
-local modname = minetest.get_current_modname()
-local path = minetest.get_modpath(modname)
-
 ------------
 -- Turkey --
 ------------
 
-creatura.register_mob(modname .. ":animalia_turkey", {
+creatura.register_mob("animalia:turkey", {
 	-- Engine Props
 	visual_size = {x = 10, y = 10},
 	mesh = "animalia_turkey.b3d",
@@ -53,8 +50,8 @@ creatura.register_mob(modname .. ":animalia_turkey", {
 	},
 	follow = animalia.food_seeds,
 	drops = {
-		{name = modname .. ":animalia_poultry_raw", min = 1, max = 4, chance = 1},
-		{name = modname .. ":animalia_feather", min = 1, max = 3, chance = 2}
+		{name = "animalia:poultry_raw", min = 1, max = 4, chance = 1},
+		{name = "animalia:feather", min = 1, max = 3, chance = 2}
 	},
 
 	-- Animalia Props
@@ -109,13 +106,13 @@ creatura.register_mob(modname .. ":animalia_turkey", {
 		if (self.growth_scale or 1) > 0.8
 		and self.gender == "female"
 		and self:timer(60) then
-			animalia.random_drop_item(self, modname .. ":animalia_turkey_egg", 10)
+			animalia.random_drop_item(self, "animalia:turkey_egg", 10)
 		end
 	end,
 
 	death_func = function(self)
-		if self:get_utility() ~= modname .. ":animalia_die" then
-			self:initiate_utility(modname .. ":animalia_die", self)
+		if self:get_utility() ~= "animalia:die" then
+			self:initiate_utility("animalia:die", self)
 		end
 	end,
 
@@ -129,7 +126,7 @@ creatura.register_mob(modname .. ":animalia_turkey", {
 	on_punch = animalia.punch
 })
 
-creatura.register_spawn_item(modname .. ":animalia_turkey", {
+creatura.register_spawn_item("animalia:turkey", {
 	col1 = "352b22",
 	col2 = "2f2721"
 })

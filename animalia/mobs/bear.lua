@@ -1,11 +1,8 @@
-local modname = minetest.get_current_modname()
-local path = minetest.get_modpath(modname)
-
 ----------
 -- Bear --
 ----------
 
-creatura.register_mob(modname .. ":animalia_grizzly_bear", {
+creatura.register_mob("animalia:grizzly_bear", {
 	-- Engine Props
 	visual_size = {x = 10, y = 10},
 	mesh = "animalia_bear.b3d",
@@ -52,7 +49,7 @@ creatura.register_mob(modname .. ":animalia_grizzly_bear", {
 	},
 	follow = animalia.food_bear,
 	drops = {
-		{name = modname .. ":animalia_pelt_bear", min = 1, max = 3, chance = 1}
+		{name = "animalia:pelt_bear", min = 1, max = 3, chance = 1}
 	},
 	fancy_collide = false,
 
@@ -111,15 +108,15 @@ creatura.register_mob(modname .. ":animalia_grizzly_bear", {
 	end,
 
 	death_func = function(self)
-		if self:get_utility() ~= modname .. ":animalia_die" then
-			self:initiate_utility(modname .. ":animalia_die", self)
+		if self:get_utility() ~= "animalia:die" then
+			self:initiate_utility("animalia:die", self)
 		end
 	end,
 
 	on_punch = animalia.punch
 })
 
-creatura.register_spawn_item(modname .. ":animalia_grizzly_bear", {
+creatura.register_spawn_item("animalia:grizzly_bear", {
 	col1 = "64361d",
 	col2 = "2c0d03"
 })

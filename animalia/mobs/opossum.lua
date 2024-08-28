@@ -1,11 +1,8 @@
-local modname = minetest.get_current_modname()
-local path = minetest.get_modpath(modname)
-
 -------------
 -- Opossum --
 -------------
 
-creatura.register_mob(modname .. ":animalia_opossum", {
+creatura.register_mob("animalia:opossum", {
 	-- Engine Props
 	visual_size = {x = 10, y = 10},
 	mesh = "animalia_opossum.b3d",
@@ -37,17 +34,17 @@ creatura.register_mob(modname .. ":animalia_opossum", {
 		clean_crop = {range = {x = 171, y = 200}, speed = 15, frame_blend = 0.2, loop = false}
 	},
 	follow = {
-		modname .. ":animalia_song_bird_egg",
-		modname .. ":animalia_rat_raw",
-		modname .. ":animalia_mutton_raw",
-		modname .. ":animalia_beef_raw",
-		modname .. ":animalia_porkchop_raw",
-		modname .. ":animalia_poultry_raw"
+		"animalia:song_bird_egg",
+		"animalia:rat_raw",
+		"animalia:mutton_raw",
+		"animalia:beef_raw",
+		"animalia:porkchop_raw",
+		"animalia:poultry_raw"
 	},
 
 	-- Behavior Parameters
 	is_skittish_mob = true,
-	attack_list = {modname .. ":animalia_rat"},
+	attack_list = {"animalia:rat"},
 
 	-- Animalia Props
 	flee_puncher = true,
@@ -102,7 +99,7 @@ creatura.register_mob(modname .. ":animalia_opossum", {
 	on_punch = animalia.punch
 })
 
-creatura.register_spawn_item(modname .. ":animalia_opossum", {
+creatura.register_spawn_item("animalia:opossum", {
 	col1 = "75665f",
 	col2 = "ccbfb8"
 })

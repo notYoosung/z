@@ -1,6 +1,3 @@
-local modname = minetest.get_current_modname()
-local path = minetest.get_modpath(modname)
-
 -----------
 -- Sheep --
 -----------
@@ -25,7 +22,7 @@ local palette  = {
 	yellow = {"Yellow", "#e3ff0070"},
 }
 
-creatura.register_mob(modname .. ":animalia_sheep", {
+creatura.register_mob("animalia:sheep", {
 	-- Engine Props
 	visual_size = {x = 10, y = 10},
 	mesh = "animalia_sheep.b3d",
@@ -75,7 +72,7 @@ creatura.register_mob(modname .. ":animalia_sheep", {
 	},
 	follow = animalia.food_wheat,
 	drops = {
-		{name = modname .. ":animalia_mutton_raw", min = 1, max = 3, chance = 1},
+		{name = "animalia:mutton_raw", min = 1, max = 3, chance = 1},
 		minetest.get_modpath("wool") and {name = "wool:white", min = 1, max = 3, chance = 2} or nil
 	},
 
@@ -150,7 +147,7 @@ creatura.register_mob(modname .. ":animalia_sheep", {
 		local tool_name = tool:get_name()
 		local creative = minetest.is_creative_enabled(clicker:get_player_name())
 
-		if tool_name == modname .. ":animalia_shears" then
+		if tool_name == "animalia:shears" then
 			if not minetest.get_modpath("wool") then
 				return
 			end
@@ -178,7 +175,7 @@ creatura.register_mob(modname .. ":animalia_sheep", {
 			if palette[dye_color] then
 				self.dye_color = self:memorize("dye_color", dye_color)
 				self.drops = {
-					{name = modname .. ":animalia_mutton_raw", chance = 1, min = 1, max = 4},
+					{name = "animalia:mutton_raw", chance = 1, min = 1, max = 4},
 					{name = "wool:" .. dye_color, chance = 2, min = 1, max = 2},
 				}
 				self.object:set_properties({
@@ -195,7 +192,7 @@ creatura.register_mob(modname .. ":animalia_sheep", {
 	on_punch = animalia.punch
 })
 
-creatura.register_spawn_item(modname .. ":animalia_sheep", {
+creatura.register_spawn_item("animalia:sheep", {
 	col1 = "f4e6cf",
 	col2 = "e1ca9b"
 })
