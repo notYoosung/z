@@ -66,11 +66,14 @@ mcl_player.register_globalstep(function(player)
 	local wielded_itemname = player:get_wielded_item():get_name()
 	local player_velocity = player:get_velocity()
 	local elytra = mcl_player.players[player].elytra and mcl_player.players[player].elytra.active
+    local player_pos = player:get_pos()
+    local player_props = player_get_properties()
 
 
+    local player_pos_offset = vector.sub(player_pos, vector.round(player_pos))
     if mcl_player.players[player].is_crawling
-    and not collisionbox_intersect(player:get_properties().collisionbox, minetest.get_node_def(mcl_player.players[player].nodes.head).collisionbox)
-    and not collisionbox_intersect(player:get_properties().collisionbox minetest.get_node_def(mcl_player.players[player].nodes.head_top).collisionbox) then --nothing obstructing
+    and not collisionbox_intersect(vector.add(player_pos_offset, player_props.collisionbox), minetest.get_node_def(mcl_player.players[player].nodes.head).collisionbox)
+    and not collisionbox_intersect(vector.add(player_pos_offset, player_props.collisionbox), minetest.get_node_def(mcl_player.players[player].nodes.head_top).collisionbox) then --nothing obstructing
         set_standing(player)
     end
 
