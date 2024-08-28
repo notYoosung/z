@@ -8,7 +8,14 @@ local temp_node_name = modname .. ":temp_password_block"
 -- Register the password block node
 minetest.register_node(password_block_name, {
     description = "Password Block",
-    tiles = {"password_block.png"},
+    tiles = {
+        "password_block_back.png",
+        "password_block_front.png",
+        "password_block_top.png",
+        "password_block_bottom.png",
+        "password_block_side.png",
+        "password_block_side.png",
+    },
     groups = {cracky = 3, stone = 1, oddly_breakable_by_hand = 1},
     after_place_node = function(pos, placer)
         local meta = minetest.get_meta(pos)
@@ -45,12 +52,23 @@ minetest.register_node(password_block_name, {
 -- Register the temporary password block node
 minetest.register_node(temp_node_name, {
     description = "Temporary Password Block",
-    tiles = {"password_block.png"},
-    groups = {cracky = 3, stone = 1, oddly_breakable_by_hand = 1},
+    tiles = {
+        "password_block_back.png",
+        "password_block_front.png",
+        "password_block_top.png",
+        "password_block_bottom.png",
+        "password_block_side.png",
+        "password_block_side.png",
+    },
+    groups = { cracky = 3, stone = 1, oddly_breakable_by_hand = 1 },
     drop = password_block_name, -- Drop the original password block when broken
     on_construct = function(pos)
         minetest.get_node_timer(pos):start(4.0) -- Change back to password block after 4 seconds
     end,
+    mcl_redstone = {
+        power = 15,
+        power_last = 15,
+    },
     on_timer = function(pos, elapsed)
         local meta = minetest.get_meta(pos)
         minetest.set_node(pos, {name = password_block_name}) -- Change back to password block
