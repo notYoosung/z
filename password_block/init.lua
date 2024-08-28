@@ -25,6 +25,12 @@ minetest.register_node(password_block_name, {
             minetest.show_formspec(player:get_player_name(), modname .. ":password_form_"..minetest.pos_to_string(pos), "field[password;Enter Password;]")
         end
     end,
+    mesecons = {
+        receptor = {
+            rules = mesecon.rules.mcl_alldirs_spread,
+            state = mesecon.state.off
+        }
+    },
     mcl_redstone = {
         power = 0,
         power_last = 0,
@@ -49,12 +55,19 @@ minetest.register_node(temp_node_name, {
     groups = {cracky = 3, stone = 1, oddly_breakable_by_hand = 1},
     drop = password_block_name, -- Drop the original password block when broken
     on_construct = function(pos)
-        minetest.get_node_timer(pos):start(4.0) -- Change back to password block after 4 seconds
+        -- minetest.get_node_timer(pos):start(4.0) -- Change back to password block after 4 seconds
     end,
     on_timer = function(pos, elapsed)
-        local meta = minetest.get_meta(pos)
-        minetest.set_node(pos, {name = password_block_name}) -- Change back to password block
+        -- local meta = minetest.get_meta(pos)
+        minetest.swap_node(pos, {name = password_block_name}) -- Change back to password block
+        mesecon.receptor_off(pos, mesecon.rules.mcl_alldirs_spread)
     end,
+    mesecons = {
+        receptor = {
+            rules = mesecon.rules.mcl_alldirs_spread,
+            state = mesecon.state.on
+        }
+    },
 })
 
 -- Handle the password setup form submission
@@ -78,8 +91,10 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
         local meta = minetest.get_meta(pos)
         if fields.password == meta:get_string("password") then
             -- Change to temporary node for 4 seconds
-            minetest.set_node(pos, {name = temp_node_name})
+            minetest.swap_node(pos, {name = temp_node_name})
+            mesecon.receptor_on(pos, mesecon.rules.mcl_alldirs_spread)
             minetest.chat_send_player(player:get_player_name(), "Password correct! Block changed for 4 seconds.")
+            minetest.get_node_timer(pos):start(5.0)         -- Change back to password block after 4 seconds
         else
             minetest.chat_send_player(player:get_player_name(), "Incorrect password.")
         end
@@ -88,21 +103,21 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 end)
 
 -- Ensure the block provides power for the redstone system
-minetest.register_abm({
-    label = "Redstone Power Provider",
-    nodenames = {password_block_name, temp_node_name},
-    interval = 1,
-    chance = 1,
-    action = function(pos, node)
-        local meta = minetest.get_meta(pos)
-        if node.name == temp_node_name then
-            -- Handle behavior of temporary node if needed
-        end
-        if meta:get_int("active") == 1 then
-            meta:set_int("power", 15)
-            minetest.get_node_timer(pos):start(1.0) -- Change state for 1 second
-        else
-            meta:set_int("power", 0)
-        end
-    end
-})
+-- minetest.register_abm({
+--     label = "Redstone Power Provider",
+--     nodenames = {password_block_name, temp_node_name},
+--     interval = 1,
+--     chance = 1,
+--     action = function(pos, node)
+--         local meta = minetest.get_meta(pos)
+--         if node.name == temp_node_name then
+--             -- Handle behavior of temporary node if needed
+--         end
+--         if meta:get_int("active") == 1 then
+--             meta:set_int("power", 15)
+--             minetest.get_node_timer(pos):start(1.0) -- Change state for 1 second
+--         else
+--             meta:set_int("power", 0)
+--         end
+--     end
+-- })

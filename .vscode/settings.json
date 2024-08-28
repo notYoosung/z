@@ -22,11 +22,13 @@
         "mesecon",
         "mcl_potions",
         "controls",
-        "mcl_flowerpots"
+        "mcl_flowerpots",
+        "mcl_player"
     ],
     "cSpell.words": [
         "amongus",
         "animalia",
+        "collisionbox",
         "creatura",
         "ctf",
         "eoaktiakouskou",
@@ -41,6 +43,7 @@
         "invis",
         "itemframes",
         "mcurrency",
+        "mesecon",
         "minetest",
         "modname",
         "modpath",
