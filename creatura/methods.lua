@@ -1,6 +1,3 @@
-local modname = minetest.get_current_modname()
-local path = minetest.get_modpath(modname)
-
 -------------
 -- Methods --
 -------------
@@ -395,7 +392,7 @@ function creatura.action_move(self, pos2, timeout, method, speed_factor, anim)
 		end
 		if timer <= 0
 		or not safe
-		or _self:move_to(pos2, method or modname .. ":creatura_obstacle_avoidance", speed_factor or 0.5) then
+		or _self:move_to(pos2, method or "creatura:obstacle_avoidance", speed_factor or 0.5) then
 			return true
 		end
 	end
@@ -471,7 +468,7 @@ end
 	return path
 end]]
 
-creatura.register_movement_method(modname .. ":creatura_pathfind_theta", function(self)
+creatura.register_movement_method("creatura:pathfind_theta", function(self)
 	local path = {}
 	local steer_to
 	local steer_int = 0
@@ -510,7 +507,7 @@ creatura.register_movement_method(modname .. ":creatura_pathfind_theta", functio
 	return func
 end)
 
-creatura.register_movement_method(modname .. ":creatura_pathfind", function(self)
+creatura.register_movement_method("creatura:pathfind", function(self)
 	local path = {}
 	local steer_to
 	local steer_int = 0
@@ -552,7 +549,7 @@ end)
 
 -- Steering
 
-creatura.register_movement_method(modname .. ":creatura_steer_small", function(self)
+creatura.register_movement_method("creatura:steer_small", function(self)
 	local steer_to
 	local steer_int = 0
 	self:set_gravity(-9.8)
@@ -575,7 +572,7 @@ creatura.register_movement_method(modname .. ":creatura_steer_small", function(s
 	return func
 end)
 
-creatura.register_movement_method(modname .. ":creatura_steer_large", function(self)
+creatura.register_movement_method("creatura:steer_large", function(self)
 	local steer_to
 	local steer_int = 0
 	self:set_gravity(-9.8)
@@ -598,7 +595,7 @@ creatura.register_movement_method(modname .. ":creatura_steer_large", function(s
 	return func
 end)
 
-creatura.register_movement_method(modname .. ":creatura_walk_simple", function(self)
+creatura.register_movement_method("creatura:walk_simple", function(self)
 	self:set_gravity(-9.8)
 	local function func(_self, goal, speed_factor)
 		local pos = _self.object:get_pos()
@@ -619,7 +616,7 @@ end)
 
 -- Deprecated
 
-creatura.register_movement_method(modname .. ":creatura_context_based_steering", function(self)
+creatura.register_movement_method("creatura:context_based_steering", function(self)
 	local steer_to
 	local steer_int = 0
 	self:set_gravity(-9.8)
@@ -642,7 +639,7 @@ creatura.register_movement_method(modname .. ":creatura_context_based_steering",
 	return func
 end)
 
-creatura.register_movement_method(modname .. ":creatura_obstacle_avoidance", function(self)
+creatura.register_movement_method("creatura:obstacle_avoidance", function(self)
 	local box = clamp(self.width, 0.5, 1.5)
 	local steer_to
 	local steer_timer = 0.25

@@ -1,6 +1,3 @@
-local modname = minetest.get_current_modname()
-local path = minetest.get_modpath(modname)
-
 --------------
 -- Spawning --
 --------------
@@ -171,7 +168,7 @@ local max_per_block = tonumber(minetest.settings:get("creatura_mapblock_limit"))
 local max_in_abr = tonumber(minetest.settings:get("creatura_abr_limit")) or 24
 local min_abm_dist = min(abr / 2, tonumber(minetest.settings:get("creatura_min_abm_dist")) or 32)
 
-local mobs_spawn = false --minetest.settings:get_bool("mobs_spawn") ~= false
+local mobs_spawn = minetest.settings:get_bool("mobs_spawn") ~= false
 
 local mapgen_mobs = {}
 
@@ -356,7 +353,7 @@ end
 
 -- Mapgen --
 
-minetest.register_node(modname .. ":creatura_spawn_node", {
+minetest.register_node("creatura:spawn_node", {
 	drawtype = "airlike",
 	groups = {not_in_creative_inventory = 1},
 	walkable = false
@@ -368,7 +365,7 @@ local mapgen_spawning_int = tonumber(minetest.settings:get("creatura_mapgen_spaw
 if mapgen_spawning then
 	local chunk_delay = 0
 	local c_air = minetest.get_content_id("air")
-	local c_spawn = minetest.get_content_id(modname .. ":creatura_spawn_node")
+	local c_spawn = minetest.get_content_id("creatura:spawn_node")
 
 	minetest.register_on_generated(function(minp, maxp)
 		if chunk_delay > 0 then chunk_delay = chunk_delay - 1 end
@@ -482,7 +479,7 @@ if mapgen_spawning then
 
 	minetest.register_abm({
 		label = "Creatura Spawning",
-		nodenames = {modname .. ":creatura_spawn_node"},
+		nodenames = {"creatura:spawn_node"},
 		interval = spawn_interval,
 		chance = 1,
 		action = function(pos)

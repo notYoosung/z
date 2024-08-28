@@ -551,7 +551,6 @@ function creatura.basic_punch_func(self, puncher, tflp, tool_caps, dir)
 	self:indicate_damage()
 end
 
-local modname = minetest.get_current_modname()
-local path = minetest.get_modpath(modname)
+local path = minetest.get_modpath("creatura")
 
 dofile(path.."/mob_meta.lua")
