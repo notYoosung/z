@@ -1,6 +1,24 @@
 local modname = minetest.get_current_modname()
 local modpath = minetest.get_modpath(modname)
 
+local storage = minetest.get_mod_storage()
+
+local tasks = {}
+
+
+
+--[[
+task = {
+	name = "",
+	requirement_table: {
+	}
+	reward_table
+
+}
+
+]]
+
+
 minetest.register_node(modname .. ":adventurer_task", {
    description = "Adventurer Task",
 --    inventory_image = ".png",
@@ -14,3 +32,6 @@ minetest.register_node(modname .. ":adventurer_task", {
 
 	end,
 })
+
+
+
