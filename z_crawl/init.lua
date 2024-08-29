@@ -89,9 +89,11 @@ mcl_player.register_globalstep(function(player)
 		player_pos_offset[2],
 		player_pos_offset[3],
 	})
+	local node_head = minetest.registered_nodes[mcl_player_player.nodes.head]
+	local node_head_top = minetest.registered_nodes[mcl_player_player.nodes.head_top]
     if mcl_player_player.is_crawling
-		and not collisionbox_intersect(table_add(player_pos_offset_collbox, player_props.collisionbox), minetest.registered_nodes[mcl_player_player.nodes.head].collisionbox)
-		and not collisionbox_intersect(table_add(player_pos_offset_collbox, player_props.collisionbox), minetest.registered_nodes[mcl_player_player.nodes.head_top].collisionbox) then --nothing obstructing
+		and (node_head ~= nil and not collisionbox_intersect(table_add(player_pos_offset_collbox, player_props.collisionbox), node_head.collisionbox))
+		and (node_head_top ~= nil and not collisionbox_intersect(table_add(player_pos_offset_collbox, player_props.collisionbox), node_head_top.collisionbox)) then --nothing obstructing
         set_standing(player)
 	elseif not (
 		mcl_player_player.is_swimming or
