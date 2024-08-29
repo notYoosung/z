@@ -33,6 +33,7 @@ end
 
 
 local function set_crawling(player, anim, anim_speed)
+	if not player then return end
 	local pitch = - math.deg(player:get_look_vertical())
 	local yaw = math.deg(player:get_look_horizontal())
 	local vel = player:get_velocity()
@@ -46,6 +47,7 @@ end
 
 
 local function set_standing(player, anim, anim_speed)
+	if not player then return end
     mcl_player.players[player].is_crawling = false
     mcl_player.player_set_animation(player, "stand")
     mcl_util.set_properties(player, player_props_normal)
@@ -104,7 +106,11 @@ mcl_player.register_globalstep(function(player)
 
 end)
 
-
+minetest.register_chatcommand("crawl", {
+	func = function(name, param)
+		set_crawl(minetest.get_player_by_name(name))
+	end
+})
 
 
 ------------------------------------------------------------

@@ -46,3 +46,4 @@ for k, v in pairs(aliases) do
 end
 
 
+dofile(modpath .. "/mcl_aliases.lua")
