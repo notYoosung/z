@@ -171,4 +171,4 @@ mcl_mobs.register_mob(modname .. ":toilet", {
 	view_range = 16,
 })
 
-mcl_mobs.register_egg(modname .. ":toilet", "Toilet", "#959b9b", "#275e61", 0)
+-- mcl_mobs.register_egg(modname .. ":toilet", "Toilet", "#959b9b", "#275e61", 0)
