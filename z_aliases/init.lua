@@ -1,3 +1,6 @@
+local modname = minetest.get_current_modname()
+local modpath = minetest.get_modpath(modname)
+
 local aliases = {
     ["default:steel_ingot"] = "mcl_core:iron_ingot",
     ["default:gold_ingot"] = "mcl_core:gold_ingot",
@@ -46,3 +49,4 @@ for k, v in pairs(aliases) do
 end
 
 
+dofile(modpath .. "/mcl_aliases.lua")

@@ -16,5 +16,5 @@ read_globals = {
     "dump", "DIR_DELIM", "VoxelArea", "Settings",
 
     -- MTG
-    "default", "sfinv", "creative",
+    -- "default", "sfinv", "creative",
 }
