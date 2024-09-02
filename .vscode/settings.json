@@ -23,7 +23,10 @@
         "mcl_potions",
         "controls",
         "mcl_flowerpots",
-        "mcl_player"
+        "mcl_player",
+        "mob_core",
+        "armor",
+        "emote"
     ],
     "cSpell.words": [
         "amongus",
