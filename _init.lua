@@ -93,9 +93,6 @@ dofile(modpath .. "/ctf/init.lua")
 --observer entity
 
 --realistic flashlight
---trapped box
-
---vuill
 
 
 
