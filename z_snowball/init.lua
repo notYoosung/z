@@ -132,6 +132,9 @@ local snowball_ENTITY={
 		visual_size = {x=0.5, y=0.5},
 		collisionbox = {0,0,0,0,0,0},
 		pointable = false,
+		should_drive = function (self)
+			return true
+		end,
 	},
 
 	timer=0,
@@ -140,6 +143,9 @@ local snowball_ENTITY={
 	_thrower = nil,
 
 	_lastpos={},
+
+
+
 }
 
 
@@ -255,8 +261,20 @@ local how_to_throw = S("Use the punch key to throw.")
 
 
 
+local function get_player_throw_function(_, velocity)
+	local function func(item, player, _)
+		local playerpos = player:get_pos()
+		local dir = player:get_look_dir()
+		mcl_throwing.throw(item, {x=playerpos.x, y=playerpos.y+1.5, z=playerpos.z}, dir, velocity, player:get_player_name())
+		if not minetest.is_creative_enabled(player:get_player_name()) then
+			item:take_item()
+		end
+		return item
+	end
+	return func
+end
 local function on_use(item, player, _)
-	mcl_throwing.get_player_throw_function("mcl_throwing:snowball_entity")(item, player, _)
+	get_player_throw_function("mcl_throwing:snowball_entity")(item, player, _)
 	attach_driver(self, player)
 
 end
