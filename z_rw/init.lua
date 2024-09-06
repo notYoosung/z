@@ -1314,7 +1314,7 @@ end)()
 
 local bullet_knockback = (function()
 	function projectile_kb(victim,projectile,kbamount)
-	
+		local rw_proj_kb_pos_x, rw_proj_kb_pos_y, rw_proj_kb_pos_z
 		if victim:get_pos() and projectile:get_pos() then
 			rw_proj_kb_pos_x = victim:get_pos().x - projectile:get_pos().x
 			rw_proj_kb_pos_y = victim:get_pos().y - projectile:get_pos().y
