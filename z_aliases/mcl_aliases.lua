@@ -9,4 +9,6 @@ minetest.register_on_mods_loaded(function()
             -- end
         end
     end
+    minetest.register_alias("mcl:grass", "mcl_core:dirt_with_grass")
 end)
+--lamp stairs
