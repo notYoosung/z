@@ -274,9 +274,8 @@ local function get_player_throw_function(_, velocity)
 	return func
 end
 local function on_use(item, player, _)
-	get_player_throw_function("mcl_throwing:snowball_entity")(item, player, _)
+	get_player_throw_function(modname .. ":snowball_entity")(item, player, _)
 	attach_driver(self, player)
-
 end
 
 -- Snowball
