@@ -58,8 +58,8 @@ local function get_visual_size(obj)
 end
 
 local function set_attach(boat)
-	boat._driver:set_attach(boat.object, "",
-		{x = 0, y = 1.5, z = 1}, {x = 0, y = 0, z = 0})
+	-- boat._driver:set_attach(boat.object, "",
+	-- 	{x = 0, y = 1.5, z = 1}, {x = 0, y = 0, z = 0})
 end
 
 local function set_double_attach(boat)
@@ -79,6 +79,7 @@ local function set_choat_attach(boat)
 end
 
 local function attach_object(self, obj)
+	if self == nil or obj == nil then minetest.log("z_snowball obj nil") return end
 	if self._driver and not self._inv_id then
 		if self._driver:is_player() then
 			self._passenger = obj
@@ -231,7 +232,7 @@ local function snowball_on_step(self, dtime)
 		if (def and def.walkable) or not def then
 			minetest.sound_play("mcl_throwing_snowball_impact_hard", { pos = pos, max_hear_distance=16, gain=0.7 }, true)
 			snowball_particles(self._lastpos, vel)
-			detach_driver(self)
+			detach_object(self)
 			self.object:remove()
 			if mod_target and node.name == "mcl_target:target_off" then
 				mcl_target.hit(vector.round(pos), 0.4) --4 redstone ticks
@@ -242,7 +243,7 @@ local function snowball_on_step(self, dtime)
 	if check_object_hit(self, pos, {snowball_vulnerable = 3}) then
 		minetest.sound_play("mcl_throwing_snowball_impact_soft", { pos = pos, max_hear_distance=16, gain=0.7 }, true)
 		snowball_particles(pos, vel)
-		detach_driver(self)
+		detach_object(self)
 		self.object:remove()
 		return
 	end
@@ -253,8 +254,8 @@ end
 snowball_ENTITY.on_step = snowball_on_step
 
 
--- minetest.register_entity(modname .. ":snowball_entity", snowball_ENTITY)
-mcl_mobs.register_mob(modname .. ":snowball_entity", snowball_ENTITY)
+minetest.register_entity(modname .. ":snowball_entity", snowball_ENTITY)
+-- mcl_mobs.register_mob(modname .. ":snowball_entity", snowball_ENTITY)
 
 
 local how_to_throw = S("Use the punch key to throw.")
@@ -265,7 +266,9 @@ local function get_player_throw_function(_, velocity)
 	local function func(item, player, _)
 		local playerpos = player:get_pos()
 		local dir = player:get_look_dir()
-		mcl_throwing.throw(item, {x=playerpos.x, y=playerpos.y+1.5, z=playerpos.z}, dir, velocity, player:get_player_name())
+		-- minetest.log(tostring(item))
+		local obj = mcl_throwing.throw(item, {x=playerpos.x, y=playerpos.y+1.5, z=playerpos.z}, dir, velocity, player:get_player_name())
+		attach_object(obj:get_luaentity(), player)
 		if not minetest.is_creative_enabled(player:get_player_name()) then
 			item:take_item()
 		end
@@ -275,7 +278,6 @@ local function get_player_throw_function(_, velocity)
 end
 local function on_use(item, player, _)
 	get_player_throw_function(modname .. ":snowball_entity")(item, player, _)
-	attach_driver(self, player)
 end
 
 -- Snowball
@@ -291,3 +293,8 @@ minetest.register_craftitem(modname .. ":snowball", {
 	_on_dispense = mcl_throwing.dispense_function,
 })
 
+mcl_throwing.register_throwable_object(modname .. ":snowball", modname .. ":snowball_entity", 22)
+
+
+--apple slices from crafting w/ axe
+-- param2 screw
