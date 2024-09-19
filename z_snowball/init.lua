@@ -58,8 +58,11 @@ local function get_visual_size(obj)
 end
 
 local function set_attach(boat)
-	-- boat._driver:set_attach(boat.object, "",
-	-- 	{x = 0, y = 1.5, z = 1}, {x = 0, y = 0, z = 0})
+	-- for k, v in pairs(boat) do
+	-- 	minetest.log(tostring(k) .. " : " .. tostring(v))
+	-- end
+	boat._driver:set_attach(boat.object, "",
+		{x = 0, y = 1.5, z = 1}, {x = 0, y = 0, z = 0})
 end
 
 local function set_double_attach(boat)
@@ -93,33 +96,35 @@ local function attach_object(self, obj)
 		if self._inv_id then
 			set_choat_attach(self)
 		else
+			-- minetest.log("attached")
 			set_attach(self)
 		end
 	end
 
 	local visual_size = get_visual_size(obj)
-	local yaw = self.object:get_yaw()
+	-- local yaw = self.object:get_yaw()
+	self._visual_size = visual_size
 	obj:set_properties({visual_size = vector.divide(visual_size, boat_visual_size)})
 
 	if obj:is_player() then
 		local name = obj:get_player_name()
 		mcl_player.players[obj].attached = true
-		obj:set_eye_offset({x=0, y=-5.5, z=0},{x=0, y=-4, z=0})
+		--obj:set_eye_offset({x=0, y=-5.5, z=0},{x=0, y=-4, z=0})
 		minetest.after(0.2, function(name)
 			local player = minetest.get_player_by_name(name)
 			if player then
 				mcl_player.player_set_animation(player, "sit" , 30)
 			end
 		end, name)
-		obj:set_look_horizontal(yaw)
-		mcl_title.set(obj, "actionbar", {text=S("Sneak to dismount"), color="white", stay=60})
+		-- obj:set_look_horizontal(yaw)
+		-- mcl_title.set(obj, "actionbar", {text=S("Sneak to dismount"), color="white", stay=60})
 	else
 		obj:get_luaentity()._old_visual_size = visual_size
 	end
 end
 
 local function detach_object(obj, change_pos)
-	if change_pos then change_pos = vector.new(0, 0.2, 0) end
+	if change_pos then change_pos = vector.new(0, 0.0, 0) end
 	return mcl_util.detach_object(obj, change_pos)
 end
 
@@ -221,6 +226,7 @@ end
 
 -- Snowball on_step()--> called when snowball is moving.
 local function snowball_on_step(self, dtime)
+	if not self.object then return end
 	self.timer = self.timer + dtime
 	local pos = self.object:get_pos()
 	local vel = self.object:get_velocity()
@@ -232,7 +238,23 @@ local function snowball_on_step(self, dtime)
 		if (def and def.walkable) or not def then
 			minetest.sound_play("mcl_throwing_snowball_impact_hard", { pos = pos, max_hear_distance=16, gain=0.7 }, true)
 			snowball_particles(self._lastpos, vel)
-			detach_object(self)
+			local obj = self._driver or self._passenger
+			if obj then
+				if obj:is_player() then
+					local name = obj:get_player_name()
+					mcl_player.players[obj].attached = false
+					--obj:set_eye_offset({ x = 0, y = 0, z = 0 }, { x = 0, y = 0, z = 0 })
+					minetest.after(0.2, function(name)
+						local player = minetest.get_player_by_name(name)
+						if player then
+							mcl_player.player_set_animation(player, "stand", 30)
+						end
+					end, name)
+				else
+					obj:get_luaentity()._old_visual_size = obj._visual_size
+				end
+			end
+			detach_object(self.object)
 			self.object:remove()
 			if mod_target and node.name == "mcl_target:target_off" then
 				mcl_target.hit(vector.round(pos), 0.4) --4 redstone ticks
@@ -243,7 +265,23 @@ local function snowball_on_step(self, dtime)
 	if check_object_hit(self, pos, {snowball_vulnerable = 3}) then
 		minetest.sound_play("mcl_throwing_snowball_impact_soft", { pos = pos, max_hear_distance=16, gain=0.7 }, true)
 		snowball_particles(pos, vel)
-		detach_object(self)
+		detach_object(self.object)
+		local obj = self._driver or self._passenger
+		if obj then
+			if obj:is_player() then
+				local name = obj:get_player_name()
+				mcl_player.players[obj].attached = false
+				--obj:set_eye_offset({ x = 0, y = 0, z = 0 }, { x = 0, y = 0, z = 0 })
+				minetest.after(0.2, function(name)
+					local player = minetest.get_player_by_name(name)
+					if player then
+						mcl_player.player_set_animation(player, "stand", 30)
+					end
+				end, name)
+			else
+				obj:get_luaentity()._old_visual_size = obj._visual_size
+			end
+		end
 		self.object:remove()
 		return
 	end
@@ -267,7 +305,7 @@ local function get_player_throw_function(_, velocity)
 		local playerpos = player:get_pos()
 		local dir = player:get_look_dir()
 		-- minetest.log(tostring(item))
-		local obj = mcl_throwing.throw(item, {x=playerpos.x, y=playerpos.y+1.5, z=playerpos.z}, dir, velocity, player:get_player_name())
+		local obj = mcl_throwing.throw(item, {x=playerpos.x, y=playerpos.y+0, z=playerpos.z}, dir, velocity, player:get_player_name())
 		attach_object(obj:get_luaentity(), player)
 		if not minetest.is_creative_enabled(player:get_player_name()) then
 			item:take_item()
