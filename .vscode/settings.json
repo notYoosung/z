@@ -26,7 +26,10 @@
         "mcl_player",
         "mob_core",
         "armor",
-        "emote"
+        "emote",
+        "mod_target",
+        "mcl_throwing",
+        "mcl_target"
     ],
     "cSpell.words": [
         "amongus",
