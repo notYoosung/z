@@ -135,7 +135,7 @@ local snowball_ENTITY={
 	initial_properties = {
 		physical = false,
 		textures = {"mcl_throwing_snowball.png"},
-		visual_size = {x=0.5, y=0.5},
+		visual_size = {x=1, y=1},
 		collisionbox = {0,0,0,0,0,0},
 		pointable = false,
 		should_drive = function (self)
@@ -250,8 +250,9 @@ local function snowball_on_step(self, dtime)
 							mcl_player.player_set_animation(player, "stand", 30)
 						end
 					end, name)
+					-- obj:set_velocity(self.object:get_velocity())
 				else
-					obj:get_luaentity()._old_visual_size = obj._visual_size
+					obj:get_luaentity().visual_size = obj._old_visual_size
 				end
 			end
 			detach_object(self.object)
@@ -278,8 +279,9 @@ local function snowball_on_step(self, dtime)
 						mcl_player.player_set_animation(player, "stand", 30)
 					end
 				end, name)
+				-- obj:set_velocity(self.object:get_velocity())
 			else
-				obj:get_luaentity()._old_visual_size = obj._visual_size
+				obj:get_luaentity().visual_size = obj._old_visual_size
 			end
 		end
 		self.object:remove()
@@ -320,7 +322,7 @@ end
 
 -- Snowball
 minetest.register_craftitem(modname .. ":snowball", {
-	description = S("Snowball"),
+	description = S("Ridable Snowball"),
 	_tt_help = S("Throwable"),
 	_doc_items_longdesc = S("Snowballs can be thrown or launched from a dispenser for fun. Hitting something with a snowball does nothing."),
 	_doc_items_usagehelp = how_to_throw,
